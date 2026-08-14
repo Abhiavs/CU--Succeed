@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #050505;
+  --color-foreground: #FAFAFA;
+  
+  --color-card: rgba(20, 20, 20, 0.6);
+  --color-card-hover: rgba(30, 30, 30, 0.8);
+  --color-border: #222222;
+  --color-border-glow: #333333;
+  
+  --color-primary: #10B981; /* Emerald */
+  --color-primary-glow: rgba(16, 185, 129, 0.3);
+  --color-primary-foreground: #022C22;
+  
+  --color-secondary: #3B82F6; /* Blue */
+  --color-secondary-glow: rgba(59, 130, 246, 0.3);
+  
+  --color-muted: #1A1A1A;
+  --color-muted-foreground: #A1A1AA;
+  
+  /* Animations */
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+  --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-slow: pulseSlow 4s infinite alternate;
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes pulseSlow {
+    from { opacity: 0.4; }
+    to { opacity: 0.8; }
+  }
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.05), transparent 25%);
+  background-attachment: fixed;
+}
+
+/* Glassmorphism utilities */
+.glass {
+  background: var(--color-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+}
+
+.glass-hover:hover {
+  background: var(--color-card-hover);
+  border-color: var(--color-border-glow);
+  box-shadow: 0 0 20px var(--color-primary-glow);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Base Form Inputs for new dark theme */
+input, select, textarea {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-glow);
+}
+
+/* Standardized Button Classes */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border: 1px solid var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 0 15px var(--color-primary-glow);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: #fff;
+  border: 1px solid var(--color-secondary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  box-shadow: 0 0 15px var(--color-secondary-glow);
+  transform: translateY(-1px);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-foreground);
+  backdrop-filter: blur(8px);
+}
+
+.btn-glass:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-foreground);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+

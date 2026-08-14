@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// User role enum
+enum Role {
+  STUDENT
+  OFFICIAL
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String // Hashed password
+  name      String
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations for Students
+  college   College? @relation(fields: [collegeId], references: [id])
+  collegeId String?
+  batch     Batch?   @relation(fields: [batchId], references: [id])
+  batchId   String?
+
+  // A student can be part of multiple programs
+  programs Program[]
+  attempts Attempt[]
+
+  // Certificates earned
+  certificates Certificate[]
+}
+
+model Program {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users        User[]
+  assessments  Assessment[]
+  certificates Certificate[]
+}
+
+model College {
+  id   String @id @default(cuid())
+  name String @unique
+
+  users User[]
+}
+
+model Batch {
+  id   String @id @default(cuid())
+  name String @unique
+
+  users User[]
+}
+
+model Assessment {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  type            String // e.g. 'PRE_TEST', 'POST_TEST', 'PSYCHOMETRIC', 'APTITUDE'
+  durationMinutes Int      @default(60)
+  marksPerQuestion Int     @default(1)
+  negativeMarking Float    @default(0)
+  isActive        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  program   Program @relation(fields: [programId], references: [id])
+  programId String
+
+  questions AssessmentQuestion[]
+  attempts  Attempt[]
+}
+
+model Question {
+  id            String   @id @default(cuid())
+  text          String   @db.Text
+  type          String // e.g. 'MULTIPLE_CHOICE'
+  parameter     String? // e.g. 'Self-Clarity', 'Confidence'
+  weight        Float    @default(1.0)
+  correctAnswer String? // ID or value of the correct answer
+  options       Json // Array of { id, text }
+  image         String? // URL to uploaded image
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  assessments AssessmentQuestion[]
+}
+
+model AssessmentQuestion {
+  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+  assessmentId String
+  question     Question   @relation(fields: [questionId], references: [id])
+  questionId   String
+
+  @@id([assessmentId, questionId])
+}
+
+model Attempt {
+  id           String    @id @default(cuid())
+  startTime    DateTime  @default(now())
+  endTime      DateTime?
+  status       String    @default("IN_PROGRESS") // 'IN_PROGRESS', 'SUBMITTED', 'EVALUATED'
+  score        Float?
+  anomalyFlags Json? // Array of flags { type, timestamp }
+
+  student   User   @relation(fields: [studentId], references: [id])
+  studentId String
+
+  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+  assessmentId String
+
+  responses    Response[]
+  certificates Certificate[]
+
+  @@unique([studentId, assessmentId]) // A student can attempt an assessment once (or we can drop this for retakes)
+}
+
+model Response {
+  id        String   @id @default(cuid())
+  answer    String?
+  isCorrect Boolean?
+
+  attempt    Attempt  @relation(fields: [attemptId], references: [id])
+  attemptId  String
+  questionId String
+
+  @@unique([attemptId, questionId])
+}
+
+model Certificate {
+  id            String   @id @default(cuid()) // CU-EMP-2026-8F3K9Q2R format
+  issueDate     DateTime @default(now())
+  status        String   @default("ACTIVE") // 'ACTIVE', 'REVOKED'
+  generatedById String? // ID of the official who generated it
+
+  student   User   @relation(fields: [studentId], references: [id])
+  studentId String
+
+  // Keep these as relations for easy querying
+  program            Program @relation(fields: [programId], references: [id])
+  programId          String
+  
+  // Assuming assessmentResultId points to Attempt based on the DB structure
+  assessmentResult   Attempt @relation(fields: [assessmentResultId], references: [id])
+  assessmentResultId String
+}
