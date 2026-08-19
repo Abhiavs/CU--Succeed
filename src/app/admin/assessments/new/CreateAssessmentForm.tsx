@@ -4,11 +4,22 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, Save } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 
 type Program = { id: string; name: string };
 type Question = { id: string; text: string; parameter: string | null; type: string };
 
-export default function CreateAssessmentForm({ programs, questions }: { programs: Program[], questions: Question[] }) {
+export default function CreateAssessmentForm({
+  programs,
+  questions,
+}: {
+  programs: Program[];
+  questions: Question[];
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -18,8 +29,8 @@ export default function CreateAssessmentForm({ programs, questions }: { programs
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
 
   const toggleQuestion = (id: string) => {
-    setSelectedQuestions(prev => 
-      prev.includes(id) ? prev.filter(q => q !== id) : [...prev, id]
+    setSelectedQuestions((prev) =>
+      prev.includes(id) ? prev.filter((q) => q !== id) : [...prev, id]
     );
   };
 
@@ -61,124 +72,143 @@ export default function CreateAssessmentForm({ programs, questions }: { programs
   };
 
   return (
-    <>
-      <div className="mb-4">
-        <Link href="/admin/assessments" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-white transition-colors">
-          <ChevronLeft size={16} /> Back to Assessments
-        </Link>
-      </div>
-
+    <div className="space-y-6 text-left text-slate-900 dark:text-slate-100">
       <div>
-        <h1 className="text-3xl font-display font-bold text-white mb-2">Create New Assessment</h1>
-        <p className="text-muted-foreground font-light">Configure a new assessment and map it to a specific course.</p>
+        <Link
+          href="/admin/assessments"
+          className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors mb-2"
+        >
+          <ChevronLeft size={15} /> Back to Assessments
+        </Link>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+          Create New Assessment
+        </h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Configure a new Pre-Test, Post-Test, or Track assessment for student cohorts.
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <div className="glass p-8 rounded-3xl space-y-6 border border-white/5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="col-span-2">
-              <label className="block text-sm font-medium text-white mb-2">Assessment Title</label>
-              <input
-                required
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g., Module 2 Post-Test"
-                className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-              />
-            </div>
-            
-            <div className="col-span-2">
-              <label className="block text-sm font-medium text-white mb-2">Description</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Optional description"
-                className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary h-24"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">Assessment Type</label>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none"
-              >
-                <option value="PRE_TEST">Pre-Test</option>
-                <option value="POST_TEST">Post-Test</option>
-                <option value="PSYCHOMETRIC">Psychometric</option>
-                <option value="APTITUDE">Aptitude</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">Target Course (Program)</label>
-              <select
-                value={programId}
-                onChange={(e) => setProgramId(e.target.value)}
-                required
-                className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none"
-              >
-                {programs.map(p => (
-                  <option key={p.id} value={p.id}>{p.name}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div className="glass p-8 rounded-3xl space-y-6 border border-white/5">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-xl font-bold text-white">Select Questions</h2>
-              <p className="text-sm text-muted-foreground font-light">{selectedQuestions.length} selected</p>
-            </div>
-          </div>
-
-          <div className="max-h-96 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-            {questions.map((q) => (
-              <label key={q.id} className={`flex items-start gap-4 p-4 rounded-xl border cursor-pointer transition-all ${
-                selectedQuestions.includes(q.id) 
-                  ? 'bg-primary/10 border-primary/50' 
-                  : 'bg-black/20 border-white/5 hover:bg-white/5'
-              }`}>
-                <div className="mt-0.5 relative flex items-center justify-center w-5 h-5 rounded border-2 border-muted-foreground transition-colors">
-                  <input 
-                    type="checkbox" 
-                    checked={selectedQuestions.includes(q.id)}
-                    onChange={() => toggleQuestion(q.id)}
-                    className="peer absolute opacity-0 w-full h-full cursor-pointer" 
-                  />
-                  <div className={`w-3 h-3 rounded-sm bg-primary transition-opacity ${selectedQuestions.includes(q.id) ? 'opacity-100' : 'opacity-0'}`}></div>
-                </div>
-                <div>
-                  <div className="text-white text-sm leading-relaxed mb-1">{q.text}</div>
-                  <div className="flex gap-2">
-                    <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-white/10 text-muted-foreground">{q.parameter || q.type}</span>
-                  </div>
-                </div>
-              </label>
-            ))}
-            {questions.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground text-sm">
-                No questions found in the bank. Please create questions first.
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <CardContent className="p-6 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="col-span-2 space-y-1.5">
+                <Label htmlFor="title">Assessment Title</Label>
+                <Input
+                  id="title"
+                  required
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="e.g., Diagnostic Pre-Assessment 2026"
+                />
               </div>
-            )}
-          </div>
-        </div>
 
-        <div className="flex justify-end pt-4">
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="btn btn-primary px-8 py-3 text-base"
-          >
-            <Save size={18} />
-            {loading ? "Creating..." : "Create Assessment"}
-          </button>
+              <div className="col-span-2 space-y-1.5">
+                <Label htmlFor="desc">Description</Label>
+                <textarea
+                  id="desc"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Optional assessment description"
+                  className="h-20"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="type">Assessment Category</Label>
+                <select
+                  id="type"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="h-10 text-xs"
+                >
+                  <option value="PRE_TEST">Pre-Assessment (Baseline)</option>
+                  <option value="POST_TEST">Post-Assessment (Outcome)</option>
+                  <option value="PSYCHOMETRIC">Psychometric Matrix</option>
+                  <option value="APTITUDE">Aptitude Precision</option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="program">Target Course / Cohort</Label>
+                <select
+                  id="program"
+                  value={programId}
+                  onChange={(e) => setProgramId(e.target.value)}
+                  className="h-10 text-xs"
+                >
+                  {programs.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                  {programs.length === 0 && (
+                    <option value="default">General Employability Cohort</option>
+                  )}
+                </select>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Question Selector */}
+        <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <CardContent className="p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white">Select Questions</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {selectedQuestions.length} of {questions.length} questions selected
+                </p>
+              </div>
+            </div>
+
+            <div className="max-h-80 overflow-y-auto space-y-2 pr-1">
+              {questions.map((q) => {
+                const isSelected = selectedQuestions.includes(q.id);
+                return (
+                  <label
+                    key={q.id}
+                    className={`flex items-start gap-3 p-3.5 rounded-lg border cursor-pointer transition-all ${
+                      isSelected
+                        ? "border-emerald-500 bg-emerald-50/50 dark:bg-slate-950/80 ring-1 ring-emerald-500"
+                        : "border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleQuestion(q.id)}
+                      className="mt-0.5 h-4 w-4 rounded border-slate-300 dark:border-slate-700 text-emerald-600 focus:ring-emerald-500"
+                    />
+                    <div className="flex-1">
+                      <div className="text-xs text-slate-900 dark:text-slate-100 font-medium mb-1.5 leading-relaxed">
+                        {q.text}
+                      </div>
+                      <Badge variant="outline" className="text-[10px]">
+                        {q.parameter || q.type}
+                      </Badge>
+                    </div>
+                  </label>
+                );
+              })}
+              {questions.length === 0 && (
+                <div className="text-center py-6 text-xs text-slate-500 dark:text-slate-400">
+                  No questions in question bank. Seed or add questions first.
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-end pt-2">
+          <Button type="submit" disabled={loading} className="h-10 px-6 text-xs font-semibold">
+            <Save size={15} className="mr-1.5" />
+            {loading ? "Creating..." : "Save Assessment"}
+          </Button>
         </div>
       </form>
-    </>
+    </div>
   );
 }

@@ -1,149 +1,252 @@
 @import "tailwindcss";
 
-@theme inline {
-  --color-background: #050505;
-  --color-foreground: #FAFAFA;
-  
-  --color-card: rgba(20, 20, 20, 0.6);
-  --color-card-hover: rgba(30, 30, 30, 0.8);
-  --color-border: #222222;
-  --color-border-glow: #333333;
-  
-  --color-primary: #10B981; /* Emerald */
-  --color-primary-glow: rgba(16, 185, 129, 0.3);
-  --color-primary-foreground: #022C22;
-  
-  --color-secondary: #3B82F6; /* Blue */
-  --color-secondary-glow: rgba(59, 130, 246, 0.3);
-  
-  --color-muted: #1A1A1A;
-  --color-muted-foreground: #A1A1AA;
-  
-  /* Animations */
-  --animate-fade-in: fadeIn 0.5s ease-out forwards;
-  --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-pulse-slow: pulseSlow 4s infinite alternate;
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bg-app: #090d16;
+    --bg-card: #0f172a;
+    --bg-nav: #090d16;
+    --border-main: rgba(255, 255, 255, 0.1);
+    --text-heading: #ffffff;
+    --text-body: #cbd5e1;
+    --text-muted: #94a3b8;
+    color-scheme: dark;
   }
-  
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+
+  html.light {
+    --bg-app: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-nav: #ffffff;
+    --border-main: #e2e8f0;
+    --text-heading: #0f172a;
+    --text-body: #334155;
+    --text-muted: #64748b;
+    color-scheme: light;
   }
-  
-  @keyframes pulseSlow {
-    from { opacity: 0.4; }
-    to { opacity: 0.8; }
+
+  html.dark {
+    color-scheme: dark;
   }
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--bg-app);
+  color: var(--text-body);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.05), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.05), transparent 25%);
-  background-attachment: fixed;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
-/* Glassmorphism utilities */
-.glass {
-  background: var(--color-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-border);
+/* ==================================================== */
+/* SELECT & OPTION THEME FIX FOR NATIVE OS POPUPS       */
+/* ==================================================== */
+select {
+  color-scheme: dark;
+  background-color: #0f172a;
+  color: #f8fafc;
 }
 
-.glass-hover:hover {
-  background: var(--color-card-hover);
-  border-color: var(--color-border-glow);
-  box-shadow: 0 0 20px var(--color-primary-glow);
-  transform: translateY(-2px);
-  transition: all 0.3s ease;
+select option {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
 }
 
-/* Base Form Inputs for new dark theme */
-input, select, textarea {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid var(--color-border);
-  color: var(--color-foreground);
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
-  width: 100%;
-  transition: all 0.2s ease;
+html.light select {
+  color-scheme: light !important;
+  background-color: #ffffff !important;
+  color: #0f172a !important;
 }
 
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary-glow);
+html.light select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
 }
 
-/* Standardized Button Classes */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.25rem;
-  border-radius: 0.75rem;
-  font-weight: 500;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
-  cursor: pointer;
+/* ==================================================== */
+/* BULLETPROOF LIGHT MODE ENFORCEMENT                   */
+/* ==================================================== */
+html.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
 }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+html.light header,
+html.light aside,
+html.light nav {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
 }
 
-.btn-primary {
-  background: var(--color-primary);
-  color: var(--color-primary-foreground);
-  border: 1px solid var(--color-primary);
+html.light .bg-slate-950,
+html.light .bg-\[\#090d16\] {
+  background-color: #f8fafc !important;
 }
 
-.btn-primary:hover:not(:disabled) {
-  box-shadow: 0 0 15px var(--color-primary-glow);
-  transform: translateY(-1px);
+html.light .bg-slate-900,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/70,
+html.light .bg-slate-900\/60,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/40 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
 }
 
-.btn-secondary {
-  background: var(--color-secondary);
-  color: #fff;
-  border: 1px solid var(--color-secondary);
+html.light .border-slate-800,
+html.light .border-slate-800\/80,
+html.light .border-slate-800\/60,
+html.light .border-slate-700,
+html.light .border-white\/10,
+html.light .border-white\/5 {
+  border-color: #e2e8f0 !important;
 }
 
-.btn-secondary:hover:not(:disabled) {
-  box-shadow: 0 0 15px var(--color-secondary-glow);
-  transform: translateY(-1px);
+/* Light mode text contrast overrides (excluding solid button children) */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
+  color: #0f172a !important;
 }
 
-.btn-glass {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--color-foreground);
-  backdrop-filter: blur(8px);
+html.light .text-white:not(button.bg-emerald-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
+html.light .text-slate-100:not(button.bg-emerald-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
+html.light .text-slate-200:not(button.bg-emerald-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
+html.light .text-slate-300:not(button.bg-emerald-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *) {
+  color: #0f172a !important;
 }
 
-.btn-glass:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+html.light .text-slate-400,
+html.light .text-slate-500,
+html.light .text-muted-foreground {
+  color: #475569 !important;
 }
 
-.btn-outline {
+/* SOLID BUTTONS: Text MUST be clean white */
+html.light button.bg-emerald-600,
+html.light button.bg-emerald-500,
+html.light button[class*="bg-emerald"],
+html.light button.bg-blue-600,
+html.light button.bg-blue-500,
+html.light button[class*="bg-blue"],
+html.light button.bg-slate-800,
+html.light button.bg-slate-900,
+html.light button.bg-red-600,
+html.light .btn-primary,
+html.light .btn-secondary {
+  color: #ffffff !important;
+}
+
+html.light button.bg-emerald-600 *,
+html.light button.bg-emerald-500 *,
+html.light button[class*="bg-emerald"] *,
+html.light button.bg-blue-600 *,
+html.light button.bg-blue-500 *,
+html.light button[class*="bg-blue"] *,
+html.light button.bg-slate-800 *,
+html.light button.bg-slate-900 *,
+html.light button.bg-red-600 *,
+html.light .btn-primary *,
+html.light .btn-secondary * {
+  color: #ffffff !important;
+}
+
+/* OUTLINE & GHOST BUTTONS */
+html.light button[class*="bg-transparent"],
+html.light button[class*="border-slate"],
+html.light button.bg-white,
+html.light .btn-outline,
+html.light .btn-ghost {
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  background-color: #ffffff !important;
+}
+
+html.light button[class*="bg-transparent"] *,
+html.light button[class*="border-slate"] *,
+html.light button.bg-white * {
+  color: #0f172a !important;
+}
+
+/* INPUTS & SELECTS */
+html.light input,
+html.light textarea,
+html.light select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* BADGES */
+html.light [class*="bg-emerald-500/10"],
+html.light [class*="bg-emerald-500/20"] {
+  background-color: #ecfdf5 !important;
+  color: #065f46 !important;
+  border-color: #a7f3d0 !important;
+}
+
+html.light [class*="bg-blue-500/10"],
+html.light [class*="bg-blue-500/20"] {
+  background-color: #eff6ff !important;
+  color: #1e40af !important;
+  border-color: #bfdbfe !important;
+}
+
+html.light [class*="bg-indigo-500/10"],
+html.light [class*="bg-indigo-500/20"] {
+  background-color: #eef2ff !important;
+  color: #3730a3 !important;
+  border-color: #c7d2fe !important;
+}
+
+html.light [class*="bg-amber-500/10"],
+html.light [class*="bg-amber-500/20"] {
+  background-color: #fffbeb !important;
+  color: #92400e !important;
+  border-color: #fde68a !important;
+}
+
+html.light [class*="bg-red-500/10"],
+html.light [class*="bg-red-500/20"] {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  border-color: #fecaca !important;
+}
+
+html.light [class*="bg-slate-100"],
+html.light [class*="bg-slate-800/40"],
+html.light [class*="bg-slate-800/60"] {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--color-foreground);
 }
 
-.btn-outline:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.4);
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
 
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}

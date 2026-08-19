@@ -2,8 +2,19 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, BookOpen, FileSpreadsheet, ClipboardList, HelpCircle, BarChart3, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  BookOpen,
+  FileSpreadsheet,
+  ClipboardList,
+  HelpCircle,
+  BarChart3,
+  ShieldCheck,
+  UserCheck,
+} from "lucide-react";
 import { SignOutButton } from "@/components/SignOutButton";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Badge } from "@/components/ui/badge";
 
 export default async function AdminLayout({
   children,
@@ -16,75 +27,96 @@ export default async function AdminLayout({
     redirect("/admin-login");
   }
 
+  const navItems = [
+    { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { label: "Assessments", href: "/admin/assessments", icon: ClipboardList },
+    { label: "Question Bank", href: "/admin/questions", icon: HelpCircle },
+    { label: "Results", href: "/admin/results", icon: FileSpreadsheet },
+    { label: "Certificates", href: "/admin/certificates", icon: BookOpen },
+    { label: "Training Matrix", href: "/admin/matrix", icon: BarChart3 },
+  ];
+
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* Glass Sidebar */}
-      <aside className="w-64 flex-shrink-0 glass border-r border-border flex flex-col relative z-20">
-        <div className="p-6 border-b border-border flex items-center justify-between">
-          <Link href="/admin" className="font-display font-bold text-xl text-secondary">
-            SucceedAcademy
-          </Link>
-        </div>
-        
-        <div className="p-4 flex-1 overflow-y-auto">
-          <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-4 pl-3">Main Menu</div>
-          <nav className="space-y-2">
-            <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-white/5 transition-colors text-foreground">
-              <LayoutDashboard size={18} className="text-secondary" />
-              Dashboard
+    <div className="flex h-screen overflow-hidden bg-[#090d16] text-slate-100">
+      {/* Sidebar */}
+      <aside className="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col justify-between z-20">
+        <div>
+          {/* Brand */}
+          <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <Link href="/admin" className="flex items-center gap-2.5">
+              <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
+                SA
+              </div>
+              <div className="text-left">
+                <div className="font-bold text-sm text-slate-900 dark:text-white tracking-tight">
+                  Succeed<span className="text-emerald-600 dark:text-emerald-400 font-semibold">Academy</span>
+                </div>
+                <div className="text-[10px] text-slate-500 font-mono">OFFICIAL PORTAL</div>
+              </div>
             </Link>
-            <Link href="/admin/assessments" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-white/5 transition-colors text-muted-foreground hover:text-foreground">
-              <ClipboardList size={18} className="text-muted-foreground" />
-              Assessments
-            </Link>
-            <Link href="/admin/questions" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-white/5 transition-colors text-muted-foreground hover:text-foreground">
-              <HelpCircle size={18} className="text-muted-foreground" />
-              Question Bank
-            </Link>
-            <Link href="/admin/results" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-white/5 transition-colors text-muted-foreground hover:text-foreground">
-              <FileSpreadsheet size={18} className="text-muted-foreground" />
-              Results
-            </Link>
-            <Link href="/admin/certificates" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-white/5 transition-colors text-muted-foreground hover:text-foreground">
-              <BookOpen size={18} className="text-muted-foreground" />
-              Certificates
-            </Link>
-            <Link href="/admin/matrix" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-white/5 transition-colors text-muted-foreground hover:text-foreground">
-              <BarChart3 size={18} className="text-muted-foreground" />
-              Training Matrix
-            </Link>
-          </nav>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="p-4 space-y-1">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-3 px-3 text-left">
+              Management
+            </div>
+            <nav className="space-y-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+                  >
+                    <Icon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
         </div>
 
-        <div className="p-4 border-t border-border">
-           <SignOutButton variant="icon" />
+        {/* Footer with Administrator Profile */}
+        <div className="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-xs font-bold text-emerald-600 dark:text-emerald-400 flex-shrink-0">
+            {session.user.name?.charAt(0) || "A"}
+          </div>
+          <div className="text-xs text-left min-w-0 flex-1">
+            <div className="font-semibold text-slate-900 dark:text-white truncate">
+              {session.user.name}
+            </div>
+            <div className="text-[10px] text-slate-500 font-mono">Administrator</div>
+          </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden relative">
-        {/* Animated Orbs for the Dashboard */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-[100px] -z-10"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -z-10"></div>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Header Nav with ThemeToggle AND Logout */}
+        <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/80 px-8 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-400">ADMIN CONTROL CENTER</span>
+            <Badge variant="outline" className="text-[10px]">
+              Active Session
+            </Badge>
+          </div>
 
-        {/* Top Header */}
-        <header className="h-16 glass border-b border-border flex items-center justify-between px-8 relative z-10">
-          <h1 className="text-lg font-semibold text-white">Official Portal</h1>
-          <div className="flex items-center gap-4">
-             <div className="flex items-center gap-3 bg-white/5 px-4 py-1.5 rounded-full border border-white/5">
-               <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-secondary to-purple-500 flex items-center justify-center text-xs font-bold">
-                 {session.user.name?.charAt(0) || "A"}
-               </div>
-               <span className="text-sm font-medium">{session.user.name}</span>
-             </div>
+          <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
+            <span className="hidden sm:inline">
+              Server Status: <strong className="text-emerald-600 dark:text-emerald-400">Online</strong>
+            </span>
+            <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 hidden sm:block" />
+            <ThemeToggle />
+            <SignOutButton />
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-8 relative z-10">
-          <div className="max-w-6xl mx-auto animate-fade-in">
-            {children}
-          </div>
+        {/* Dynamic Page Content */}
+        <main className="flex-1 overflow-y-auto p-8">
+          <div className="max-w-6xl mx-auto">{children}</div>
         </main>
       </div>
     </div>

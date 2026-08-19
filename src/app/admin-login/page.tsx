@@ -4,10 +4,16 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { ShieldCheck, ArrowRight, Lock, Mail } from "lucide-react";
 
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@succeed.com");
+  const [password, setPassword] = useState("admin123");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -24,7 +30,7 @@ export default function AdminLoginPage() {
     });
 
     if (res?.error) {
-      setError("Invalid admin credentials");
+      setError("Invalid admin credentials. Please use admin@succeed.com / admin123");
       setLoading(false);
     } else {
       router.push("/admin");
@@ -32,66 +38,98 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-secondary/10 rounded-full blur-[100px] -z-10 translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-primary/10 rounded-full blur-[100px] -z-10 -translate-x-1/2 translate-y-1/2"></div>
-
-      <div className="glass p-10 rounded-3xl w-full max-w-md mx-4 animate-slide-up relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-secondary to-transparent rounded-t-3xl"></div>
-        
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-block font-display font-bold text-2xl text-white mb-2">
-            SucceedAcademy
+    <div className="min-h-screen bg-[#090d16] flex flex-col justify-center items-center px-4 sm:px-6 text-slate-100">
+      <div className="w-full max-w-md space-y-6">
+        {/* Brand Header */}
+        <div className="text-center space-y-2">
+          <Link href="/" className="inline-flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
+              SA
+            </div>
+            <span className="font-bold text-lg text-white tracking-tight">
+              Succeed<span className="text-emerald-400 font-semibold">Academy</span>
+            </span>
           </Link>
-          <h2 className="text-lg text-secondary font-light flex items-center justify-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-            Official Portal
-          </h2>
+          <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>Official Administrator Portal</span>
+          </div>
         </div>
-        
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-center text-sm font-medium animate-fade-in">
-            {error}
-          </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div>
-            <label className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 block">Admin Email</label>
-            <input
-              type="email"
-              placeholder="admin@cusucceed.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="focus:border-secondary focus:ring-secondary/20 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.3)]"
-            />
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 block">Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="focus:border-secondary focus:ring-secondary/20 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.3)]"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn btn-secondary w-full py-4 text-base mt-2"
-          >
-            {loading ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> : "Access Portal"}
-          </button>
-        </form>
+        {/* Login Card */}
+        <Card className="border-slate-800 bg-slate-900">
+          <CardContent className="p-6 sm:p-8 space-y-4">
+            <div className="space-y-1 text-left">
+              <h2 className="text-lg font-bold text-white">Administrator Sign In</h2>
+              <p className="text-xs text-slate-400">
+                Access cohort analytics, question banks, and certificate issuing controls.
+              </p>
+            </div>
 
-        <div className="mt-8 pt-6 border-t border-white/10 text-center text-sm font-medium text-muted-foreground">
-          <p>
-            Are you a student? <Link href="/login" className="text-primary hover:text-primary-glow transition-colors hover:underline">Student Login</Link>
-          </p>
+            {error && (
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium text-center">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4 text-left">
+              <div className="space-y-1">
+                <Label htmlFor="admin-email" className="text-xs text-slate-300">
+                  Admin Email
+                </Label>
+                <Input
+                  id="admin-email"
+                  type="email"
+                  placeholder="admin@succeed.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="admin-password" className="text-xs text-slate-300">
+                  Password
+                </Label>
+                <Input
+                  id="admin-password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Default Credential Helper Box */}
+              <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+                <div className="font-semibold text-slate-300">Default Administrator Credentials:</div>
+                <div className="font-mono text-slate-400">
+                  Email: <strong className="text-emerald-400">admin@succeed.com</strong> (or <strong className="text-emerald-400">admin@cusucceed.com</strong>)
+                </div>
+                <div className="font-mono text-slate-400">
+                  Password: <strong className="text-emerald-400">admin123</strong>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full h-10 text-xs font-semibold"
+              >
+                {loading ? "Authenticating..." : "Access Admin Portal"}
+                <ArrowRight className="w-3.5 h-3.5 ml-1" />
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        {/* Footer Link */}
+        <div className="text-center text-xs text-slate-400">
+          Student taking an assessment?{" "}
+          <Link href="/login" className="text-emerald-400 font-semibold hover:underline">
+            Student Sign In
+          </Link>
         </div>
       </div>
     </div>

@@ -1,59 +1,74 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { Compass, ShieldCheck, ArrowRight, UserCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default async function Navbar() {
   const session = await getServerSession(authOptions);
 
   return (
-    <nav className="sticky top-0 z-50 glass px-6 py-4">
-      <div className="max-w-[1080px] mx-auto flex items-center justify-between">
-        <Link href="/" className="font-display font-bold text-xl text-primary whitespace-nowrap hover:text-white transition-colors">
-          SucceedAcademy
+    <header className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/90 backdrop-blur-md">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
+        {/* Brand Logo */}
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
+            SA
+          </div>
+          <div className="font-bold text-base text-white tracking-tight">
+            Succeed<span className="text-emerald-400 font-semibold">Academy</span>
+          </div>
         </Link>
-        <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0 text-sm font-medium">
-          <li><Link href="/#about" className="text-muted-foreground hover:text-primary transition-colors">About</Link></li>
-          <li><Link href="/#programs" className="text-muted-foreground hover:text-primary transition-colors">Programs</Link></li>
-          <li><Link href="/#ecosystem" className="text-muted-foreground hover:text-primary transition-colors">Platform</Link></li>
+
+        {/* Navigation Links */}
+        <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
+          <Link href="/#flow" className="hover:text-white transition-colors">
+            Assessment Flow
+          </Link>
+          <Link href="/#tracks" className="hover:text-white transition-colors">
+            Tracks
+          </Link>
+          <Link href="/student/reports" className="hover:text-white transition-colors flex items-center gap-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+            Certificates
+          </Link>
+        </nav>
+
+        {/* Action Buttons & Theme Changer */}
+        <div className="flex items-center gap-2.5">
+          <ThemeToggle />
+
           {session ? (
-            <li>
-              <Link 
-                href={session.user.role === "OFFICIAL" ? "/admin" : "/student"} 
-                className="px-5 py-2.5 bg-primary/10 text-primary border border-primary/20 rounded-full hover:bg-primary hover:text-primary-foreground transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)]"
-              >
-                Dashboard
+            <div className="flex items-center gap-2">
+              <Link href={session.user.role === "OFFICIAL" ? "/admin" : "/student"}>
+                <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8">
+                  <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="hidden sm:inline">{session.user.name}</span>
+                </Button>
               </Link>
-            </li>
-          ) : (
-            <li>
-              <Link 
-                href="/login" 
-                className="px-5 py-2.5 bg-primary/10 text-primary border border-primary/20 rounded-full hover:bg-primary hover:text-primary-foreground transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)]"
-              >
-                Login
+              <Link href="/student">
+                <Button size="sm" className="text-xs h-8">
+                  Dashboard <ArrowRight className="w-3 h-3 ml-1" />
+                </Button>
               </Link>
-            </li>
-          )}
-        </ul>
-        {/* Mobile menu button */}
-        <div className="md:hidden flex items-center">
-           {session ? (
-            <Link 
-              href={session.user.role === "OFFICIAL" ? "/admin" : "/student"} 
-              className="px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-full hover:bg-primary hover:text-primary-foreground transition-all text-sm"
-            >
-              Dashboard
-            </Link>
+            </div>
           ) : (
-            <Link 
-              href="/login" 
-              className="px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-full hover:bg-primary hover:text-primary-foreground transition-all text-sm"
-            >
-              Login
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="text-xs text-slate-300 hover:text-white h-8">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/start">
+                <Button size="sm" className="text-xs h-8">
+                  Start <ArrowRight className="w-3 h-3 ml-1" />
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 }

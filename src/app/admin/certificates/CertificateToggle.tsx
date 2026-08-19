@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, XCircle, RotateCcw } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   certificateId: string;
@@ -16,7 +18,7 @@ export default function CertificateToggle({ certificateId, initialStatus }: Prop
   const toggleStatus = async () => {
     const newStatus = initialStatus === "ACTIVE" ? "REVOKED" : "ACTIVE";
     if (!confirm(`Are you sure you want to change this certificate to ${newStatus}?`)) return;
-    
+
     setLoading(true);
     try {
       await fetch(`/api/certificates/${certificateId}`, {
@@ -33,25 +35,27 @@ export default function CertificateToggle({ certificateId, initialStatus }: Prop
   };
 
   return (
-    <div className="flex items-center justify-end gap-4">
+    <div className="flex items-center justify-end gap-3">
       {initialStatus === "ACTIVE" ? (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-xs font-medium">
-          <CheckCircle2 size={14} /> Active
-        </span>
+        <Badge variant="default" className="text-[10px]">
+          <CheckCircle2 size={12} className="mr-1" /> Active
+        </Badge>
       ) : (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-500/10 text-red-400 border border-red-500/20 rounded-full text-xs font-medium">
-          <XCircle size={14} /> Revoked
-        </span>
+        <Badge variant="destructive" className="text-[10px]">
+          <XCircle size={12} className="mr-1" /> Revoked
+        </Badge>
       )}
-      
-      <button 
+
+      <Button
+        variant="outline"
+        size="icon"
         onClick={toggleStatus}
         disabled={loading}
-        className="btn btn-outline p-2 disabled:opacity-50"
+        className="h-7 w-7 text-xs border-slate-700 hover:bg-slate-800"
         title={initialStatus === "ACTIVE" ? "Revoke Certificate" : "Restore Certificate"}
       >
-        <RotateCcw size={16} />
-      </button>
+        <RotateCcw size={12} />
+      </Button>
     </div>
   );
 }

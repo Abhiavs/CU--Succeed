@@ -2,26 +2,25 @@
 
 import { signOut } from "next-auth/react";
 import { LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export function SignOutButton({ className, variant = "default" }: { className?: string, variant?: "default" | "icon" }) {
-  if (variant === "icon") {
-    return (
-      <button 
-        onClick={() => signOut({ callbackUrl: '/' })} 
-        className={className || "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-red-500/10 hover:text-red-400 transition-colors text-muted-foreground w-full text-left"}
-      >
-        <LogOut size={18} />
-        Sign Out
-      </button>
-    );
-  }
-
+export function SignOutButton({
+  className,
+}: {
+  className?: string;
+}) {
   return (
-    <button 
-      onClick={() => signOut({ callbackUrl: '/' })} 
-      className={className || "text-coral font-medium hover:text-coral-dark transition-colors underline"}
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => signOut({ callbackUrl: "/" })}
+      className={`h-8 w-8 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-500/30 hover:bg-red-50 dark:hover:bg-red-950/30 border-slate-300 dark:border-slate-800 transition-colors cursor-pointer ${
+        className || ""
+      }`}
+      title="Sign Out / Logout"
+      aria-label="Logout"
     >
-      Logout
-    </button>
+      <LogOut className="w-4 h-4" />
+    </Button>
   );
 }

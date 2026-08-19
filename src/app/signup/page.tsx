@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Sparkles, ArrowRight, User, Mail, Lock } from "lucide-react";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -25,86 +30,121 @@ export default function SignupPage() {
       });
 
       if (res.ok) {
-        router.push("/login");
+        router.push("/start");
       } else {
         const data = await res.json();
-        setError(data.message || "Something went wrong");
+        setError(data.message || data.error || "Something went wrong");
         setLoading(false);
       }
-    } catch (error) {
+    } catch {
       setError("Failed to register. Try again.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-primary/10 rounded-full blur-[100px] -z-10 translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-secondary/10 rounded-full blur-[100px] -z-10 -translate-x-1/2 translate-y-1/2"></div>
+    <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-slate-950 p-4">
+      {/* Background Glow */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
-      <div className="glass p-10 rounded-3xl w-full max-w-md mx-4 animate-slide-up relative mt-16 mb-16">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-primary to-transparent rounded-t-3xl"></div>
-        
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-block font-display font-bold text-2xl text-white mb-2">
-            SucceedAcademy
-          </Link>
-          <h2 className="text-lg text-muted-foreground font-light">Create Student Account</h2>
-        </div>
-        
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-center text-sm font-medium animate-fade-in">
-            {error}
+      <Card className="border-white/10 bg-slate-900/85 backdrop-blur-xl w-full max-w-md shadow-2xl animate-fade-in relative">
+        <CardContent className="p-8 sm:p-10 space-y-6">
+          <div className="text-center space-y-2">
+            <Link href="/" className="inline-flex items-center gap-2 mb-2">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1px]">
+                <div className="h-full w-full bg-slate-950 rounded-[11px] flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                </div>
+              </div>
+              <span className="font-extrabold text-xl text-white">
+                Succeed<span className="text-emerald-400">Academy</span>
+              </span>
+            </Link>
+            <h2 className="text-xl font-bold text-white tracking-tight">Create Student Account</h2>
+            <p className="text-xs text-slate-400">
+              Or launch the full{" "}
+              <Link href="/start" className="text-emerald-400 font-semibold hover:underline">
+                Assessment Onboarding Wizard
+              </Link>
+            </p>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div>
-            <label className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 block">Full Name</label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 block">Email Address</label>
-            <input
-              type="email"
-              placeholder="student@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 block">Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn btn-primary w-full py-4 text-base mt-2"
-          >
-            {loading ? <span className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></span> : "Sign Up"}
-          </button>
-        </form>
+          {error && (
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium text-center animate-fade-in">
+              {error}
+            </div>
+          )}
 
-        <div className="mt-8 pt-6 border-t border-white/10 text-center text-sm font-medium text-muted-foreground">
-          <p>
-            Already have an account? <Link href="/login" className="text-primary hover:text-primary-glow transition-colors hover:underline">Sign In</Link>
-          </p>
-        </div>
-      </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="name" className="flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-emerald-400" /> Full Name
+              </Label>
+              <Input
+                id="name"
+                placeholder="Alex Johnson"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-cyan-400" /> Email Address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="student@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-indigo-400" /> Password
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              size="lg"
+              className="w-full rounded-2xl shadow-emerald-500/20 mt-2"
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                  Creating Account...
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  Sign Up & Continue <ArrowRight className="w-4 h-4" />
+                </span>
+              )}
+            </Button>
+          </form>
+
+          <div className="pt-6 border-t border-white/10 text-center text-xs text-slate-400">
+            Already have an account?{" "}
+            <Link href="/login" className="text-emerald-400 font-semibold hover:underline">
+              Sign In
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

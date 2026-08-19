@@ -1,197 +1,224 @@
 # SucceedAcademy
 
-> The complete digital platform for student assessment, training, and employability development.
+> Enterprise-grade digital ecosystem for student employability diagnostics, psychometric assessment, aptitude benchmarking, and competency verification.
 
-**SucceedAcademy** is a full-stack web application. It provides a premium, modern interface for managing student assessments across multiple courses, with role-based access for Students and Officials (Admins).
+**SucceedAcademy** is a full-stack assessment platform built with Next.js 16, TypeScript, Tailwind CSS, and Shadcn UI. It empowers institutions to evaluate students across three comprehensive pillars: **Psychometric Matrix**, **Aptitude Precision**, and an interactive **Wheel of Competencies**, generating verified scorecards and credentials.
 
 ---
 
-## ✨ Features
+## 🗺️ Standard Assessment Flow
 
-### 🎓 Student Portal
+```
+HOME
+  ↓
+SELECT TYPE (Pre / Post)
+  ↓
+SELECT YEAR (1st / 2nd / 3rd / 4th)
+  ↓
+REGISTER (Name / Roll / Branch / College)
+  ↓
+STUDENT DASHBOARD
+  ↓
+┌─────────────────────────┬─────────────────────────┬─────────────────────────┐
+│   PSYCHOMETRIC MATRIX   │    APTITUDE PRECISION   │  WHEEL OF COMPETENCIES  │
+│  • Situational Judgment │  • 15-Min Timed Exam    │  • 8-Dimension Radar    │
+│  • 5-Point Likert Scale │  • Question Navigator   │  • Live Polygon Morph   │
+│  • Trait Classification │  • Sectional Accuracy   │  • Benchmark Comparison │
+└────────────┬────────────┴────────────┬────────────┴────────────┬────────────┘
+             └─────────────────────────┼─────────────────────────┘
+                                       ↓
+                           RESULTS & CERTIFICATE
+                             • Composite Readiness Score & Percentile
+                             • Psychometric Archetype Analysis
+                             • Aptitude Sectional Breakdown
+                             • Radar Chart vs Target Benchmark
+                             • Actionable Growth Roadmap
+                             • Official Digital Certificate (Print/PDF)
+```
 
-- **Course-wise Dashboard** — Students see only the courses they are enrolled in, with per-course assessment cards showing completion status.
-- **Take Assessments** — Dynamic, timed assessments loaded from the database with polished radio-button UI.
-- **Automated Grading** — Answers are graded server-side against the question bank, and scores are saved instantly.
-- **Reports & Certificates** — View detailed score reports and earn certificates for passing assessments.
+---
 
-### 🛡️ Admin (Official) Portal
+## ✨ Key Features
 
-- **Live Dashboard** — Real-time stats: student count, active assessments, question bank size, and completion rate.
-- **Question Bank** — Create, view, and manage multiple-choice questions with category tagging.
-- **Assessment Builder** — Create new assessments, assign them to a course, and pick exactly which questions to include.
-- **Recent Activity Feed** — See the latest student completions with scores in real-time.
+### 🎓 Student Assessment Ecosystem
+- **6-Step Progressive Workflow** — Frictionless journey from initial onboarding to verified accreditation.
+- **Pre & Post Diagnostics** — Measure baseline skill levels before training and evaluate growth post-course.
+- **Pillar 1: Psychometric Matrix** — Scenario-based psychological evaluation (Emotional Resilience, Teamwork, Leadership, Ethics).
+- **Pillar 2: Aptitude Precision** — Timed quantitative, logical reasoning, and verbal communication examination with real-time question navigator palette.
+- **Pillar 3: Wheel of Competencies** — Interactive 8-dimension rating radar with dynamic SVG polygon morphing comparing student ratings against industry benchmarks.
+- **Executive Results Hub** — Composite Readiness Index, percentile ranking, competency archetype, and actionable growth plan.
+- **Verified Digital Certificate** — Official credential with unique verification code (`SUC-EMP-2026-XXXX`) and Print/Save PDF support.
+- **Theme Switcher** — Seamless Light & Dark mode toggle in the navigation bar with instant persistence.
 
-### 🔐 Authentication
-
-- Separate Student and Admin login portals.
-- Role-based access control (RBAC) — students can't access admin routes and vice versa.
-- Auto-enrollment: new students are automatically enrolled in the default course.
+### 🛡️ Official (Admin) Portal
+- **Management Dashboard** — Real-time tracking of student completion metrics, batch analytics, and test distributions.
+- **Question Bank** — Manage questions with category tagging and weighting.
+- **Assessment Builder** — Configure Pre/Post tests for specific academic programs.
+- **Certificate Verification** — View, issue, and inspect student certification records.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer         | Technology                |
-| ------------- | ------------------------- |
-| **Framework** | Next.js 16 (App Router)   |
-| **Language**  | TypeScript                |
-| **Styling**   | Tailwind CSS 4            |
-| **Database**  | MySQL (local)             |
-| **ORM**       | Prisma 6                  |
-| **Auth**      | NextAuth.js (Credentials) |
-| **Icons**     | Lucide React              |
+| Layer | Technology |
+|---|---|
+| **Framework** | Next.js 16 (App Router + Turbopack) |
+| **UI & Components** | Shadcn UI, Radix UI Primitives, Lucide Icons |
+| **Styling** | Tailwind CSS v4 (Light & Dark Theme Switcher) |
+| **Language** | TypeScript 5 |
+| **Database** | MySQL (with In-Memory & Local Storage Fallback) |
+| **ORM** | Prisma ORM 6 |
+| **Auth** | NextAuth.js (JWT Credentials Provider) |
+| **Data Viz** | Custom SVG Radar Visualizer, Recharts, Progress Components |
 
 ---
 
-## 🚀 Getting Started
+## 🗄️ Database Management (Prisma)
 
-### Prerequisites
+The application uses Prisma ORM with MySQL. Follow these commands to manage your database schema and client:
 
-- **Node.js** v18 or later
-- **MySQL** server running locally (e.g., XAMPP, WAMP, or standalone MySQL)
-- **npm** (comes with Node.js)
+### 1. Update Prisma Schema
+Edit [`prisma/schema.prisma`](prisma/schema.prisma) to add or modify models, relations, or fields.
 
-### 1. Clone the repository
+### 2. Generate Prisma Client
+Whenever you update `schema.prisma`, regenerate the TypeScript Prisma Client:
 
 ```bash
-git clone <your-repo-url>
-cd succeed
+npm run db:generate
+# or: npx prisma generate
 ```
 
-### 2. Install dependencies
+### 3. Push Schema Changes to Database
+Push schema updates directly to your MySQL database without manual migrations:
 
 ```bash
+npm run db:push
+# or: npx prisma db push
+```
+
+### 4. Create Migrations (Production)
+```bash
+npm run db:migrate
+# or: npx prisma migrate dev
+```
+
+### 5. Open Prisma Studio (Database GUI)
+Explore and manage database records visually in your browser:
+
+```bash
+npm run db:studio
+# or: npx prisma studio
+```
+
+---
+
+## 🚀 Quick Setup & Installation
+
+### Prerequisites
+- **Node.js** v18+ 
+- **MySQL** running locally (e.g. XAMPP, WAMP, MySQL Server on port `3306`)
+- **npm**
+
+### 1. Clone & Install
+```bash
+git clone <repository-url>
+cd succeed
 npm install
 ```
 
-### 3. Configure environment variables
-
-Create a `.env` file in the project root (or edit the existing one):
-
+### 2. Configure Environment Variables
+Create or verify `.env`:
 ```env
-DATABASE_URL="mysql://root:your_password@localhost:3306/succeed_academy"
-NEXTAUTH_SECRET="your_super_secret_key_here"
+DATABASE_URL="mysql://root:root@localhost:3306/cusucceed"
+NEXTAUTH_SECRET="your_secret_key"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
-> **Note:** Replace `your_password` with your MySQL root password. If you have no password, use `mysql://root:@localhost:3306/succeed_academy`.
-
-### 4. Create the database
-
-Open your MySQL client (phpMyAdmin, MySQL Workbench, or CLI) and create the database:
-
-```sql
-CREATE DATABASE succeed_academy;
-```
-
-### 5. Push the schema & seed data (one command)
-
+### 3. Initialize Database & Seed (One Command)
 ```bash
 npm run setup
 ```
+*This executes `prisma generate`, `prisma db push`, and seeds admin and assessment question data.*
 
-This single command will:
-
-1. Push the Prisma schema to your MySQL database (create all tables).
-2. Create a default Admin account.
-3. Seed sample questions and an assessment.
-4. Enroll existing students in the default course.
-
-> **Or run each step individually:**
->
-> ```bash
-> npm run db:push        # Create tables
-> npm run seed:admin     # Create admin account
-> npm run seed:data      # Seed questions & assessment
-> npm run seed:enroll    # Enroll students in default course
-> ```
-
-### 6. Start the development server
-
+### 4. Start Development Server
 ```bash
 npm run dev
 ```
-
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 📜 Available Scripts
+
+| Script | Command | Description |
+|---|---|---|
+| `npm run dev` | `next dev` | Start development server on `localhost:3000` |
+| `npm run build` | `next build` | Compile optimized production build |
+| `npm run start` | `next start` | Launch production server |
+| `npm run db:generate` | `prisma generate` | Generate Prisma Client |
+| `npm run db:push` | `prisma db push` | Push Prisma schema to MySQL |
+| `npm run db:migrate` | `prisma migrate dev` | Run Prisma migration workflow |
+| `npm run db:studio` | `prisma studio` | Open web-based DB visualizer |
+| `npm run seed:admin` | `node scripts/seedAdmin.mjs` | Create default admin account |
+| `npm run seed:data` | `node scripts/seedData.mjs` | Seed mock assessment questions |
+| `npm run setup` | `...` | Full automated DB generation, push & seeding |
 
 ---
 
 ## 🔑 Default Credentials
 
-| Role    | Email                 | Password   |
-| ------- | --------------------- | ---------- |
-| Admin   | `admin@succeed.com`   | `admin123` |
-| Student | Sign up via `/signup` | (your own) |
+| Role | Email | Password |
+|---|---|---|
+| **Admin (Official)** | `admin@succeed.com` | `admin123` |
+| **Student** | Any email via `/start` | Your registered password |
 
 ---
 
-## 📁 Project Structure
+## 📁 Directory Structure
 
 ```
 succeed/
 ├── prisma/
-│   └── schema.prisma         # Database schema
+│   └── schema.prisma             # Prisma Database schema models
 ├── scripts/
-│   ├── seedAdmin.mjs         # Create default admin
-│   ├── seedData.mjs          # Seed questions & assessments
-│   └── enrollStudents.mjs    # Enroll students in courses
+│   ├── seedAdmin.mjs             # Admin user seeder
+│   ├── seedData.mjs              # Assessment & Question bank seeder
+│   └── enrollStudents.mjs        # Student enrollment script
 ├── src/
 │   ├── app/
-│   │   ├── page.tsx              # Landing page
-│   │   ├── login/                # Student login
-│   │   ├── signup/               # Student registration
-│   │   ├── admin-login/          # Admin login
-│   │   ├── admin/                # Admin portal (layout + pages)
-│   │   │   ├── layout.tsx        # Sidebar layout
-│   │   │   ├── page.tsx          # Dashboard
-│   │   │   ├── assessments/      # Assessment management
-│   │   │   ├── questions/        # Question bank
-│   │   │   ├── results/          # Result generation
-│   │   │   ├── certificates/     # Certificate management
-│   │   │   └── matrix/           # Training matrix
-│   │   ├── student/              # Student portal
-│   │   │   ├── page.tsx          # Student dashboard
-│   │   │   ├── assessment/[id]/  # Take assessment (dynamic)
-│   │   │   └── reports/          # View reports
-│   │   └── api/                  # API routes
-│   │       ├── auth/             # Auth (signup, NextAuth)
-│   │       ├── assessments/      # Assessment CRUD & grading
-│   │       └── questions/        # Question CRUD
-│   ├── components/               # Shared components
-│   └── lib/                      # Prisma client, auth config
+│   │   ├── page.tsx              # Home landing page with workflow figure
+│   │   ├── start/page.tsx        # 3-Step Wizard (Type -> Year -> Register)
+│   │   ├── login/page.tsx        # Student login
+│   │   ├── signup/page.tsx       # Student registration
+│   │   ├── admin-login/          # Official admin login
+│   │   ├── student/
+│   │   │   ├── page.tsx          # Student Dashboard (3 assessment tracks)
+│   │   │   ├── assessment/
+│   │   │   │   ├── psychometric/ # Psychometric matrix module
+│   │   │   │   └── aptitude/     # Timed aptitude examination
+│   │   │   ├── wheel/page.tsx    # Interactive Wheel of Competencies
+│   │   │   ├── results/page.tsx  # Composite results & digital certificate
+│   │   │   └── reports/page.tsx  # Reports hub
+│   │   ├── admin/                # Official management portal
+│   │   └── api/                  # Backend REST API routes
+│   │       ├── auth/             # NextAuth & registration
+│   │       ├── assessments/      # Scoring and attempt evaluation
+│   │       ├── wheel/            # WheelScore persistence
+│   │       └── student/          # Aggregate student state
+│   ├── components/
+│   │   ├── ui/                   # Shadcn UI primitives (Button, Card, Badge, Slider, etc.)
+│   │   ├── Navbar.tsx            # Navigation header with ThemeToggle
+│   │   └── ThemeToggle.tsx       # Light / Dark mode switcher
+│   └── lib/
+│       ├── assessmentData.ts     # Questions, 8-wheel dimensions & scoring logic
+│       ├── store.ts              # In-memory resilient state store
+│       ├── prisma.ts             # Prisma client singleton
+│       └── utils.ts              # Tailwind CSS class merge helper
 ├── package.json
 └── README.md
 ```
 
 ---
 
-## 📜 Available Scripts
-
-| Script                | Description                                  |
-| --------------------- | -------------------------------------------- |
-| `npm run dev`         | Start the development server                 |
-| `npm run build`       | Create a production build                    |
-| `npm run start`       | Start the production server                  |
-| `npm run setup`       | Full setup: push DB + seed admin + seed data |
-| `npm run db:push`     | Push Prisma schema to MySQL                  |
-| `npm run seed:admin`  | Create the default admin account             |
-| `npm run seed:data`   | Seed sample questions and assessment         |
-| `npm run seed:enroll` | Enroll existing students in default course   |
-
----
-
-## 🎨 Design
-
-The UI follows a **Premium Dark Theme** with:
-
-- Glassmorphism card effects
-- Neon accent glows (emerald green for primary, blue for secondary)
-- Smooth micro-animations and hover transitions
-- Responsive design that works on mobile and desktop
-
----
-
 ## 📄 License
-
-This project is private and built for the CU-SUCCEED initiative.
+Private & Proprietary • Built for SucceedAcademy Employability Initiative.

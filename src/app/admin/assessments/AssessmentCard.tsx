@@ -1,9 +1,12 @@
 "use client";
 
-import { Settings, Play, Pause, ExternalLink, Trash2 } from "lucide-react";
+import { Play, Pause, ExternalLink, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 type AssessmentProps = {
   id: string;
@@ -37,7 +40,7 @@ export default function AssessmentCard({ assessment }: { assessment: AssessmentP
 
   const deleteAssessment = async () => {
     if (!confirm("Are you sure you want to delete this assessment? This cannot be undone.")) return;
-    
+
     setDeleting(true);
     try {
       const res = await fetch(`/api/assessments/${assessment.id}`, {
@@ -57,63 +60,66 @@ export default function AssessmentCard({ assessment }: { assessment: AssessmentP
   };
 
   return (
-    <div className={`glass p-6 rounded-2xl border ${assessment.isActive ? 'border-primary/20' : 'border-white/5'} relative group transition-all duration-300 ${deleting ? 'opacity-50' : ''}`}>
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <h3 className="font-semibold text-lg text-white">{assessment.title}</h3>
-            <span className={`px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold rounded-full ${
-              assessment.isActive 
-                ? 'bg-primary/20 text-primary border border-primary/30' 
-                : 'bg-white/10 text-muted-foreground border border-white/10'
-            }`}>
-              {assessment.isActive ? 'Active' : 'Draft'}
-            </span>
+    <Card className={`border-slate-800 bg-slate-900 group transition-all text-left ${deleting ? "opacity-50" : ""}`}>
+      <CardContent className="p-6 space-y-4">
+        <div className="flex justify-between items-start">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-semibold text-base text-white">{assessment.title}</h3>
+              <Badge variant={assessment.isActive ? "default" : "outline"} className="text-[10px]">
+                {assessment.isActive ? "Active" : "Draft"}
+              </Badge>
+            </div>
+            <div className="text-xs text-slate-400 font-mono">
+              {assessment.program.name} • {assessment.type}
+            </div>
           </div>
-          <div className="text-sm text-muted-foreground font-mono">{assessment.program.name} • {assessment.type}</div>
+
+          <button
+            onClick={deleteAssessment}
+            disabled={deleting}
+            className="p-1.5 rounded-md text-slate-400 hover:text-red-500 hover:bg-slate-800 dark:hover:bg-slate-800 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+            title="Delete Assessment"
+          >
+            <Trash2 size={16} />
+          </button>
         </div>
-        <button 
-          onClick={deleteAssessment}
-          disabled={deleting}
-          className="btn btn-glass p-2 text-red-400 opacity-0 group-hover:opacity-100 transition-all"
-          title="Delete Assessment"
-        >
-          <Trash2 size={16} />
-        </button>
-      </div>
-      
-      <div className="space-y-2 mb-6">
-        <div className="flex justify-between text-xs font-mono text-muted-foreground mb-1">
+
+        <div className="flex justify-between text-xs text-slate-400 py-2 border-y border-slate-800">
           <span>Completed Attempts</span>
-          <span className="text-white">{assessment.completedCount}</span>
+          <span className="font-mono font-bold text-slate-200">{assessment.completedCount}</span>
         </div>
-      </div>
-      
-      <div className="flex gap-3 pt-4 border-t border-white/5">
-         {assessment.isActive ? (
-           <button 
-             onClick={toggleActive}
-             disabled={loading}
-             className="btn btn-outline flex-1 text-red-400 hover:bg-red-500/10 hover:border-red-500/50 disabled:opacity-50"
-           >
-             <Pause size={14} /> {loading ? "Pausing..." : "Pause"}
-           </button>
-         ) : (
-           <button 
-             onClick={toggleActive}
-             disabled={loading}
-             className="btn btn-primary flex-1 disabled:opacity-50"
-           >
-             <Play size={14} /> {loading ? "Activating..." : "Activate"}
-           </button>
-         )}
-         <Link 
-           href={`/admin/results?assessmentId=${assessment.id}`}
-           className="btn btn-glass flex-1"
-         >
-           <ExternalLink size={14} /> View Stats
-         </Link>
-      </div>
-    </div>
+
+        <div className="flex gap-2 pt-1">
+          {assessment.isActive ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleActive}
+              disabled={loading}
+              className="flex-1 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 border-red-200 dark:border-red-900/40 bg-red-50/50 dark:bg-red-950/20"
+            >
+              <Pause size={13} className="mr-1" /> {loading ? "Pausing..." : "Pause"}
+            </Button>
+          ) : (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={toggleActive}
+              disabled={loading}
+              className="flex-1 text-xs"
+            >
+              <Play size={13} className="mr-1" /> {loading ? "Activating..." : "Activate"}
+            </Button>
+          )}
+
+          <Link href={`/admin/results?assessmentId=${assessment.id}`} className="flex-1">
+            <Button variant="secondary" size="sm" className="w-full text-xs">
+              <ExternalLink size={13} className="mr-1" /> View Stats
+            </Button>
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

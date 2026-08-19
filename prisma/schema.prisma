@@ -14,13 +14,18 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String // Hashed password
-  name      String
-  role      Role     @default(STUDENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(cuid())
+  email          String   @unique
+  password       String // Hashed password
+  name           String
+  role           Role     @default(STUDENT)
+  rollNumber     String?  // Student Roll / Reg Number
+  branch         String?  // Department / Branch (e.g. CSE, IT, ME, ECE)
+  year           String?  // 1st, 2nd, 3rd, 4th
+  assessmentType String?  @default("PRE") // PRE / POST
+  collegeName    String?  // College name free text or selected
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relations for Students
   college   College? @relation(fields: [collegeId], references: [id])
@@ -29,8 +34,9 @@ model User {
   batchId   String?
 
   // A student can be part of multiple programs
-  programs Program[]
-  attempts Attempt[]
+  programs    Program[]
+  attempts    Attempt[]
+  wheelScores WheelScore[]
 
   // Certificates earned
   certificates Certificate[]
@@ -63,16 +69,18 @@ model Batch {
 }
 
 model Assessment {
-  id              String   @id @default(cuid())
-  title           String
-  description     String?
-  type            String // e.g. 'PRE_TEST', 'POST_TEST', 'PSYCHOMETRIC', 'APTITUDE'
-  durationMinutes Int      @default(60)
-  marksPerQuestion Int     @default(1)
-  negativeMarking Float    @default(0)
-  isActive        Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id               String   @id @default(cuid())
+  title            String
+  description      String?
+  type             String // e.g. 'PRE_TEST', 'POST_TEST', 'PRE', 'POST'
+  category         String   @default("APTITUDE") // 'PSYCHOMETRIC', 'APTITUDE', 'WHEEL', 'GENERAL'
+  year             String?  // '1st', '2nd', '3rd', '4th', 'ALL'
+  durationMinutes  Int      @default(30)
+  marksPerQuestion Int      @default(1)
+  negativeMarking  Float    @default(0)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   program   Program @relation(fields: [programId], references: [id])
   programId String
@@ -84,11 +92,12 @@ model Assessment {
 model Question {
   id            String   @id @default(cuid())
   text          String   @db.Text
-  type          String // e.g. 'MULTIPLE_CHOICE'
-  parameter     String? // e.g. 'Self-Clarity', 'Confidence'
+  type          String // e.g. 'MULTIPLE_CHOICE', 'LIKERT'
+  category      String   @default("APTITUDE") // 'PSYCHOMETRIC', 'APTITUDE'
+  parameter     String? // e.g. 'Self-Clarity', 'Confidence', 'Logical Reasoning', 'Quantitative'
   weight        Float    @default(1.0)
-  correctAnswer String? // ID or value of the correct answer
-  options       Json // Array of { id, text }
+  correctAnswer String? // ID or value of the correct answer (optional for psychometric)
+  options       Json // Array of { id, text, value? }
   image         String? // URL to uploaded image
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -97,9 +106,9 @@ model Question {
 }
 
 model AssessmentQuestion {
-  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
   assessmentId String
-  question     Question   @relation(fields: [questionId], references: [id])
+  question     Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId   String
 
   @@id([assessmentId, questionId])
@@ -109,32 +118,50 @@ model Attempt {
   id           String    @id @default(cuid())
   startTime    DateTime  @default(now())
   endTime      DateTime?
-  status       String    @default("IN_PROGRESS") // 'IN_PROGRESS', 'SUBMITTED', 'EVALUATED'
+  status       String    @default("IN_PROGRESS") // 'IN_PROGRESS', 'SUBMITTED', 'COMPLETED'
   score        Float?
+  category     String?   @default("APTITUDE") // 'PSYCHOMETRIC', 'APTITUDE'
   anomalyFlags Json? // Array of flags { type, timestamp }
+  analysis     Json?     // Detailed calculated breakdown / dimensions
 
-  student   User   @relation(fields: [studentId], references: [id])
+  student   User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId String
 
-  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
   assessmentId String
 
   responses    Response[]
   certificates Certificate[]
 
-  @@unique([studentId, assessmentId]) // A student can attempt an assessment once (or we can drop this for retakes)
+  @@index([studentId, assessmentId])
 }
 
 model Response {
   id        String   @id @default(cuid())
   answer    String?
+  score     Float?   @default(0)
   isCorrect Boolean?
 
-  attempt    Attempt  @relation(fields: [attemptId], references: [id])
+  attempt    Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
   attemptId  String
   questionId String
 
   @@unique([attemptId, questionId])
+}
+
+model WheelScore {
+  id           String   @id @default(cuid())
+  studentId    String
+  student      User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  type         String   @default("PRE") // PRE / POST
+  year         String?  // 1st, 2nd, 3rd, 4th
+  dimensions   Json     // Array of { key, label, score, maxScore }
+  totalScore   Float    @default(0)
+  averageScore Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([studentId])
 }
 
 model Certificate {
@@ -143,14 +170,12 @@ model Certificate {
   status        String   @default("ACTIVE") // 'ACTIVE', 'REVOKED'
   generatedById String? // ID of the official who generated it
 
-  student   User   @relation(fields: [studentId], references: [id])
+  student   User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId String
 
-  // Keep these as relations for easy querying
-  program            Program @relation(fields: [programId], references: [id])
+  program            Program @relation(fields: [programId], references: [id], onDelete: Cascade)
   programId          String
   
-  // Assuming assessmentResultId points to Attempt based on the DB structure
-  assessmentResult   Attempt @relation(fields: [assessmentResultId], references: [id])
+  assessmentResult   Attempt @relation(fields: [assessmentResultId], references: [id], onDelete: Cascade)
   assessmentResultId String
 }
