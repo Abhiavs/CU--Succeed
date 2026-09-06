@@ -2,7 +2,6 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
-import { inMemoryStore } from "./store";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -17,25 +16,8 @@ export const authOptions: NextAuthOptions = {
 
         const emailLower = credentials.email.trim().toLowerCase();
 
-        // 1. Hardcoded admin verification fallback (works even if DB is offline)
-        if (
-          (emailLower === "admin@succeed.com" || emailLower === "admin@cusucceed.com") &&
-          credentials.password === "admin123"
-        ) {
-          return {
-            id: "admin-master-001",
-            name: "Super Administrator",
-            email: emailLower,
-            role: "OFFICIAL",
-            rollNumber: null,
-            branch: null,
-            year: null,
-            assessmentType: null,
-            collegeName: "Succeed Academy HQ",
-          };
-        }
-
-        // 2. Query Prisma database
+        // Authentication must always use the production database. Assessment
+        // accounts and credentials must never fall back to demo data.
         try {
           const user = await prisma.user.findUnique({
             where: { email: emailLower },
@@ -59,51 +41,8 @@ export const authOptions: NextAuthOptions = {
             }
           }
         } catch (dbError) {
-          console.warn("DB offline, checking store:", dbError);
-        }
-
-        // 3. Check fallback in-memory store for students
-        const storedProfile = inMemoryStore.getProfile(emailLower);
-        if (storedProfile) {
-          return {
-            id: storedProfile.id,
-            name: storedProfile.name,
-            email: storedProfile.email,
-            role: "STUDENT",
-            rollNumber: storedProfile.rollNumber,
-            branch: storedProfile.branch,
-            year: storedProfile.year,
-            assessmentType: storedProfile.assessmentType,
-            collegeName: storedProfile.collegeName,
-          };
-        }
-
-        // 4. Demo fallback account if student logs in with demo credentials
-        if (emailLower.includes("@") && credentials.password.length >= 4) {
-          const demoId = "student-demo-" + emailLower.split("@")[0];
-          const demoProfile = {
-            id: demoId,
-            name: emailLower.split("@")[0].toUpperCase(),
-            email: emailLower,
-            rollNumber: "SUC-2026-001",
-            branch: "Computer Science & Engineering",
-            year: "3rd",
-            assessmentType: "PRE" as const,
-            collegeName: "Succeed Institute of Technology",
-            createdAt: new Date().toISOString(),
-          };
-          inMemoryStore.saveProfile(demoProfile);
-          return {
-            id: demoProfile.id,
-            name: demoProfile.name,
-            email: demoProfile.email,
-            role: "STUDENT",
-            rollNumber: demoProfile.rollNumber,
-            branch: demoProfile.branch,
-            year: demoProfile.year,
-            assessmentType: demoProfile.assessmentType,
-            collegeName: demoProfile.collegeName,
-          };
+          console.error("Authentication database lookup failed.", dbError);
+          return null;
         }
 
         return null;
@@ -142,5 +81,5 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET || "my_super_secret_key",
+  secret: process.env.NEXTAUTH_SECRET,
 };

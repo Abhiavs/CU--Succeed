@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { inMemoryStore } from "@/lib/store";
+import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -36,17 +36,51 @@ export default async function StudentDashboard() {
   const branch = session.user.branch || "Computer Science & Engineering";
   const year = session.user.year || "3rd";
   const assessmentType = session.user.assessmentType || "PRE";
-  const collegeName = session.user.collegeName || "Succeed Academy of Technology";
+  const collegeName = session.user.collegeName || "CU-SUCCEED of Technology";
 
-  // Fetch student state from inMemoryStore
-  const state = inMemoryStore.getState(studentId);
+// Get temporary state as fallback
+// Get all permanently completed modules from the database
+const completedAttempts = await prisma.attempt.findMany({
+  where: {
+    studentId,
+    status: "COMPLETED",
+  },
+});
 
-  let completedCount = 0;
-  if (state.psychometricCompleted) completedCount++;
-  if (state.aptitudeCompleted) completedCount++;
-  if (state.wheelCompleted) completedCount++;
+const psychometricAttempt = completedAttempts.find(
+  (attempt) => attempt.category === "PSYCHOMETRIC"
+);
 
-  const completionPct = Math.round((completedCount / 3) * 100);
+const aptitudeAttempt = completedAttempts.find(
+  (attempt) => attempt.category === "APTITUDE"
+);
+
+const wheelAttempt = completedAttempts.find(
+  (attempt) => attempt.category === "WHEEL"
+);
+
+// Dashboard state comes from the database
+const state = {
+  psychometricCompleted: !!psychometricAttempt,
+  psychometricScore: psychometricAttempt?.score ?? 0,
+
+  aptitudeCompleted: !!aptitudeAttempt,
+  aptitudeScore: aptitudeAttempt?.score ?? 0,
+
+  wheelCompleted: !!wheelAttempt,
+  wheelAverage:
+  wheelAttempt?.score != null
+    ? wheelAttempt.score / 10
+    : 0,
+};
+
+let completedCount = 0;
+
+if (state.psychometricCompleted) completedCount++;
+if (state.aptitudeCompleted) completedCount++;
+if (state.wheelCompleted) completedCount++;
+
+const completionPct = Math.round((completedCount / 3) * 100);
 
   return (
     <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 space-y-6 text-slate-100">
@@ -147,18 +181,7 @@ export default async function StudentDashboard() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-800">
-                <Link href="/student/assessment/psychometric">
-                  <Button
-                    variant={state.psychometricCompleted ? "secondary" : "default"}
-                    size="sm"
-                    className="w-full justify-between text-xs h-9"
-                  >
-                    <span>{state.psychometricCompleted ? "Review Responses" : "Start Psychometric"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-              </div>
+              
             </CardContent>
           </Card>
 
@@ -199,18 +222,7 @@ export default async function StudentDashboard() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-800">
-                <Link href="/student/assessment/aptitude">
-                  <Button
-                    variant={state.aptitudeCompleted ? "secondary" : "default"}
-                    size="sm"
-                    className="w-full justify-between text-xs h-9"
-                  >
-                    <span>{state.aptitudeCompleted ? "Review Responses" : "Start Aptitude Test"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-              </div>
+              
             </CardContent>
           </Card>
 
@@ -251,18 +263,7 @@ export default async function StudentDashboard() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-800">
-                <Link href="/student/wheel">
-                  <Button
-                    variant={state.wheelCompleted ? "secondary" : "default"}
-                    size="sm"
-                    className="w-full justify-between text-xs h-9"
-                  >
-                    <span>{state.wheelCompleted ? "Update Wheel Ratings" : "Launch Dimension Wheel"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-              </div>
+             
             </CardContent>
           </Card>
         </div>

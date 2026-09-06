@@ -16,6 +16,7 @@ export interface StudentAssessmentState {
   psychometricCompleted: boolean;
   psychometricScore: number;
   psychometricAttemptId?: string;
+  psychometricRetakeAllowed: boolean;
   aptitudeCompleted: boolean;
   aptitudeScore: number;
   aptitudeAttemptId?: string;
@@ -26,8 +27,10 @@ export interface StudentAssessmentState {
 
 // In-memory global store to guarantee flawless operation across hot reloads & server runs
 const defaultWheelScores: Record<string, number> = {};
+
 WHEEL_DIMENSIONS.forEach((dim) => {
-  defaultWheelScores[dim.id] = Math.round(dim.benchmark);
+  defaultWheelScores[dim.id] = 1;
+  
 });
 
 const globalStore = global as unknown as {
@@ -44,21 +47,25 @@ if (!globalStore._assessmentStates) {
 }
 
 export const inMemoryStore = {
-  saveProfile(profile: StudentProfile) {
-    globalStore._studentProfiles?.set(profile.id, profile);
-    globalStore._studentProfiles?.set(profile.email, profile);
-    if (!globalStore._assessmentStates?.has(profile.id)) {
-      globalStore._assessmentStates?.set(profile.id, {
-        psychometricCompleted: false,
-        psychometricScore: 0,
-        aptitudeCompleted: false,
-        aptitudeScore: 0,
-        wheelCompleted: false,
-        wheelAverage: 0,
-        wheelScores: { ...defaultWheelScores },
-      });
-    }
-  },
+saveProfile(profile: StudentProfile) {
+  globalStore._studentProfiles?.set(profile.id, profile);
+  globalStore._studentProfiles?.set(profile.email, profile);
+
+  if (!globalStore._assessmentStates?.has(profile.id)) {
+    globalStore._assessmentStates?.set(profile.id, {
+      psychometricCompleted: false,
+      psychometricScore: 0,
+      psychometricRetakeAllowed: false,
+
+      aptitudeCompleted: false,
+      aptitudeScore: 0,
+
+      wheelCompleted: false,
+      wheelAverage: 0,
+      wheelScores: { ...defaultWheelScores },
+    });
+  }
+},
 
   getProfile(idOrEmail: string): StudentProfile | undefined {
     return globalStore._studentProfiles?.get(idOrEmail);
@@ -80,15 +87,18 @@ export const inMemoryStore = {
     const existing = globalStore._assessmentStates?.get(studentId);
     if (existing) return existing;
 
-    const initial: StudentAssessmentState = {
-      psychometricCompleted: false,
-      psychometricScore: 0,
-      aptitudeCompleted: false,
-      aptitudeScore: 0,
-      wheelCompleted: false,
-      wheelAverage: 0,
-      wheelScores: { ...defaultWheelScores },
-    };
+   const initial: StudentAssessmentState = {
+  psychometricCompleted: false,
+  psychometricScore: 0,
+  psychometricRetakeAllowed: false,
+
+  aptitudeCompleted: false,
+  aptitudeScore: 0,
+
+  wheelCompleted: false,
+  wheelAverage: 0,
+  wheelScores: { ...defaultWheelScores },
+};
     globalStore._assessmentStates?.set(studentId, initial);
     return initial;
   },

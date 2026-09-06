@@ -1,43 +1,120 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
+import { useRouter} from "next/navigation";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles, ArrowRight, User, Mail, Lock } from "lucide-react";
+import {
+  Sparkles,
+  ArrowRight,
+  User,
+  Mail,
+  Lock,
+  Hash,
+  BookOpen,
+  Building2,
+  ChevronDown,
+} from "lucide-react";
+
+const BRANCHES = [
+  "Computer Science",
+  "Information Technology",
+  "Electronics and Communication",
+  "Electrical Engineering",
+  "Mechanical Engineering",
+  "Civil Engineering",
+  "Chemical Engineering",
+  "Biotechnology",
+  "Artificial Intelligence & Machine Learning",
+  "Artificial Intelligence & Data Science",
+];
+
+const COLLEGES = [
+  "Pravara Rural Engineering College, Loni",
+];
 
 export default function SignupPage() {
+  const router = useRouter();
+
+  const selectedYear = "1st";
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rollNumber, setRollNumber] = useState("");
+  const [branch, setBranch] = useState("");
+  const [collegeName, setCollegeName] = useState("");
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setError("");
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/signup", {
+      // Create the student account in PostgreSQL.
+      const signupResponse = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          rollNumber,
+          branch,
+          year: selectedYear,
+          assessmentType: "PRE",
+          collegeName,
+        }),
       });
 
-      if (res.ok) {
-        router.push("/start");
-      } else {
-        const data = await res.json();
-        setError(data.message || data.error || "Something went wrong");
+      const signupData = await signupResponse.json();
+
+      if (!signupResponse.ok) {
+        setError(
+          signupData.error ||
+            signupData.message ||
+            "Unable to create your account."
+        );
         setLoading(false);
+        return;
       }
-    } catch {
-      setError("Failed to register. Try again.");
+
+      // Automatically log the newly created student in.
+      const loginResult = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!loginResult || loginResult.error) {
+        setError(
+          "Your account was created, but automatic login failed. Please sign in."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Continue to academic year selection
+      router.push("/select-year");
+      router.refresh();
+    } catch (error) {
+      console.error("Registration error:", error);
+
+      setError(
+        "Something went wrong while creating your account. Please try again."
+      );
+
       setLoading(false);
     }
   };
@@ -46,10 +123,13 @@ export default function SignupPage() {
     <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-slate-950 p-4">
       {/* Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
+
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
       <Card className="border-white/10 bg-slate-900/85 backdrop-blur-xl w-full max-w-md shadow-2xl animate-fade-in relative">
         <CardContent className="p-8 sm:p-10 space-y-6">
+
+          {/* Branding */}
           <div className="text-center space-y-2">
             <Link href="/" className="inline-flex items-center gap-2 mb-2">
               <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1px]">
@@ -57,19 +137,25 @@ export default function SignupPage() {
                   <Sparkles className="w-4 h-4 text-emerald-400" />
                 </div>
               </div>
+
               <span className="font-extrabold text-xl text-white">
                 Succeed<span className="text-emerald-400">Academy</span>
               </span>
             </Link>
-            <h2 className="text-xl font-bold text-white tracking-tight">Create Student Account</h2>
+
+            <h2 className="text-xl font-bold text-white tracking-tight">
+              Student Registration
+            </h2>
+
             <p className="text-xs text-slate-400">
-              Or launch the full{" "}
-              <Link href="/start" className="text-emerald-400 font-semibold hover:underline">
-                Assessment Onboarding Wizard
-              </Link>
+              Academic Year:{" "}
+              <span className="text-emerald-400 font-semibold">
+                First Year
+              </span>
             </p>
           </div>
 
+          {/* Error */}
           {error && (
             <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium text-center animate-fade-in">
               {error}
@@ -77,47 +163,141 @@ export default function SignupPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
+
+            {/* Full Name */}
             <div className="space-y-1.5">
               <Label htmlFor="name" className="flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-emerald-400" /> Full Name
+                <User className="w-3.5 h-3.5 text-emerald-400" />
+                Full Name
               </Label>
+
               <Input
                 id="name"
-                placeholder="Alex Johnson"
+                placeholder="Enter your full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
 
+            {/* Roll Number */}
+            <div className="space-y-1.5">
+              <Label
+                htmlFor="rollNumber"
+                className="flex items-center gap-1.5"
+              >
+                <Hash className="w-3.5 h-3.5 text-emerald-400" />
+                Roll Number
+              </Label>
+
+              <Input
+                id="rollNumber"
+                placeholder="Enter your roll number"
+                value={rollNumber}
+                onChange={(e) => setRollNumber(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Branch Dropdown */}
+            <div className="space-y-1.5">
+              <Label htmlFor="branch" className="flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
+                Branch
+              </Label>
+
+              <div className="relative">
+                <select
+                  id="branch"
+                  value={branch}
+                  onChange={(e) => setBranch(e.target.value)}
+                  required
+                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                >
+                  <option value="" disabled>
+                    Select your branch
+                  </option>
+
+                  {BRANCHES.map((branchOption) => (
+                    <option key={branchOption} value={branchOption}>
+                      {branchOption}
+                    </option>
+                  ))}
+                </select>
+
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              </div>
+            </div>
+
+            {/* College Dropdown */}
+            <div className="space-y-1.5">
+              <Label
+                htmlFor="collegeName"
+                className="flex items-center gap-1.5"
+              >
+                <Building2 className="w-3.5 h-3.5 text-indigo-400" />
+                College
+              </Label>
+
+              <div className="relative">
+                <select
+                  id="collegeName"
+                  value={collegeName}
+                  onChange={(e) => setCollegeName(e.target.value)}
+                  required
+                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                >
+                  <option value="" disabled>
+                    Select your college
+                  </option>
+
+                  {COLLEGES.map((collegeOption) => (
+                    <option key={collegeOption} value={collegeOption}>
+                      {collegeOption}
+                    </option>
+                  ))}
+                </select>
+
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              </div>
+            </div>
+
+            {/* Email */}
             <div className="space-y-1.5">
               <Label htmlFor="email" className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-cyan-400" /> Email Address
+                <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                Gmail / Email Address
               </Label>
+
               <Input
                 id="email"
                 type="email"
-                placeholder="student@example.com"
+                placeholder="student@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
 
+            {/* Password */}
             <div className="space-y-1.5">
               <Label htmlFor="password" className="flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-indigo-400" /> Password
+                <Lock className="w-3.5 h-3.5 text-indigo-400" />
+                Password
               </Label>
+
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="Minimum 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                minLength={8}
                 required
               />
             </div>
 
+            {/* Submit */}
             <Button
               type="submit"
               disabled={loading}
@@ -127,11 +307,12 @@ export default function SignupPage() {
               {loading ? (
                 <span className="flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                  Creating Account...
+                 Creating Account...
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  Sign Up & Continue <ArrowRight className="w-4 h-4" />
+                  Register & Continue
+                  <ArrowRight className="w-4 h-4" />
                 </span>
               )}
             </Button>
@@ -139,10 +320,14 @@ export default function SignupPage() {
 
           <div className="pt-6 border-t border-white/10 text-center text-xs text-slate-400">
             Already have an account?{" "}
-            <Link href="/login" className="text-emerald-400 font-semibold hover:underline">
+            <Link
+              href="/login"
+              className="text-emerald-400 font-semibold hover:underline"
+            >
               Sign In
             </Link>
           </div>
+
         </CardContent>
       </Card>
     </div>

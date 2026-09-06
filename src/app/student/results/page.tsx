@@ -378,7 +378,7 @@ export default function StudentResultsPage() {
             <div className="p-8 sm:p-12 rounded-xl border border-slate-700 bg-slate-900 text-center max-w-3xl mx-auto space-y-6 print:border-2 print:border-black print:bg-white print:text-black">
               <div className="space-y-1">
                 <div className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold print:text-black">
-                  SUCCEED ACADEMY DIGITAL CREDENTIAL
+                  CU-SUCCEED DIGITAL CREDENTIAL
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white print:text-black">
                   Certificate of Employability Assessment

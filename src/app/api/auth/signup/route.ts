@@ -1,59 +1,51 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { inMemoryStore } from "@/lib/store";
 
 export async function POST(req: Request) {
   try {
     const { name, email, password, rollNumber, branch, year, assessmentType, collegeName } =
       await req.json();
 
-    if (!name || !email || !password) {
-      return NextResponse.json({ error: "Name, email, and password are required." }, { status: 400 });
+    const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+    if (!name?.trim() || !normalizedEmail || !password || !rollNumber?.trim() || !branch?.trim() || !collegeName?.trim()) {
+      return NextResponse.json({ error: "Name, email, password, roll number, branch, and college are required." }, { status: 400 });
+    }
+    if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
+      return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
+    }
+    if (password.length < 8) {
+      return NextResponse.json({ error: "Password must contain at least 8 characters." }, { status: 400 });
+    }
+    if (year && year !== "1st") {
+      return NextResponse.json({ error: "Registration is currently available to first-year students only." }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userId = "usr_" + Math.random().toString(36).substring(2, 11);
-
-    // Save in in-memory store
-    inMemoryStore.saveProfile({
-      id: userId,
-      name,
-      email,
-      rollNumber: rollNumber || "SUC-" + Math.floor(1000 + Math.random() * 9000),
-      branch: branch || "Computer Science & Engineering",
-      year: year || "3rd",
-      assessmentType: assessmentType === "POST" ? "POST" : "PRE",
-      collegeName: collegeName || "Succeed Academy of Technology",
-      createdAt: new Date().toISOString(),
-    });
-
-    // Attempt saving in DB
     try {
-      const existingUser = await prisma.user.findUnique({ where: { email } });
+      const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
       if (existingUser) {
         return NextResponse.json({ error: "A student with this email already exists." }, { status: 400 });
       }
 
-      await (prisma.user as any).create({
+      const user = await prisma.user.create({
         data: {
-          id: userId,
-          name,
-          email,
+          name: name.trim(),
+          email: normalizedEmail,
           password: hashedPassword,
           role: "STUDENT",
-          rollNumber: rollNumber || null,
-          branch: branch || null,
-          year: year || "3rd",
-          assessmentType: assessmentType || "PRE",
-          collegeName: collegeName || null,
+          rollNumber: rollNumber.trim(),
+          branch: branch.trim(),
+          year: "1st",
+          assessmentType: "PRE",
+          collegeName: collegeName.trim(),
         },
       });
+      return NextResponse.json({ success: true, userId: user.id }, { status: 201 });
     } catch (dbErr) {
-      console.warn("DB save skipped, stored in memory store:", dbErr);
+      console.error("Student account creation failed.", dbErr);
+      return NextResponse.json({ error: "Unable to create the account. Please try again." }, { status: 503 });
     }
-
-    return NextResponse.json({ success: true, userId }, { status: 201 });
   } catch (error) {
     console.error("Signup error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -6,7 +6,7 @@ import { Providers } from "@/components/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SucceedAcademy —  Digital Platform",
+  title: "CU-SUCCEED—  Digital Platform",
   description:
     "The complete digital ecosystem for student assessment, training, and employability development by .",
 };

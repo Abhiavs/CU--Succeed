@@ -11,6 +11,7 @@ import {
   BarChart3,
   ShieldCheck,
   UserCheck,
+  Compass,
 } from "lucide-react";
 import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -28,13 +29,24 @@ export default async function AdminLayout({
   }
 
   const navItems = [
-    { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    { label: "Assessments", href: "/admin/assessments", icon: ClipboardList },
-    { label: "Question Bank", href: "/admin/questions", icon: HelpCircle },
-    { label: "Results", href: "/admin/results", icon: FileSpreadsheet },
-    { label: "Certificates", href: "/admin/certificates", icon: BookOpen },
-    { label: "Training Matrix", href: "/admin/matrix", icon: BarChart3 },
-  ];
+  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+
+  { label: "Assessments", href: "/admin/assessments", icon: ClipboardList },
+
+  {
+    label: "Wheel Dimensions",
+    href: "/admin/wheel-dimensions",
+    icon: Compass,
+  },
+
+  { label: "Question Bank", href: "/admin/questions", icon: HelpCircle },
+
+  { label: "Results", href: "/admin/results", icon: FileSpreadsheet },
+
+  { label: "Certificates", href: "/admin/certificates", icon: BookOpen },
+
+  { label: "Training Matrix", href: "/admin/matrix", icon: BarChart3 },
+];
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#090d16] text-slate-100">
@@ -45,11 +57,11 @@ export default async function AdminLayout({
           <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <Link href="/admin" className="flex items-center gap-2.5">
               <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
-                SA
+                CS
               </div>
               <div className="text-left">
                 <div className="font-bold text-sm text-slate-900 dark:text-white tracking-tight">
-                  Succeed<span className="text-emerald-600 dark:text-emerald-400 font-semibold">Academy</span>
+                  CU-<span className="text-emerald-600 dark:text-emerald-400 font-semibold">SUCCEED</span>
                 </div>
                 <div className="text-[10px] text-slate-500 font-mono">OFFICIAL PORTAL</div>
               </div>

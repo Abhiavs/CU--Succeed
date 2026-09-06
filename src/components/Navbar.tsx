@@ -14,27 +14,14 @@ export default async function Navbar() {
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5">
           <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
-            SA
+            CA
           </div>
           <div className="font-bold text-base text-white tracking-tight">
-            Succeed<span className="text-emerald-400 font-semibold">Academy</span>
+            CU-<span className="text-emerald-400 font-semibold">SUCCEED</span>
           </div>
         </Link>
 
-        {/* Navigation Links */}
-        <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
-          <Link href="/#flow" className="hover:text-white transition-colors">
-            Assessment Flow
-          </Link>
-          <Link href="/#tracks" className="hover:text-white transition-colors">
-            Tracks
-          </Link>
-          <Link href="/student/reports" className="hover:text-white transition-colors flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-            Certificates
-          </Link>
-        </nav>
-
+        
         {/* Action Buttons & Theme Changer */}
         <div className="flex items-center gap-2.5">
           <ThemeToggle />
@@ -60,11 +47,7 @@ export default async function Navbar() {
                   Sign In
                 </Button>
               </Link>
-              <Link href="/start">
-                <Button size="sm" className="text-xs h-8">
-                  Start <ArrowRight className="w-3 h-3 ml-1" />
-                </Button>
-              </Link>
+            
             </div>
           )}
         </div>

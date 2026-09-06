@@ -125,7 +125,7 @@ export default function LoginPage() {
             <p>
               New student?{" "}
               <Link href="/start" className="text-emerald-400 font-semibold hover:underline">
-                Start Assessment Wizard
+                Start Assessment 
               </Link>
             </p>
             <p>

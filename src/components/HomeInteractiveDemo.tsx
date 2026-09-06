@@ -342,7 +342,7 @@ export function HomeInteractiveDemo() {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold">
-              SUCCEED ACADEMY OFFICIAL CREDENTIAL
+              CU-SUCCEED OFFICIAL CREDENTIAL
             </div>
             <h4 className="text-lg font-serif font-bold text-white">
               Certificate of Employability & Competency
