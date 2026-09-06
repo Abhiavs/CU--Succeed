@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import PostPublishToggle from "./PostPublishToggle";
+import ReattemptButton from "@/components/AdminReattemptButton";
 
 import {
   Users2,
@@ -15,7 +16,6 @@ import {
   Compass,
   ClipboardList,
   TrendingUp,
-  RotateCcw,
   CircleDot,
 } from "lucide-react";
 
@@ -812,44 +812,19 @@ export default async function AdminDashboard({
 
                           {assessment.attempted &&
                             !assessment.reattemptAllowed && (
-                              <form
-                                action="/api/admin/reattempt"
-                                method="POST"
-                              >
-
-                                {isWheel ? (
-                                  <input
-                                    type="hidden"
-                                    name="wheelScoreId"
-                                    value={
-                                      assessment.attempt?.id || ""
-                                    }
-                                  />
-                                ) : (
-                                  <input
-                                    type="hidden"
-                                    name="attemptId"
-                                    value={
-                                      assessment.attempt?.id || ""
-                                    }
-                                  />
-                                )}
-
-                                <input
-                                  type="hidden"
-                                  name="allowed"
-                                  value="true"
-                                />
-
-                                <Button
-                                  size="sm"
-                                  type="submit"
-                                >
-                                  <RotateCcw className="mr-2 h-4 w-4" />
-                                  Allow Reattempt
-                                </Button>
-
-                              </form>
+                              <ReattemptButton
+                                type={isWheel ? "WHEEL" : "ATTEMPT"}
+                                wheelScoreId={
+                                  isWheel
+                                    ? assessment.attempt?.id || undefined
+                                    : undefined
+                                }
+                                attemptId={
+                                  !isWheel
+                                    ? assessment.attempt?.id || undefined
+                                    : undefined
+                                }
+                              />
                             )}
 
                         </td>

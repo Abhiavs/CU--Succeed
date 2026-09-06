@@ -4,6 +4,7 @@ import {
   Filter,
   HelpCircle,
   Pencil,
+  Layers,
 } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -11,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import DeleteQuestionButton from "./DeleteQuestionButton";
+import DeleteAllButton from "./DeleteAllButton";
 
 export default async function QuestionBankPage() {
   let questions: any[] = [];
@@ -41,15 +43,30 @@ export default async function QuestionBankPage() {
           </p>
         </div>
 
-        <Link href="/admin/questions/new">
-          <Button
-            size="sm"
-            className="h-9 px-4 text-xs font-semibold"
-          >
-            <Plus size={15} className="mr-1" />
-            Add Question
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/admin/questions/bulk">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-9 px-4 text-xs font-semibold"
+            >
+              <Layers size={15} className="mr-1" />
+              Bulk Add
+            </Button>
+          </Link>
+
+          <DeleteAllButton count={questions.length} />
+
+          <Link href="/admin/questions/new">
+            <Button
+              size="sm"
+              className="h-9 px-4 text-xs font-semibold"
+            >
+              <Plus size={15} className="mr-1" />
+              Add Question
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Table */}
@@ -113,34 +130,32 @@ export default async function QuestionBankPage() {
                     {q.type}
                   </td>
 
-                  {/* Delete */}
+                  {/* Actions: Edit + Delete */}
                   <td className="px-5 py-3.5 text-right">
-                    <DeleteQuestionButton
-                      questionId={q.id}
-                      questionText={q.text}
-                    />
+                    <div className="flex items-center justify-end gap-2">
+                      <Link href={`/admin/questions/${q.id}/edit`}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 gap-1 text-xs"
+                        >
+                          Edit
+                        </Button>
+                      </Link>
+
+                      <DeleteQuestionButton
+                        questionId={q.id}
+                        questionText={q.text}
+                      />
+                    </div>
                   </td>
-                  
-                  <td className="px-5 py-3.5 text-right">
-                 <div className="flex items-center justify-end gap-2">
-                 <Link href={`/admin/questions/${q.id}/edit`}>
-                 <Button
-                  variant="outline"
-                 size="sm"
-                 className="h-8 gap-1 text-xs">
-      
-                  Edit
-                </Button>
-                </Link>
-              </div>
-               </td>
                 </tr>
               ))}
 
               {questions.length === 0 && (
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={6}
                     className="py-12 text-center text-slate-400"
                   >
                     <HelpCircle className="mx-auto mb-2 h-8 w-8 text-slate-600" />

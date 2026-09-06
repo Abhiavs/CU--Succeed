@@ -10,10 +10,8 @@ import { Progress } from "@/components/ui/progress";
 import {
   BrainCircuit,
   Zap,
-  Award,
   CheckCircle2,
   Clock,
-  ArrowRight,
   Hash,
   BookOpen,
   Building2,
@@ -311,23 +309,6 @@ export default async function StudentDashboard() {
         </div>
       </div>
 
-      {/* Results Hub Action Strip */}
-      <div className="p-6 rounded-xl border border-slate-800 bg-slate-900 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-left">
-        <div className="space-y-1">
-          <h3 className="font-bold text-base text-white flex items-center gap-2">
-            <Award className="w-4 h-4 text-emerald-400" /> Multidimensional Scorecard & Verified Certificate
-          </h3>
-          <p className="text-xs text-slate-400">
-            Inspect your overall readiness index, dimensional radar comparison, archetype insights, and download your certificate.
-          </p>
-        </div>
-
-        <Link href="/student/results">
-          <Button size="sm" className="h-9 px-5 text-xs font-semibold whitespace-nowrap">
-            View Results Hub <ArrowRight className="w-3.5 h-3.5 ml-1" />
-          </Button>
-        </Link>
       </div>
-    </div>
   );
 }
