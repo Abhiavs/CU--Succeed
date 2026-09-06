@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import PostPublishToggle from "./PostPublishToggle";
 
 import {
   Users2,
@@ -458,7 +459,8 @@ export default async function AdminDashboard({
           </p>
         </div>
 
-     
+        <PostPublishToggle />
+
       </div>
 
       {/* STATISTICS */}

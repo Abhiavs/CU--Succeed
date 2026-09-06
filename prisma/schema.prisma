@@ -31,6 +31,7 @@ model Program {
   id          String  @id
   name        String
   description String?
+  postAssessmentPublished Boolean @default(false)
 
   assessments  Assessment[]
   certificates Certificate[]
