@@ -19,7 +19,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100 selection:bg-emerald-500/20 selection:text-emerald-300">
+    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100 selection:bg-indigo-500/20 selection:text-blue-300">
 
       {/* =====================================================
           NAVBAR
@@ -41,7 +41,7 @@ export default async function Home() {
 
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-700 bg-slate-900 text-xs font-medium text-slate-300">
 
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
 
               <span>
                 Standardized Student Employability Framework
@@ -54,7 +54,7 @@ export default async function Home() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
 
               Assess Candidate Potential with
-              <span className="text-emerald-400">
+              <span className="text-blue-400">
                 {" "}Multidimensional Rigor
               </span>
 
@@ -134,7 +134,7 @@ export default async function Home() {
 
               <div className="text-center">
 
-                <div className="text-2xl font-bold text-emerald-400">
+                <div className="text-2xl font-bold text-indigo-400">
                   Pre & Post
                 </div>
 
@@ -249,7 +249,7 @@ export default async function Home() {
                 className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between"
               >
 
-                <div className="text-[10px] font-mono font-bold text-emerald-400 mb-2">
+                <div className="text-[10px] font-mono font-bold text-blue-400 mb-2">
 
                   STEP {item.step}
 
@@ -329,7 +329,7 @@ export default async function Home() {
 
               <CardContent className="p-6 space-y-4">
 
-                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
 
                   <BrainCircuit className="w-5 h-5" />
 
@@ -337,7 +337,7 @@ export default async function Home() {
 
                 <div>
 
-                  <div className="text-[11px] font-mono text-emerald-400 font-semibold uppercase">
+                  <div className="text-[11px] font-mono text-blue-400 font-semibold uppercase">
 
                     Pillar 01
 
@@ -527,7 +527,7 @@ export default async function Home() {
 
           <div className="font-semibold text-slate-300">
 
-            CU-SUCCEED{" "}
+            CU Succeed{" "}
 
             <span className="font-normal text-slate-500">
 
@@ -562,7 +562,7 @@ export default async function Home() {
 
             <span>
 
-              © {new Date().getFullYear()} CU-SUCCEED
+              © {new Date().getFullYear()} CU Succeed
 
             </span>
 

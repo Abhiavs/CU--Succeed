@@ -131,6 +131,7 @@ export default async function ResultGenerationPage({
 }: {
   searchParams: Promise<{
     tab?: string;
+    batch?: string;
   }>;
 }) {
 
@@ -149,6 +150,39 @@ export default async function ResultGenerationPage({
       : params.tab === "post"
       ? "POST"
       : "PSYCHOMETRIC";
+
+  /*
+   * ==========================================================
+   * GET BATCH FILTER
+   *
+   * "" (or "all") means every batch.
+   * ==========================================================
+   */
+
+  const BATCHES = ["Batch 1", "Batch 2"];
+
+  const batchFilter =
+    params.batch && BATCHES.includes(params.batch)
+      ? params.batch
+      : "";
+
+  /*
+   * URL-safe tab name used to preserve the active tab
+   * when switching batches or exporting.
+   */
+
+  const tabQuery =
+    currentTab === "WHEEL"
+      ? "wheel"
+      : currentTab === "POST"
+      ? "post"
+      : "psychometric";
+
+  const batchQuerySuffix = batchFilter
+    ? `&batch=${encodeURIComponent(batchFilter)}`
+    : "";
+
+  const exportHref = `/api/admin/results/export?tab=${tabQuery}${batchQuerySuffix}`;
 
   /*
    * ==========================================================
@@ -184,6 +218,7 @@ export default async function ResultGenerationPage({
             year: true,
             assessmentType: true,
             collegeName: true,
+            batch: true,
           },
         },
 
@@ -209,12 +244,30 @@ export default async function ResultGenerationPage({
 
   /*
    * ==========================================================
+   * APPLY BATCH FILTER
+   *
+   * Everything below (tab counts, averages, table) uses the
+   * batch-scoped list, so "Batch 1" shows only Batch 1 data.
+   * ==========================================================
+   */
+
+  const scopedAttempts =
+    batchFilter === ""
+      ? attempts
+      : attempts.filter(
+          (attempt) =>
+            attempt.student?.batch ===
+            batchFilter
+        );
+
+  /*
+   * ==========================================================
    * FILTER ATTEMPTS BY CURRENT TAB
    * ==========================================================
    */
 
   const currentAttempts =
-    attempts.filter(
+    scopedAttempts.filter(
       (attempt) =>
         getAttemptType(attempt) ===
         currentTab
@@ -227,7 +280,7 @@ export default async function ResultGenerationPage({
    */
 
   const psychometricAttempts =
-    attempts.filter(
+    scopedAttempts.filter(
       (attempt) =>
         getAttemptType(attempt) ===
         "PSYCHOMETRIC"
@@ -240,7 +293,7 @@ export default async function ResultGenerationPage({
    */
 
   const wheelAttempts =
-    attempts.filter(
+    scopedAttempts.filter(
       (attempt) =>
         getAttemptType(attempt) ===
         "WHEEL"
@@ -253,7 +306,7 @@ export default async function ResultGenerationPage({
    */
 
   const postAttempts =
-    attempts.filter(
+    scopedAttempts.filter(
       (attempt) =>
         getAttemptType(attempt) ===
         "POST"
@@ -388,7 +441,7 @@ export default async function ResultGenerationPage({
 
           <CardContent className="p-5 flex items-center gap-4">
 
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+            <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-blue-400">
 
               <BrainCircuit size={20} />
 
@@ -536,7 +589,7 @@ export default async function ResultGenerationPage({
                 className={`px-5 py-2.5 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
                   currentTab ===
                   "PSYCHOMETRIC"
-                    ? "bg-emerald-500 text-white border-emerald-500"
+                    ? "bg-indigo-500 text-white border-indigo-500"
                     : "bg-transparent border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
               >
@@ -628,6 +681,64 @@ export default async function ResultGenerationPage({
           </div>
 
           {/* ==================================================
+              BATCH FILTER + EXCEL EXPORT
+          ================================================== */}
+
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+
+            {/* BATCH CHIPS */}
+
+            <div className="flex flex-wrap items-center gap-2">
+
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mr-1">
+                Batch
+              </span>
+
+              <Link
+                href={`/admin/results?tab=${tabQuery}`}
+                className={`px-3 py-1.5 rounded-md border text-xs font-medium transition-colors ${
+                  batchFilter === ""
+                    ? "bg-indigo-500 text-white border-indigo-500"
+                    : "border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                }`}
+              >
+                All
+              </Link>
+
+              {BATCHES.map((batchOption) => (
+                <Link
+                  key={batchOption}
+                  href={`/admin/results?tab=${tabQuery}&batch=${encodeURIComponent(
+                    batchOption
+                  )}`}
+                  className={`px-3 py-1.5 rounded-md border text-xs font-medium transition-colors ${
+                    batchFilter === batchOption
+                      ? "bg-indigo-500 text-white border-indigo-500"
+                      : "border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  }`}
+                >
+                  {batchOption}
+                </Link>
+              ))}
+
+            </div>
+
+            {/* DOWNLOAD */}
+
+            <a
+              href={exportHref}
+              className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+            >
+              <BarChart3 className="w-4 h-4" />
+
+              Download Excel
+
+              {batchFilter ? ` (${batchFilter})` : " (All Batches)"}
+            </a>
+
+          </div>
+
+          {/* ==================================================
               TABLE TITLE
           ================================================== */}
 
@@ -667,6 +778,12 @@ export default async function ResultGenerationPage({
                   <th className="py-3.5 px-4 font-mono uppercase text-slate-500">
 
                     Candidate
+
+                  </th>
+
+                  <th className="py-3.5 px-4 font-mono uppercase text-slate-500">
+
+                    Batch
 
                   </th>
 
@@ -744,7 +861,7 @@ export default async function ResultGenerationPage({
 
                               <div className="cursor-pointer group">
 
-                                <div className="font-semibold text-slate-900 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">
+                                <div className="font-semibold text-slate-900 dark:text-slate-200 group-hover:text-indigo-500 transition-colors">
 
                                   {
                                     attempt.student
@@ -782,6 +899,27 @@ export default async function ResultGenerationPage({
                               </div>
 
                             </Link>
+
+                          </td>
+
+                          {/* ================================
+                              BATCH
+                          ================================ */}
+
+                          <td className="py-3.5 px-4">
+
+                            {attempt.student?.batch ? (
+                              <Badge
+                                variant="secondary"
+                                className="text-[10px]"
+                              >
+                                {attempt.student.batch}
+                              </Badge>
+                            ) : (
+                              <span className="text-slate-500">
+                                —
+                              </span>
+                            )}
 
                           </td>
 
@@ -941,7 +1079,7 @@ export default async function ResultGenerationPage({
                     <tr>
 
                       <td
-                        colSpan={6}
+                        colSpan={7}
                         className="py-12 text-center text-slate-500"
                       >
 

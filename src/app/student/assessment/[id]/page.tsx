@@ -61,7 +61,7 @@ export default async function AssessmentPage({
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col relative overflow-hidden py-10 px-4 sm:px-6">
       {/* Background Glow */}
-      <div className="absolute top-0 right-1/3 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[160px] -z-10 pointer-events-none" />
+      <div className="absolute top-0 right-1/3 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[160px] -z-10 pointer-events-none" />
 
       <div className="w-full max-w-4xl mx-auto space-y-6 animate-slide-up">
         {/* Navigation */}
@@ -81,7 +81,7 @@ export default async function AssessmentPage({
               <Sparkles className="w-3.5 h-3.5 mr-1" /> Active Module
             </Badge>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-              {assessment?.title || "CU-SUCCEED Assessment Module"}
+              {assessment?.title || "CU Succeed Assessment Module"}
             </h1>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               Answer all questions thoughtfully. Your responses are evaluated upon submission.
@@ -89,7 +89,7 @@ export default async function AssessmentPage({
           </div>
 
           <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
-            <Clock className="w-5 h-5 text-emerald-400" />
+            <Clock className="w-5 h-5 text-blue-400" />
             <div className="text-xs">
               <div className="text-slate-400 font-mono">Module Time</div>
               <div className="font-bold text-white">30:00</div>
@@ -108,7 +108,7 @@ export default async function AssessmentPage({
               <Card key={q.id} className="border-white/10 bg-slate-900/70">
                 <CardContent className="p-6 sm:p-8 space-y-5">
                   <div className="flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs flex-shrink-0 border border-emerald-500/20">
+                    <div className="w-7 h-7 rounded-xl bg-indigo-500/10 text-blue-400 flex items-center justify-center font-bold text-xs flex-shrink-0 border border-indigo-500/20">
                       {index + 1}
                     </div>
                     <h3 className="font-medium text-base sm:text-lg text-white leading-relaxed">
@@ -120,14 +120,14 @@ export default async function AssessmentPage({
                     {options.map((opt) => (
                       <label
                         key={opt.id}
-                        className="flex items-center gap-3.5 p-4 rounded-2xl border border-white/5 bg-black/20 hover:bg-white/[0.04] hover:border-emerald-500/30 cursor-pointer transition-all group"
+                        className="flex items-center gap-3.5 p-4 rounded-2xl border border-white/5 bg-black/20 hover:bg-white/[0.04] hover:border-indigo-500/30 cursor-pointer transition-all group"
                       >
                         <input
                           type="radio"
                           name={`q_${q.id}`}
                           value={opt.id}
                           required
-                          className="w-4 h-4 text-emerald-500 accent-emerald-500 cursor-pointer"
+                          className="w-4 h-4 text-indigo-500 accent-indigo-500 cursor-pointer"
                         />
                         <span className="text-xs sm:text-sm text-slate-300 group-hover:text-white font-medium">
                           {opt.text}
@@ -144,7 +144,7 @@ export default async function AssessmentPage({
             <Button
               type="submit"
               size="lg"
-              className="rounded-2xl px-10 shadow-emerald-500/25 bg-gradient-to-r from-emerald-500 to-teal-500"
+              className="rounded-2xl px-10 shadow-indigo-500/25 bg-gradient-to-r from-indigo-500 to-sky-500"
             >
               <CheckCircle2 className="w-5 h-5 mr-2" />
               Submit Assessment Module

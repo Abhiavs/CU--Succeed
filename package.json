@@ -11,10 +11,16 @@
     "db:push": "npx prisma db push",
     "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio",
+    "postinstall": "npx prisma generate",
+    "build:prod": "npx prisma generate && next build",
+    "start:prod": "next start",
     "seed:admin": "node scripts/seedAdmin.mjs",
     "seed:data": "node scripts/seedData.mjs",
     "seed:enroll": "node scripts/enrollStudents.mjs",
     "setup": "npx prisma generate && npx prisma db push && node scripts/seedAdmin.mjs && node scripts/seedData.mjs && node scripts/enrollStudents.mjs"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
@@ -43,7 +49,8 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "recharts": "^3.10.1",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

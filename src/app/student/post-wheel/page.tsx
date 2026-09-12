@@ -279,8 +279,8 @@ export default function PostAssessmentWheelPage() {
     return (
       <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-100">
         <div className="text-center space-y-4">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
+            <Loader2 className="w-6 h-6 text-sky-400 animate-spin" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-white">
@@ -361,22 +361,22 @@ export default function PostAssessmentWheelPage() {
     <div className="min-h-screen bg-[#090d16] text-slate-100">
       {/* BACKGROUND GLOW */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px]" />
-        <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] bg-emerald-500/5 rounded-full blur-[140px]" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-sky-500/5 rounded-full blur-[140px]" />
+        <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] bg-indigo-500/5 rounded-full blur-[140px]" />
       </div>
 
       {/* HEADER */}
       <header className="relative border-b border-slate-800/80 bg-[#090d16]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-              <Award className="w-5 h-5 text-cyan-400" />
+            <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
+              <Award className="w-5 h-5 text-sky-400" />
             </div>
 
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-bold text-white">CU-SUCCEED</h1>
-                <Badge className="text-[10px] bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <h1 className="font-bold text-white">CU Succeed</h1>
+                <Badge className="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20">
                   POST-ASSESSMENT
                 </Badge>
               </div>
@@ -391,7 +391,7 @@ export default function PostAssessmentWheelPage() {
               <div className="text-[10px] uppercase tracking-wider text-slate-500">
                 Post-Assessment Average
               </div>
-              <div className="text-sm font-bold text-cyan-400">
+              <div className="text-sm font-bold text-sky-400">
                 {averageScore}
                 <span className="text-slate-500 text-xs"> / 10</span>
               </div>
@@ -404,7 +404,7 @@ export default function PostAssessmentWheelPage() {
       <main className="relative max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* INTRO TITLE */}
         <div className="mb-8">
-          <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono uppercase tracking-widest mb-3">
+          <div className="flex items-center gap-2 text-sky-400 text-xs font-mono uppercase tracking-widest mb-3">
             <Sparkles className="w-4 h-4" />
             Post-Program Skill Mastery & Growth
           </div>
@@ -428,7 +428,7 @@ export default function PostAssessmentWheelPage() {
                 <div className="flex items-start justify-between mb-5">
                   <div>
                     <div className="flex items-center gap-2">
-                      <BarChart3 className="w-4 h-4 text-cyan-400" />
+                      <BarChart3 className="w-4 h-4 text-sky-400" />
                       <h3 className="font-semibold text-white">
                         Post-Assessment Radar
                       </h3>
@@ -437,7 +437,7 @@ export default function PostAssessmentWheelPage() {
                       Your outcome wheel updates in real time.
                     </p>
                   </div>
-                  <Badge variant="outline" className="text-[10px] text-cyan-400 border-cyan-500/30">
+                  <Badge variant="outline" className="text-[10px] text-sky-400 border-sky-500/30">
                     LIVE RADAR
                   </Badge>
                 </div>
@@ -520,7 +520,7 @@ export default function PostAssessmentWheelPage() {
                 {/* LEGEND */}
                 <div className="mt-4 pt-4 border-t border-slate-800 flex items-center justify-center gap-5 text-[11px]">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-sky-400" />
                     <span className="text-slate-300">Your Post Rating</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -533,12 +533,12 @@ export default function PostAssessmentWheelPage() {
 
             {/* SELECTED DIMENSION CARD */}
             {selectedDimension && (
-              <Card className="border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 to-transparent">
+              <Card className="border-sky-500/20 bg-gradient-to-br from-sky-500/5 to-transparent">
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <Target className="w-4 h-4 text-cyan-400" />
+                        <Target className="w-4 h-4 text-sky-400" />
                         <h3 className="font-semibold text-white">
                           {selectedDimension.name}
                         </h3>
@@ -550,7 +550,7 @@ export default function PostAssessmentWheelPage() {
                     </div>
 
                     <div className="flex-shrink-0 text-center">
-                      <div className="text-2xl font-bold text-cyan-400">
+                      <div className="text-2xl font-bold text-sky-400">
                         {ratings[selectedDimension.id] || 1}
                       </div>
                       <div className="text-[10px] text-slate-500 uppercase">
@@ -585,7 +585,7 @@ export default function PostAssessmentWheelPage() {
                     <div className="text-[10px] uppercase text-slate-500">
                       Overall Average
                     </div>
-                    <div className="text-lg font-bold text-cyan-400">
+                    <div className="text-lg font-bold text-sky-400">
                       {averageScore}
                       <span className="text-xs text-slate-500"> / 10</span>
                     </div>
@@ -605,7 +605,7 @@ export default function PostAssessmentWheelPage() {
                         onClick={() => setActiveDimension(dimension.id)}
                         className={`rounded-xl border p-4 transition-all cursor-pointer ${
                           selected
-                            ? "border-cyan-500/40 bg-cyan-500/5"
+                            ? "border-sky-500/40 bg-sky-500/5"
                             : "border-slate-800 bg-slate-950/30 hover:border-slate-700"
                         }`}
                       >
@@ -615,7 +615,7 @@ export default function PostAssessmentWheelPage() {
                               <span
                                 className={`w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold ${
                                   selected
-                                    ? "bg-cyan-500 text-slate-950"
+                                    ? "bg-sky-500 text-slate-950"
                                     : "bg-slate-800 text-slate-400"
                                 }`}
                               >
@@ -675,7 +675,7 @@ export default function PostAssessmentWheelPage() {
                 <div className="mt-7 pt-5 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="text-xs text-slate-400">
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                      <CheckCircle2 className="w-4 h-4 text-sky-400" />
                       <span>
                         {dimensions.length} post competency dimensions configured.
                       </span>
@@ -685,7 +685,7 @@ export default function PostAssessmentWheelPage() {
                   <Button
                     onClick={handleSubmitWheel}
                     disabled={isSaving}
-                    className="h-11 px-7 text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white"
+                    className="h-11 px-7 text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white"
                   >
                     {isSaving ? (
                       <>
@@ -713,7 +713,7 @@ export default function PostAssessmentWheelPage() {
 
       {/* FOOTER */}
       <footer className="relative border-t border-slate-800/60 py-5 text-center text-[10px] text-slate-600">
-        CU-SUCCEED • Post-Assessment Competency System
+        CU Succeed • Post-Assessment Competency System
       </footer>
     </div>
   );

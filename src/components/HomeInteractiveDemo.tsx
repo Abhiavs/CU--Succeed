@@ -73,7 +73,7 @@ export function HomeInteractiveDemo() {
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block" />
           <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
+          <span className="w-2.5 h-2.5 rounded-full bg-indigo-500/80 inline-block" />
           <span className="text-xs font-mono text-slate-400 ml-2">live-interactive-preview</span>
         </div>
 
@@ -83,7 +83,7 @@ export function HomeInteractiveDemo() {
             onClick={() => setActiveTab("wheel")}
             className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
               activeTab === "wheel"
-                ? "bg-emerald-600 text-white shadow-sm"
+                ? "bg-indigo-600 text-white shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -93,7 +93,7 @@ export function HomeInteractiveDemo() {
             onClick={() => setActiveTab("question")}
             className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
               activeTab === "question"
-                ? "bg-emerald-600 text-white shadow-sm"
+                ? "bg-indigo-600 text-white shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -103,7 +103,7 @@ export function HomeInteractiveDemo() {
             onClick={() => setActiveTab("certificate")}
             className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
               activeTab === "certificate"
-                ? "bg-emerald-600 text-white shadow-sm"
+                ? "bg-indigo-600 text-white shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -119,7 +119,7 @@ export function HomeInteractiveDemo() {
           <div className="md:col-span-6 flex flex-col items-center justify-center p-4 rounded-xl bg-slate-950/60 border border-slate-800">
             <div className="text-[11px] font-mono text-slate-400 mb-2 flex items-center justify-between w-full">
               <span>DYNAMIC SVG RADAR</span>
-              <span className="text-emerald-400 font-bold">Average: {demoAvg}/10</span>
+              <span className="text-blue-400 font-bold">Average: {demoAvg}/10</span>
             </div>
 
             <div className="w-full max-w-[260px] aspect-square relative">
@@ -197,7 +197,7 @@ export function HomeInteractiveDemo() {
                       dominantBaseline="central"
                       onClick={() => setSelectedDim(dim.id)}
                       className={`text-[8px] font-mono cursor-pointer ${
-                        isSelected ? "fill-emerald-400 font-bold" : "fill-slate-400"
+                        isSelected ? "fill-blue-400 font-bold" : "fill-slate-400"
                       }`}
                     >
                       {dim.shortName}
@@ -209,7 +209,7 @@ export function HomeInteractiveDemo() {
 
             <div className="flex items-center gap-4 text-[10px] text-slate-400 pt-2">
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Live Candidate Rating
+                <span className="w-2 h-2 rounded-full bg-indigo-500" /> Live Candidate Rating
               </span>
               <span className="flex items-center gap-1">
                 <span className="w-2 h-0.5 border-t border-dashed border-blue-400" /> Industry Benchmark
@@ -246,7 +246,7 @@ export function HomeInteractiveDemo() {
                   >
                     <div className="flex justify-between text-xs mb-1">
                       <span className="font-medium text-slate-200">{dim.name}</span>
-                      <span className="font-mono font-bold text-emerald-400">{val} / 10</span>
+                      <span className="font-mono font-bold text-blue-400">{val} / 10</span>
                     </div>
                     <Slider
                       value={[val]}
@@ -303,19 +303,19 @@ export function HomeInteractiveDemo() {
                   onClick={() => setSelectedAnswer(opt.id)}
                   className={`p-3 rounded-lg border cursor-pointer transition-all flex items-center gap-3 ${
                     isSelected
-                      ? "border-emerald-500 bg-slate-950 ring-1 ring-emerald-500"
+                      ? "border-indigo-500 bg-slate-950 ring-1 ring-indigo-500"
                       : "border-slate-800 bg-slate-900/60 hover:border-slate-700"
                   }`}
                 >
                   <div
                     className={`w-6 h-6 rounded-md flex items-center justify-center font-bold text-xs ${
-                      isSelected ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-400"
+                      isSelected ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-400"
                     }`}
                   >
                     {opt.id}
                   </div>
                   <span className="text-xs text-slate-200">{opt.text}</span>
-                  {isSelected && <CheckCircle2 className="w-4 h-4 text-emerald-400 ml-auto" />}
+                  {isSelected && <CheckCircle2 className="w-4 h-4 text-blue-400 ml-auto" />}
                 </div>
               );
             })}
@@ -323,7 +323,7 @@ export function HomeInteractiveDemo() {
 
           <div className="pt-2 flex justify-between items-center text-xs">
             <span className="text-slate-400">
-              Evaluated trait: <strong className="text-emerald-400">Strategic Crisis Mitigation</strong>
+              Evaluated trait: <strong className="text-blue-400">Strategic Crisis Mitigation</strong>
             </span>
             <Link href="/start">
               <Button size="sm" className="text-xs">
@@ -338,11 +338,11 @@ export function HomeInteractiveDemo() {
       {activeTab === "certificate" && (
         <div className="p-6 sm:p-8 space-y-4">
           <div className="p-6 rounded-xl border border-slate-700 bg-slate-950 text-center space-y-3">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mx-auto">
+            <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-blue-400 mx-auto">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <div className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold">
-              CU-SUCCEED OFFICIAL CREDENTIAL
+            <div className="text-[10px] font-mono tracking-widest uppercase text-blue-400 font-bold">
+              CU SUCCEED OFFICIAL CREDENTIAL
             </div>
             <h4 className="text-lg font-serif font-bold text-white">
               Certificate of Employability & Competency
@@ -352,7 +352,7 @@ export function HomeInteractiveDemo() {
             </p>
             <div className="pt-3 border-t border-slate-800 flex justify-between items-center text-[11px] text-slate-400">
               <span>Verification ID: SUC-EMP-2026-DEMO</span>
-              <span className="text-emerald-400 font-mono font-bold">Status: Accredited</span>
+              <span className="text-blue-400 font-mono font-bold">Status: Accredited</span>
             </div>
           </div>
         </div>

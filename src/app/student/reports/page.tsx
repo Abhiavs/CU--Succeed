@@ -35,7 +35,7 @@ export default async function ReportsPage() {
 
         {/* Header Card */}
         <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-center p-8 space-y-4">
-          <div className="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto text-emerald-600 dark:text-emerald-400">
+          <div className="w-14 h-14 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mx-auto text-indigo-600 dark:text-blue-400">
             <Award className="w-7 h-7" />
           </div>
           <Badge variant="default" className="text-xs">
@@ -63,10 +63,10 @@ export default async function ReportsPage() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <ShieldCheck className="text-emerald-600 dark:text-emerald-400 w-5 h-5" /> Verifiable Certificate
+                  <ShieldCheck className="text-indigo-600 dark:text-blue-400 w-5 h-5" /> Verifiable Certificate
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Issued under SucceedAcademy Employability Accreditation Protocol
+                  Issued under CU Succeed Employability Accreditation Protocol
                 </p>
               </div>
 
@@ -79,7 +79,7 @@ export default async function ReportsPage() {
 
             <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-lg font-bold">
+                <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-blue-400 text-lg font-bold">
                   🎓
                 </div>
                 <div>
@@ -87,7 +87,7 @@ export default async function ReportsPage() {
                     {session.user.name}'s Multidimensional Assessment Credential
                   </h4>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
-                    Status: <span className="text-emerald-600 dark:text-emerald-400 font-bold">Active & Verified</span>
+                    Status: <span className="text-indigo-600 dark:text-blue-400 font-bold">Active & Verified</span>
                   </p>
                 </div>
               </div>

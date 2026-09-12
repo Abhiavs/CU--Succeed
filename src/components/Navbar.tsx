@@ -13,11 +13,11 @@ export default async function Navbar() {
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
-            CA
+          <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
+            CU
           </div>
           <div className="font-bold text-base text-white tracking-tight">
-            CU-<span className="text-emerald-400 font-semibold">SUCCEED</span>
+            CU <span className="text-blue-400 font-semibold">Succeed</span>
           </div>
         </Link>
 
@@ -30,7 +30,7 @@ export default async function Navbar() {
             <div className="flex items-center gap-2">
               <Link href={session.user.role === "OFFICIAL" ? "/admin" : "/student"}>
                 <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8">
-                  <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <UserCheck className="w-3.5 h-3.5 text-blue-400" />
                   <span className="hidden sm:inline">{session.user.name}</span>
                 </Button>
               </Link>

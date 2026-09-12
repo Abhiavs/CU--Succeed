@@ -453,9 +453,9 @@ export default function WheelOfCompetenciesPage() {
 
         <div className="text-center space-y-4">
 
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
 
-            <Loader2 className="w-6 h-6 text-emerald-400 animate-spin" />
+            <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
 
           </div>
 
@@ -576,9 +576,9 @@ export default function WheelOfCompetenciesPage() {
 
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
 
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[140px]" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[140px]" />
 
-        <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] bg-cyan-500/5 rounded-full blur-[140px]" />
+        <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] bg-sky-500/5 rounded-full blur-[140px]" />
 
       </div>
 
@@ -592,9 +592,9 @@ export default function WheelOfCompetenciesPage() {
 
           <div className="flex items-center gap-3">
 
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
 
-              <Compass className="w-5 h-5 text-emerald-400" />
+              <Compass className="w-5 h-5 text-blue-400" />
 
             </div>
 
@@ -603,10 +603,10 @@ export default function WheelOfCompetenciesPage() {
               <div className="flex items-center gap-2">
 
                 <h1 className="font-bold text-white">
-                  CU-SUCCEED
+                  CU Succeed
                 </h1>
 
-                <Badge className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <Badge className="text-[10px] bg-indigo-500/10 text-blue-400 border border-indigo-500/20">
                   PRE-ASSESSMENT
                 </Badge>
 
@@ -628,7 +628,7 @@ export default function WheelOfCompetenciesPage() {
                 Average Score
               </div>
 
-              <div className="text-sm font-bold text-emerald-400">
+              <div className="text-sm font-bold text-blue-400">
                 {averageScore}
                 <span className="text-slate-500 text-xs">
                   {" "}
@@ -656,7 +656,7 @@ export default function WheelOfCompetenciesPage() {
 
         <div className="mb-8">
 
-          <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono uppercase tracking-widest mb-3">
+          <div className="flex items-center gap-2 text-blue-400 text-xs font-mono uppercase tracking-widest mb-3">
 
             <Sparkles className="w-4 h-4" />
 
@@ -702,7 +702,7 @@ export default function WheelOfCompetenciesPage() {
 
                     <div className="flex items-center gap-2">
 
-                      <BarChart3 className="w-4 h-4 text-emerald-400" />
+                      <BarChart3 className="w-4 h-4 text-blue-400" />
 
                       <h3 className="font-semibold text-white">
                         Competency Profile
@@ -875,7 +875,7 @@ export default function WheelOfCompetenciesPage() {
 
                   <div className="flex items-center gap-2">
 
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-400" />
 
                     <span className="text-slate-300">
                       Your Rating
@@ -905,7 +905,7 @@ export default function WheelOfCompetenciesPage() {
 
             {selectedDimension && (
 
-              <Card className="border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent">
+              <Card className="border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 to-transparent">
 
                 <CardContent className="p-5">
 
@@ -915,7 +915,7 @@ export default function WheelOfCompetenciesPage() {
 
                       <div className="flex items-center gap-2 mb-2">
 
-                        <Target className="w-4 h-4 text-emerald-400" />
+                        <Target className="w-4 h-4 text-blue-400" />
 
                         <h3 className="font-semibold text-white">
 
@@ -936,7 +936,7 @@ export default function WheelOfCompetenciesPage() {
 
                     <div className="flex-shrink-0 text-center">
 
-                      <div className="text-2xl font-bold text-emerald-400">
+                      <div className="text-2xl font-bold text-blue-400">
 
                         {ratings[
                           selectedDimension.id
@@ -1011,7 +1011,7 @@ export default function WheelOfCompetenciesPage() {
 
                     </div>
 
-                    <div className="text-lg font-bold text-emerald-400">
+                    <div className="text-lg font-bold text-blue-400">
 
                       {averageScore}
                       <span className="text-xs text-slate-500">
@@ -1064,7 +1064,7 @@ export default function WheelOfCompetenciesPage() {
                           }
                           className={`rounded-xl border p-4 transition-all cursor-pointer ${
                             selected
-                              ? "border-emerald-500/40 bg-emerald-500/5"
+                              ? "border-indigo-500/40 bg-indigo-500/5"
                               : "border-slate-800 bg-slate-950/30 hover:border-slate-700"
                           }`}
                         >
@@ -1077,7 +1077,7 @@ export default function WheelOfCompetenciesPage() {
 
                                 <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold ${
                                   selected
-                                    ? "bg-emerald-500 text-slate-950"
+                                    ? "bg-indigo-500 text-slate-950"
                                     : "bg-slate-800 text-slate-400"
                                 }`}>
 
@@ -1196,7 +1196,7 @@ export default function WheelOfCompetenciesPage() {
 
                     <div className="flex items-center gap-2">
 
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 text-blue-400" />
 
                       <span>
 
@@ -1215,7 +1215,7 @@ export default function WheelOfCompetenciesPage() {
                     disabled={
                       isSaving
                     }
-                    className="h-11 px-7 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500"
+                    className="h-11 px-7 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500"
                   >
 
                     {isSaving ? (
@@ -1267,7 +1267,7 @@ export default function WheelOfCompetenciesPage() {
 
       <footer className="relative border-t border-slate-800/60 py-5 text-center text-[10px] text-slate-600">
 
-        CU-SUCCEED • Competency Assessment System
+        CU Succeed • Competency Assessment System
 
       </footer>
 

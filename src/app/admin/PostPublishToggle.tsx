@@ -63,7 +63,7 @@ export default function PostPublishToggle() {
     <div className="flex items-center gap-3">
       <div className="flex items-center gap-2">
         {published ? (
-          <Badge className="bg-emerald-500">
+          <Badge className="bg-indigo-500">
             <Globe className="mr-1 h-3 w-3" />
             POST Published
           </Badge>

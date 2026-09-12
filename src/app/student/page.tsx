@@ -33,7 +33,8 @@ export default async function StudentDashboard() {
   const rollNumber = session.user.rollNumber || "SUC-2026-042";
   const branch = session.user.branch || "Computer Science & Engineering";
   const year = session.user.year || "3rd";
-  const collegeName = session.user.collegeName || "CU-SUCCEED of Technology";
+  const collegeName = session.user.collegeName || "CU Succeed of Technology";
+  const batch = session.user.batch || "—";
 
   // Check if POST assessment is published
   const program = await prisma.program.findUnique({
@@ -71,6 +72,7 @@ export default async function StudentDashboard() {
 
     preWheelCompleted: !!preWheelScore,
     preWheelAverage: preWheelScore?.averageScore ?? 0,
+    preWheelReattemptAllowed: preWheelScore?.reattemptAllowed === true,
 
     postWheelCompleted: !!postWheelScore,
     postWheelAverage: postWheelScore?.averageScore ?? 0,
@@ -97,7 +99,7 @@ export default async function StudentDashboard() {
                 STUDENT ASSESSMENT JOURNEY
               </Badge>
               <Badge variant="secondary" className="text-xs">
-                {year} YEAR COHORT
+                {year} YEAR COHORT{batch !== "—" ? ` • ${batch}` : ""}
               </Badge>
             </div>
 
@@ -128,7 +130,7 @@ export default async function StudentDashboard() {
           <div className="p-4 rounded-lg bg-slate-950/80 border border-slate-800 w-full lg:w-60 space-y-2 flex-shrink-0">
             <div className="flex justify-between items-center text-xs">
               <span className="text-slate-400">Overall Completion</span>
-              <span className="font-bold text-emerald-400 font-mono">{completionPct}%</span>
+              <span className="font-bold text-blue-400 font-mono">{completionPct}%</span>
             </div>
             <Progress value={completionPct} className="h-1.5" />
             <div className="text-[11px] text-slate-400">
@@ -154,7 +156,7 @@ export default async function StudentDashboard() {
             <CardContent className="p-5 flex flex-col h-full justify-between space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">
+                  <div className="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-blue-400 font-bold">
                     <BrainCircuit className="w-5 h-5" />
                   </div>
                   {preStageCompleted ? (
@@ -173,7 +175,7 @@ export default async function StudentDashboard() {
                 </div>
 
                 <div>
-                  <div className="text-[10px] font-mono font-semibold text-emerald-400 uppercase mb-0.5">
+                  <div className="text-[10px] font-mono font-semibold text-blue-400 uppercase mb-0.5">
                     PRE Assessment
                   </div>
                   <h3 className="font-bold text-base text-white">Psychometric + Competency Wheel</h3>
@@ -184,11 +186,11 @@ export default async function StudentDashboard() {
 
                 <div className="space-y-1 text-[11px] text-slate-300">
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className={`w-3 h-3 ${state.psychometricCompleted ? 'text-emerald-400' : 'text-slate-600'}`} />
+                    <CheckCircle2 className={`w-3 h-3 ${state.psychometricCompleted ? 'text-blue-400' : 'text-slate-600'}`} />
                     <span className={state.psychometricCompleted ? '' : 'text-slate-500'}>Psychometric: {state.psychometricCompleted ? `${state.psychometricScore}%` : 'Not started'}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className={`w-3 h-3 ${state.preWheelCompleted ? 'text-emerald-400' : 'text-slate-600'}`} />
+                    <CheckCircle2 className={`w-3 h-3 ${state.preWheelCompleted ? 'text-blue-400' : 'text-slate-600'}`} />
                     <span className={state.preWheelCompleted ? '' : 'text-slate-500'}>Wheel: {state.preWheelCompleted ? `${state.preWheelAverage.toFixed(1)}/10` : 'Not started'}</span>
                   </div>
                 </div>
@@ -209,10 +211,10 @@ export default async function StudentDashboard() {
                     </Button>
                   </Link>
                 )}
-                {preStageCompleted && (
+                {preStageCompleted && state.preWheelReattemptAllowed && (
                   <Link href="/student/wheel" className="flex-1">
                     <Button size="sm" variant="outline" className="w-full h-9 text-xs">
-                      View PRE Wheel
+                      Retake PRE Wheel
                     </Button>
                   </Link>
                 )}
@@ -262,15 +264,15 @@ export default async function StudentDashboard() {
 
           {/* POST Wheel - Only show if published */}
           {postPublished && (
-            <Card className="border-cyan-900/50 bg-slate-900/90 flex flex-col justify-between">
+            <Card className="border-sky-900/50 bg-slate-900/90 flex flex-col justify-between">
               <CardContent className="p-5 flex flex-col h-full justify-between space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">
+                    <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 font-bold">
                       <CircleDot className="w-5 h-5" />
                     </div>
                     {state.postWheelCompleted ? (
-                      <Badge className="text-xs bg-cyan-500">
+                      <Badge className="text-xs bg-sky-500">
                         Completed • {state.postWheelAverage.toFixed(1)}/10
                       </Badge>
                     ) : (
@@ -281,7 +283,7 @@ export default async function StudentDashboard() {
                   </div>
 
                   <div>
-                    <div className="text-[10px] font-mono font-semibold text-cyan-400 uppercase mb-0.5">
+                    <div className="text-[10px] font-mono font-semibold text-sky-400 uppercase mb-0.5">
                       POST Assessment
                     </div>
                     <h3 className="font-bold text-base text-white">POST Competency Wheel</h3>
@@ -292,14 +294,14 @@ export default async function StudentDashboard() {
 
                   <div className="space-y-1 text-[11px] text-slate-300">
                     <div className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3 h-3 text-cyan-400" />
+                      <CheckCircle2 className="w-3 h-3 text-sky-400" />
                       <span>Compare PRE vs POST</span>
                     </div>
                   </div>
                 </div>
 
                 <Link href="/student/post-wheel" className="flex-1">
-                  <Button size="sm" className="w-full h-9 text-xs bg-cyan-600 hover:bg-cyan-700">
+                  <Button size="sm" className="w-full h-9 text-xs bg-sky-600 hover:bg-sky-700">
                     {state.postWheelCompleted ? 'View POST Wheel' : 'Start POST Wheel'}
                   </Button>
                 </Link>

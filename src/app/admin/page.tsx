@@ -475,7 +475,7 @@ export default async function AdminDashboard({
                 Students
               </span>
 
-              <Users2 className="h-5 w-5 text-emerald-500" />
+              <Users2 className="h-5 w-5 text-indigo-500" />
             </div>
 
             <div className="mt-3 text-3xl font-bold">
@@ -541,7 +541,7 @@ export default async function AdminDashboard({
                 Post Wheel
               </span>
 
-              <CircleDot className="h-5 w-5 text-cyan-500" />
+              <CircleDot className="h-5 w-5 text-sky-500" />
             </div>
 
             <div className="mt-3 text-3xl font-bold">
@@ -804,7 +804,7 @@ export default async function AdminDashboard({
                             assessment.reattemptAllowed && (
                               <Badge
                                 variant="outline"
-                                className="border-emerald-500 text-emerald-600"
+                                className="border-indigo-500 text-indigo-600"
                               >
                                 Reattempt Allowed
                               </Badge>

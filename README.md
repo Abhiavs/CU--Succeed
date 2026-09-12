@@ -74,10 +74,25 @@ CU-SUCCEED is a student assessment platform that tracks competency development t
 
 ## Getting Started
 
+### Local development vs Hosted
+
+This project is designed to run in **both** environments at the same time — you keep
+building features locally while a production copy is live. The code is identical; only
+environment variables differ.
+
+| Variable | Local dev (`.env`) | Hosted (Railway / Render / Fly) |
+| --- | --- | --- |
+| `DATABASE_URL` | Your **local** PostgreSQL | The platform's **hosted** PostgreSQL |
+| `NEXTAUTH_URL` | `http://localhost:3000` | `https://<your-app>.onrender.com` (public URL) |
+| `NEXTAUTH_SECRET` | Any dev random secret | A **separately generated** secret (`openssl rand -base64 32`) |
+
+- **Develop locally:** follow *Installation* below → `npm run dev`.
+- **Deploy to the cloud:** follow **[DEPLOYMENT.md](DEPLOYMENT.md)** — nothing in the code changes.
+
 ### Prerequisites
 
-- Node.js 18+ and npm
-- PostgreSQL database
+- Node.js 20+ and npm
+- PostgreSQL database (local for dev; a separate hosted one for production)
 
 ### Installation
 
@@ -94,17 +109,22 @@ npm install
 
 3. Set up environment variables
 
-Copy the example file and configure your credentials:
+Copy the example file and configure your local credentials:
 ```bash
-cp env-example .env
+cp .env.example .env
 ```
 
-Edit `.env` with your actual values:
+Edit `.env` with your **local** values (this file is git-ignored — never committed):
+
 ```env
 DATABASE_URL="postgresql://username:password@localhost:5432/database_name?schema=public"
 NEXTAUTH_SECRET="generate-a-long-random-secret-here"
 NEXTAUTH_URL="http://localhost:3000"
 ```
+
+> For the **hosted / production** copy (Railway, Render, Fly), you do **not** use this
+> file — you set the same variable names in the host dashboard, pointing at a **separate**
+> hosted PostgreSQL. See **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
 4. Set up the database
 ```bash

@@ -45,20 +45,20 @@ export default function LoginPage() {
   return (
     <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-slate-950 p-4">
       {/* Background Glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
       <Card className="border-white/10 bg-slate-900/85 backdrop-blur-xl w-full max-w-md shadow-2xl animate-fade-in relative">
         <CardContent className="p-8 sm:p-10 space-y-6">
           <div className="text-center space-y-2">
             <Link href="/" className="inline-flex items-center gap-2 mb-2">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1px]">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-400 p-[1px]">
                 <div className="h-full w-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <Sparkles className="w-4 h-4 text-blue-400" />
                 </div>
               </div>
               <span className="font-extrabold text-xl text-white">
-                Succeed<span className="text-emerald-400">Academy</span>
+                CU <span className="text-blue-400">Succeed</span>
               </span>
             </Link>
             <h2 className="text-xl font-bold text-white tracking-tight">Student Portal Sign In</h2>
@@ -76,7 +76,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="email" className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-emerald-400" /> Email Address
+                <Mail className="w-3.5 h-3.5 text-indigo-400" /> Email Address
               </Label>
               <Input
                 id="email"
@@ -90,7 +90,7 @@ export default function LoginPage() {
 
             <div className="space-y-1.5">
               <Label htmlFor="password" className="flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-cyan-400" /> Password
+                <Lock className="w-3.5 h-3.5 text-sky-400" /> Password
               </Label>
               <Input
                 id="password"
@@ -106,7 +106,7 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               size="lg"
-              className="w-full rounded-2xl shadow-emerald-500/20 mt-2"
+              className="w-full rounded-2xl shadow-indigo-500/20 mt-2"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -124,13 +124,13 @@ export default function LoginPage() {
           <div className="pt-6 border-t border-white/10 flex flex-col gap-2.5 text-center text-xs text-slate-400">
             <p>
               New student?{" "}
-              <Link href="/start" className="text-emerald-400 font-semibold hover:underline">
+              <Link href="/start" className="text-blue-400 font-semibold hover:underline">
                 Start Assessment 
               </Link>
             </p>
             <p>
               Are you an official?{" "}
-              <Link href="/admin-login" className="text-cyan-400 font-semibold hover:underline">
+              <Link href="/admin-login" className="text-sky-400 font-semibold hover:underline">
                 Official Admin Portal
               </Link>
             </p>

@@ -18,6 +18,7 @@ model User {
   year           String?
   assessmentType String?
   collegeName    String?
+  batch          String?
 
   attempts     Attempt[]
   certificates Certificate[]

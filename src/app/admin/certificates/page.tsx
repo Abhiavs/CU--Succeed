@@ -50,7 +50,7 @@ export default async function CertificatesPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
           <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold">
+            <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-blue-400 font-bold">
               <Award size={20} />
             </div>
             <div>
@@ -107,7 +107,7 @@ export default async function CertificatesPage() {
                   key={cert.id}
                   className="border-b border-slate-100 dark:border-slate-800/60 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
                 >
-                  <td className="py-3.5 px-4 font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                  <td className="py-3.5 px-4 font-mono font-bold text-indigo-600 dark:text-blue-400">
                     {cert.id}
                   </td>
                   <td className="py-3.5 px-4">

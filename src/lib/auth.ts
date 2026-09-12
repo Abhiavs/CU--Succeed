@@ -37,6 +37,7 @@ export const authOptions: NextAuthOptions = {
                 year: u.year || null,
                 assessmentType: u.assessmentType || null,
                 collegeName: u.collegeName || null,
+                batch: u.batch || null,
               };
             }
           }
@@ -59,6 +60,7 @@ export const authOptions: NextAuthOptions = {
         token.year = user.year;
         token.assessmentType = user.assessmentType;
         token.collegeName = user.collegeName;
+        token.batch = user.batch;
       }
       return token;
     },
@@ -71,6 +73,7 @@ export const authOptions: NextAuthOptions = {
         session.user.year = token.year as string | null;
         session.user.assessmentType = token.assessmentType as string | null;
         session.user.collegeName = token.collegeName as string | null;
+        session.user.batch = token.batch as string | null;
       }
       return session;
     },

@@ -202,8 +202,8 @@ export default async function AttemptDetailsPage({
 
             <div className="flex items-center gap-4">
 
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 ring-1 ring-emerald-500/20">
-                <User className="h-7 w-7 text-emerald-500" />
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 ring-1 ring-indigo-500/20">
+                <User className="h-7 w-7 text-indigo-500" />
               </div>
 
               <div>
@@ -242,7 +242,7 @@ export default async function AttemptDetailsPage({
               <Badge
                 className={
                   attempt.status === "COMPLETED"
-                    ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 hover:bg-emerald-500/10 dark:text-emerald-400"
+                    ? "bg-indigo-500/10 text-indigo-600 border border-indigo-500/20 hover:bg-indigo-500/10 dark:text-blue-400"
                     : "bg-amber-500/10 text-amber-600 border border-amber-500/20 hover:bg-amber-500/10"
                 }
               >
@@ -376,9 +376,9 @@ export default async function AttemptDetailsPage({
 
               <div className="mb-3 flex items-center gap-2">
 
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/10">
 
-                  <CircleCheck className="h-4 w-4 text-emerald-500" />
+                  <CircleCheck className="h-4 w-4 text-indigo-500" />
 
                 </div>
 
@@ -392,7 +392,7 @@ export default async function AttemptDetailsPage({
 
               </div>
 
-              <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+              <p className="text-2xl font-bold text-indigo-600 dark:text-blue-400">
 
                 {isWheelAttempt
                   ? wheelScore?.totalScore ??
@@ -660,7 +660,7 @@ export default async function AttemptDetailsPage({
                               <div
                                 className={
                                   isCorrect
-                                    ? "flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-sm font-bold text-emerald-600 dark:text-emerald-400"
+                                    ? "flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/10 text-sm font-bold text-indigo-600 dark:text-blue-400"
                                     : isIncorrect
                                     ? "flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10 text-sm font-bold text-red-600 dark:text-red-400"
                                     : "flex h-8 w-8 items-center justify-center rounded-lg bg-slate-500/10 text-sm font-bold text-slate-600 dark:text-slate-400"
@@ -703,9 +703,9 @@ export default async function AttemptDetailsPage({
 
                             <td className="px-5 py-5 align-top">
 
-                              <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-sm">
+                              <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-3 py-2 text-sm">
 
-                                <span className="font-medium text-emerald-700 dark:text-emerald-400">
+                                <span className="font-medium text-indigo-700 dark:text-blue-400">
 
                                   {answer.question.correctAnswer ||
                                     "N/A"}
@@ -720,7 +720,7 @@ export default async function AttemptDetailsPage({
 
                               {isCorrect ? (
 
-                                <Badge className="bg-emerald-600 hover:bg-emerald-600">
+                                <Badge className="bg-indigo-600 hover:bg-indigo-600">
 
                                   <CheckCircle2 className="mr-1 h-3.5 w-3.5" />
 

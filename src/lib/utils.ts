@@ -16,8 +16,8 @@ export function getScoreGrade(score: number): {
   label: string;
   color: string;
 } {
-  if (score >= 90) return { grade: "A+", label: "Exceptional", color: "text-emerald-400" };
-  if (score >= 80) return { grade: "A", label: "Advanced", color: "text-emerald-500" };
+  if (score >= 90) return { grade: "A+", label: "Exceptional", color: "text-blue-400" };
+  if (score >= 80) return { grade: "A", label: "Advanced", color: "text-indigo-500" };
   if (score >= 70) return { grade: "B+", label: "Proficient", color: "text-cyan-400" };
   if (score >= 60) return { grade: "B", label: "Competent", color: "text-blue-400" };
   if (score >= 50) return { grade: "C", label: "Developing", color: "text-amber-400" };

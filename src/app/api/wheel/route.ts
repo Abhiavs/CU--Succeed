@@ -405,6 +405,15 @@ export async function POST(
 
             year:
               String(year),
+
+            /*
+             * Consume the granted reattempt once the
+             * student submits the wheel again so the
+             * dashboard option disappears after the redo.
+             */
+
+            reattemptAllowed:
+              false,
           },
         });
 

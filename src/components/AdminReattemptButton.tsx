@@ -72,7 +72,7 @@ export default function ReattemptButton({
       </Button>
 
       {message && (
-        <span className="flex items-center gap-1 text-xs text-emerald-600">
+        <span className="flex items-center gap-1 text-xs text-indigo-600">
           <CheckCircle2 className="h-3 w-3" />
           {message}
         </span>

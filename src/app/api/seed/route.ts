@@ -26,6 +26,7 @@ async function seedApplication() {
       name: "CU-SUCCEED",
       description:
         "CU-SUCCEED assessment and student development program.",
+      postAssessmentPublished: false,
     },
   });
 

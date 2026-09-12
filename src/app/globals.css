@@ -115,10 +115,10 @@ html.light h6 {
   color: #0f172a !important;
 }
 
-html.light .text-white:not(button.bg-emerald-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
-html.light .text-slate-100:not(button.bg-emerald-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
-html.light .text-slate-200:not(button.bg-emerald-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
-html.light .text-slate-300:not(button.bg-emerald-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *) {
+html.light .text-white:not(button.bg-indigo-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
+html.light .text-slate-100:not(button.bg-indigo-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
+html.light .text-slate-200:not(button.bg-indigo-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
+html.light .text-slate-300:not(button.bg-indigo-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *) {
   color: #0f172a !important;
 }
 
@@ -129,9 +129,9 @@ html.light .text-muted-foreground {
 }
 
 /* SOLID BUTTONS: Text MUST be clean white */
-html.light button.bg-emerald-600,
-html.light button.bg-emerald-500,
-html.light button[class*="bg-emerald"],
+html.light button.bg-indigo-600,
+html.light button.bg-indigo-500,
+html.light button[class*="bg-indigo"],
 html.light button.bg-blue-600,
 html.light button.bg-blue-500,
 html.light button[class*="bg-blue"],
@@ -143,9 +143,9 @@ html.light .btn-secondary {
   color: #ffffff !important;
 }
 
-html.light button.bg-emerald-600 *,
-html.light button.bg-emerald-500 *,
-html.light button[class*="bg-emerald"] *,
+html.light button.bg-indigo-600 *,
+html.light button.bg-indigo-500 *,
+html.light button[class*="bg-indigo"] *,
 html.light button.bg-blue-600 *,
 html.light button.bg-blue-500 *,
 html.light button[class*="bg-blue"] *,
@@ -189,11 +189,11 @@ html.light textarea::placeholder {
 }
 
 /* BADGES */
-html.light [class*="bg-emerald-500/10"],
-html.light [class*="bg-emerald-500/20"] {
-  background-color: #ecfdf5 !important;
-  color: #065f46 !important;
-  border-color: #a7f3d0 !important;
+html.light [class*="bg-indigo-500/10"],
+html.light [class*="bg-indigo-500/20"] {
+  background-color: #eef2ff !important;
+  color: #3730a3 !important;
+  border-color: #c7d2fe !important;
 }
 
 html.light [class*="bg-blue-500/10"],
@@ -203,11 +203,11 @@ html.light [class*="bg-blue-500/20"] {
   border-color: #bfdbfe !important;
 }
 
-html.light [class*="bg-indigo-500/10"],
-html.light [class*="bg-indigo-500/20"] {
-  background-color: #eef2ff !important;
-  color: #3730a3 !important;
-  border-color: #c7d2fe !important;
+html.light [class*="bg-sky-500/10"],
+html.light [class*="bg-sky-500/20"] {
+  background-color: #f0f9ff !important;
+  color: #075985 !important;
+  border-color: #bae6fd !important;
 }
 
 html.light [class*="bg-amber-500/10"],

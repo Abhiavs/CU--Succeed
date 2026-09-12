@@ -172,7 +172,7 @@ export default function CreateAssessmentForm({
                     key={q.id}
                     className={`flex items-start gap-3 p-3.5 rounded-lg border cursor-pointer transition-all ${
                       isSelected
-                        ? "border-emerald-500 bg-emerald-50/50 dark:bg-slate-950/80 ring-1 ring-emerald-500"
+                        ? "border-indigo-500 bg-indigo-50/50 dark:bg-slate-950/80 ring-1 ring-indigo-500"
                         : "border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700"
                     }`}
                   >
@@ -180,7 +180,7 @@ export default function CreateAssessmentForm({
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggleQuestion(q.id)}
-                      className="mt-0.5 h-4 w-4 rounded border-slate-300 dark:border-slate-700 text-emerald-600 focus:ring-emerald-500"
+                      className="mt-0.5 h-4 w-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500"
                     />
                     <div className="flex-1">
                       <div className="text-xs text-slate-900 dark:text-slate-100 font-medium mb-1.5 leading-relaxed">

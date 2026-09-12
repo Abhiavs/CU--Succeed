@@ -6,9 +6,9 @@ import { Providers } from "@/components/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CU-SUCCEED—  Digital Platform",
+  title: "CU Succeed — Digital Platform",
   description:
-    "The complete digital ecosystem for student assessment, training, and employability development by .",
+    "The complete digital ecosystem for student assessment, training, and employability development.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

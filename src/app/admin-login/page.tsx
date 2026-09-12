@@ -43,15 +43,15 @@ export default function AdminLoginPage() {
         {/* Brand Header */}
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
-              SA
+            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
+              CU
             </div>
             <span className="font-bold text-lg text-white tracking-tight">
-              Succeed<span className="text-emerald-400 font-semibold">Academy</span>
+              CU <span className="text-blue-400 font-semibold">Succeed</span>
             </span>
           </Link>
           <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <ShieldCheck className="w-4 h-4 text-blue-400" />
             <span>Official Administrator Portal</span>
           </div>
         </div>
@@ -105,10 +105,10 @@ export default function AdminLoginPage() {
               <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 space-y-1">
                 <div className="font-semibold text-slate-300">Default Administrator Credentials:</div>
                 <div className="font-mono text-slate-400">
-                  Email: <strong className="text-emerald-400">admin@succeed.com</strong> (or <strong className="text-emerald-400">admin@cusucceed.com</strong>)
+                  Email: <strong className="text-blue-400">admin@succeed.com</strong> (or <strong className="text-blue-400">admin@cusucceed.com</strong>)
                 </div>
                 <div className="font-mono text-slate-400">
-                  Password: <strong className="text-emerald-400">admin123</strong>
+                  Password: <strong className="text-blue-400">admin123</strong>
                 </div>
               </div>
 
@@ -127,7 +127,7 @@ export default function AdminLoginPage() {
         {/* Footer Link */}
         <div className="text-center text-xs text-slate-400">
           Student taking an assessment?{" "}
-          <Link href="/login" className="text-emerald-400 font-semibold hover:underline">
+          <Link href="/login" className="text-blue-400 font-semibold hover:underline">
             Student Sign In
           </Link>
         </div>

@@ -45,7 +45,7 @@ export default function StudentResultsPage() {
     return (
       <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-300">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-6 h-6 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
           <p className="text-xs font-mono">Synthesizing Candidate Results...</p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function StudentResultsPage() {
           <button
             onClick={() => setActiveTab("scorecard")}
             className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-              activeTab === "scorecard" ? "bg-emerald-600 text-white" : "text-slate-400 hover:text-white"
+              activeTab === "scorecard" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
             }`}
           >
             Scorecard Summary
@@ -103,7 +103,7 @@ export default function StudentResultsPage() {
           <button
             onClick={() => setActiveTab("radar")}
             className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-              activeTab === "radar" ? "bg-emerald-600 text-white" : "text-slate-400 hover:text-white"
+              activeTab === "radar" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
             }`}
           >
             Competency Radar Figure
@@ -111,7 +111,7 @@ export default function StudentResultsPage() {
           <button
             onClick={() => setActiveTab("certificate")}
             className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-              activeTab === "certificate" ? "bg-emerald-600 text-white" : "text-slate-400 hover:text-white"
+              activeTab === "certificate" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
             }`}
           >
             Verified Certificate
@@ -153,7 +153,7 @@ export default function StudentResultsPage() {
 
             {/* Overall Composite Score */}
             <div className="p-4 rounded-lg bg-slate-950/80 border border-slate-800 text-center w-full lg:w-60 flex-shrink-0 print:border-gray-300">
-              <div className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider mb-0.5">
+              <div className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-wider mb-0.5">
                 Composite Readiness
               </div>
               <div className="text-4xl font-extrabold text-white mb-0.5 print:text-black">
@@ -174,7 +174,7 @@ export default function StudentResultsPage() {
               <Card className="border-slate-800 bg-slate-900/90 print:border">
                 <CardContent className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-blue-400 font-bold">
                       <BrainCircuit className="w-4 h-4" />
                     </div>
                     <span className="text-xl font-bold text-white">
@@ -184,7 +184,7 @@ export default function StudentResultsPage() {
                   <div>
                     <h4 className="font-bold text-white text-sm">Psychometric Matrix</h4>
                     <p className="text-xs text-slate-400">
-                      Archetype: <strong className="text-emerald-400">{composite.psychometricArchetype.title}</strong>
+                      Archetype: <strong className="text-blue-400">{composite.psychometricArchetype.title}</strong>
                     </p>
                   </div>
                   <Progress value={state.psychometricScore || composite.psychometricScore} className="h-1" />
@@ -271,7 +271,7 @@ export default function StudentResultsPage() {
             <Card className="md:col-span-6 border-slate-800 bg-slate-900 p-6 flex flex-col items-center justify-center">
               <div className="text-xs font-mono font-semibold text-slate-400 mb-3 w-full flex justify-between">
                 <span>FIGURE 2.1 • RADAR ANALYSIS</span>
-                <span className="text-emerald-400">Average: {state.wheelAverage || composite.wheelAverage}/10</span>
+                <span className="text-blue-400">Average: {state.wheelAverage || composite.wheelAverage}/10</span>
               </div>
 
               <div className="w-full max-w-[300px] aspect-square relative">
@@ -337,7 +337,7 @@ export default function StudentResultsPage() {
 
               <div className="flex items-center gap-5 text-xs text-slate-400 pt-3 border-t border-slate-800 w-full justify-center">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
                   <span>Candidate Profile</span>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -360,7 +360,7 @@ export default function StudentResultsPage() {
                           <div className="font-semibold text-slate-200">{dim.name}</div>
                           <div className="text-[10px] text-slate-500 font-mono">Benchmark: {dim.benchmark}/10</div>
                         </div>
-                        <span className="font-mono font-bold text-emerald-400 px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
+                        <span className="font-mono font-bold text-blue-400 px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
                           {score} / 10
                         </span>
                       </div>
@@ -377,8 +377,8 @@ export default function StudentResultsPage() {
           <div className="pt-2">
             <div className="p-8 sm:p-12 rounded-xl border border-slate-700 bg-slate-900 text-center max-w-3xl mx-auto space-y-6 print:border-2 print:border-black print:bg-white print:text-black">
               <div className="space-y-1">
-                <div className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold print:text-black">
-                  CU-SUCCEED DIGITAL CREDENTIAL
+                <div className="text-[10px] font-mono tracking-widest uppercase text-blue-400 font-bold print:text-black">
+                  CU SUCCEED DIGITAL CREDENTIAL
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white print:text-black">
                   Certificate of Employability Assessment
@@ -403,13 +403,13 @@ export default function StudentResultsPage() {
                   {student.assessmentType === "PRE" ? "Pre-Assessment" : "Post-Assessment"}
                 </strong>{" "}
                 program evaluating Psychometric traits, Aptitude precision, and 8-Dimension Competency standards with a composite score of{" "}
-                <strong className="text-emerald-400 print:text-black">{composite.overallReadiness}%</strong>.
+                <strong className="text-blue-400 print:text-black">{composite.overallReadiness}%</strong>.
               </p>
 
               <div className="pt-6 border-t border-slate-800 flex items-center justify-between text-left text-xs print:border-gray-400">
                 <div className="text-slate-400 print:text-gray-600">
                   <div>Issue Date: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</div>
-                  <div className="font-mono text-[10px] text-emerald-400 print:text-black mt-0.5">
+                  <div className="font-mono text-[10px] text-blue-400 print:text-black mt-0.5">
                     Verification ID: {certificateId}
                   </div>
                 </div>
@@ -419,7 +419,7 @@ export default function StudentResultsPage() {
                     Director of Assessment
                   </div>
                   <div className="text-[10px] text-slate-400 print:text-gray-600 font-mono">
-                    SucceedAcademy Board
+                    CU Succeed Board
                   </div>
                 </div>
               </div>

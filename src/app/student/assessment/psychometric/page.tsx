@@ -190,7 +190,7 @@ export default function PsychometricAssessmentPage() {
     return (
       <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-100">
         <div className="text-center">
-          <BrainCircuit className="w-8 h-8 mx-auto mb-4 text-emerald-400 animate-pulse" />
+          <BrainCircuit className="w-8 h-8 mx-auto mb-4 text-blue-400 animate-pulse" />
 
           <p className="text-sm text-slate-400">
             Loading psychometric assessment...
@@ -553,7 +553,7 @@ export default function PsychometricAssessmentPage() {
               Progress
             </span>
 
-            <span className="text-emerald-400 font-mono font-bold">
+            <span className="text-blue-400 font-mono font-bold">
               {progressPct}%
             </span>
 
@@ -580,7 +580,7 @@ export default function PsychometricAssessmentPage() {
 
       <div className="space-y-3">
   {currentQuestion.parameter && (
-    <div className="text-[11px] font-mono font-semibold text-emerald-400 uppercase">
+    <div className="text-[11px] font-mono font-semibold text-blue-400 uppercase">
       DIMENSION: {currentQuestion.parameter}
     </div>
   )}
@@ -614,7 +614,7 @@ export default function PsychometricAssessmentPage() {
                       }
                       className={`p-3.5 rounded-lg border cursor-pointer transition-all flex items-start gap-3 ${
                         isSelected
-                          ? "border-emerald-500 bg-slate-950 ring-1 ring-emerald-500"
+                          ? "border-indigo-500 bg-slate-950 ring-1 ring-indigo-500"
                           : "border-slate-800 bg-slate-900/60 hover:border-slate-700"
                       }`}
                     >
@@ -622,7 +622,7 @@ export default function PsychometricAssessmentPage() {
                       <div
                         className={`w-6 h-6 rounded-md flex items-center justify-center font-bold text-xs flex-shrink-0 ${
                           isSelected
-                            ? "bg-emerald-600 text-white"
+                            ? "bg-indigo-600 text-white"
                             : "bg-slate-800 text-slate-400"
                         }`}
                       >
@@ -639,7 +639,7 @@ export default function PsychometricAssessmentPage() {
 
                       {isSelected && (
 
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
 
                       )}
 
@@ -699,7 +699,7 @@ export default function PsychometricAssessmentPage() {
                     !allAnswered ||
                     isSubmitting
                   }
-                  className="h-9 px-6 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500"
+                  className="h-9 px-6 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500"
                 >
 
                   {isSubmitting
@@ -726,7 +726,7 @@ export default function PsychometricAssessmentPage() {
 
         Psychometric Behavioral Matrix
         {" • "}
-        SucceedAcademy
+        CU Succeed
 
       </footer>
 

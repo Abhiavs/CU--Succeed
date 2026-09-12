@@ -40,9 +40,9 @@ export default function SelectYearPage() {
   return (
     <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-slate-950 p-4">
       {/* Background Glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
       <Card className="border-white/10 bg-slate-900/85 backdrop-blur-xl w-full max-w-2xl shadow-2xl">
         <CardContent className="p-8 sm:p-10 space-y-8">
@@ -50,19 +50,19 @@ export default function SelectYearPage() {
           {/* Branding */}
           <div className="text-center space-y-3">
             <Link href="/" className="inline-flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1px]">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-400 p-[1px]">
                 <div className="h-full w-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <Sparkles className="w-4 h-4 text-blue-400" />
                 </div>
               </div>
 
               <span className="font-extrabold text-xl text-white">
-                Succeed<span className="text-emerald-400">Academy</span>
+                CU <span className="text-blue-400">Succeed</span>
               </span>
             </Link>
 
             <Badge variant="default" className="text-xs">
-              CU-SUCCEED
+              CU SUCCEED
             </Badge>
 
             <h1 className="text-2xl font-bold text-white tracking-tight">
@@ -77,7 +77,7 @@ export default function SelectYearPage() {
           {/* Step 1: Academic Year */}
           <div className="space-y-3">
             <div>
-              <div className="text-[11px] font-mono font-semibold text-emerald-400 uppercase">
+              <div className="text-[11px] font-mono font-semibold text-blue-400 uppercase">
                 Step 1
               </div>
 
@@ -95,7 +95,7 @@ export default function SelectYearPage() {
               onClick={() => setSelectedYear("1st")}
               className={`w-full p-5 rounded-xl border text-left transition-all ${
                 selectedYear === "1st"
-                  ? "border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500"
+                  ? "border-indigo-500 bg-indigo-500/10 ring-1 ring-indigo-500"
                   : "border-slate-800 bg-slate-950/50 hover:border-slate-700"
               }`}
             >
@@ -104,7 +104,7 @@ export default function SelectYearPage() {
                   <div
                     className={`w-11 h-11 rounded-xl flex items-center justify-center ${
                       selectedYear === "1st"
-                        ? "bg-emerald-500/20 text-emerald-400"
+                        ? "bg-indigo-500/20 text-blue-400"
                         : "bg-slate-800 text-slate-400"
                     }`}
                   >
@@ -123,7 +123,7 @@ export default function SelectYearPage() {
                 </div>
 
                 {selectedYear === "1st" && (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <CheckCircle2 className="w-5 h-5 text-blue-400" />
                 )}
               </div>
             </button>

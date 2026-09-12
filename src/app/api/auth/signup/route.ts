@@ -4,12 +4,15 @@ import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password, rollNumber, branch, year, assessmentType, collegeName } =
+    const { name, email, password, rollNumber, branch, batch, year, assessmentType, collegeName } =
       await req.json();
 
     const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
     if (!name?.trim() || !normalizedEmail || !password || !rollNumber?.trim() || !branch?.trim() || !collegeName?.trim()) {
       return NextResponse.json({ error: "Name, email, password, roll number, branch, and college are required." }, { status: 400 });
+    }
+    if (!["Batch 1", "Batch 2"].includes(batch)) {
+      return NextResponse.json({ error: "Please select a valid batch." }, { status: 400 });
     }
     if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
       return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
@@ -36,6 +39,7 @@ export async function POST(req: Request) {
           role: "STUDENT",
           rollNumber: rollNumber.trim(),
           branch: branch.trim(),
+          batch: batch.trim(),
           year: "1st",
           assessmentType: "PRE",
           collegeName: collegeName.trim(),

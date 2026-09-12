@@ -19,6 +19,7 @@ import {
   BookOpen,
   Building2,
   ChevronDown,
+  Layers,
 } from "lucide-react";
 
 const BRANCHES = [
@@ -38,6 +39,8 @@ const COLLEGES = [
   "Pravara Rural Engineering College, Loni",
 ];
 
+const BATCHES = ["Batch 1", "Batch 2"];
+
 export default function SignupPage() {
   const router = useRouter();
 
@@ -48,6 +51,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [branch, setBranch] = useState("");
+  const [batch, setBatch] = useState("");
   const [collegeName, setCollegeName] = useState("");
 
   const [error, setError] = useState("");
@@ -72,6 +76,7 @@ export default function SignupPage() {
           password,
           rollNumber,
           branch,
+          batch,
           year: selectedYear,
           assessmentType: "PRE",
           collegeName,
@@ -122,9 +127,9 @@ export default function SignupPage() {
   return (
     <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-slate-950 p-4">
       {/* Background Glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
       <Card className="border-white/10 bg-slate-900/85 backdrop-blur-xl w-full max-w-md shadow-2xl animate-fade-in relative">
         <CardContent className="p-8 sm:p-10 space-y-6">
@@ -132,14 +137,14 @@ export default function SignupPage() {
           {/* Branding */}
           <div className="text-center space-y-2">
             <Link href="/" className="inline-flex items-center gap-2 mb-2">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1px]">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-400 p-[1px]">
                 <div className="h-full w-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <Sparkles className="w-4 h-4 text-blue-400" />
                 </div>
               </div>
 
               <span className="font-extrabold text-xl text-white">
-                Succeed<span className="text-emerald-400">Academy</span>
+                CU <span className="text-blue-400">Succeed</span>
               </span>
             </Link>
 
@@ -149,7 +154,7 @@ export default function SignupPage() {
 
             <p className="text-xs text-slate-400">
               Academic Year:{" "}
-              <span className="text-emerald-400 font-semibold">
+              <span className="text-blue-400 font-semibold">
                 First Year
               </span>
             </p>
@@ -167,7 +172,7 @@ export default function SignupPage() {
             {/* Full Name */}
             <div className="space-y-1.5">
               <Label htmlFor="name" className="flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-emerald-400" />
+                <User className="w-3.5 h-3.5 text-indigo-400" />
                 Full Name
               </Label>
 
@@ -186,7 +191,7 @@ export default function SignupPage() {
                 htmlFor="rollNumber"
                 className="flex items-center gap-1.5"
               >
-                <Hash className="w-3.5 h-3.5 text-emerald-400" />
+                <Hash className="w-3.5 h-3.5 text-indigo-400" />
                 Roll Number
               </Label>
 
@@ -199,10 +204,40 @@ export default function SignupPage() {
               />
             </div>
 
+            {/* Batch Dropdown */}
+            <div className="space-y-1.5">
+              <Label htmlFor="batch" className="flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-sky-400" />
+                Batch
+              </Label>
+
+              <div className="relative">
+                <select
+                  id="batch"
+                  value={batch}
+                  onChange={(e) => setBatch(e.target.value)}
+                  required
+                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                >
+                  <option value="" disabled>
+                    Select your batch
+                  </option>
+
+                  {BATCHES.map((batchOption) => (
+                    <option key={batchOption} value={batchOption}>
+                      {batchOption}
+                    </option>
+                  ))}
+                </select>
+
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              </div>
+            </div>
+
             {/* Branch Dropdown */}
             <div className="space-y-1.5">
               <Label htmlFor="branch" className="flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
+                <BookOpen className="w-3.5 h-3.5 text-sky-400" />
                 Branch
               </Label>
 
@@ -212,7 +247,7 @@ export default function SignupPage() {
                   value={branch}
                   onChange={(e) => setBranch(e.target.value)}
                   required
-                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 >
                   <option value="" disabled>
                     Select your branch
@@ -245,7 +280,7 @@ export default function SignupPage() {
                   value={collegeName}
                   onChange={(e) => setCollegeName(e.target.value)}
                   required
-                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 >
                   <option value="" disabled>
                     Select your college
@@ -265,7 +300,7 @@ export default function SignupPage() {
             {/* Email */}
             <div className="space-y-1.5">
               <Label htmlFor="email" className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                <Mail className="w-3.5 h-3.5 text-sky-400" />
                 Gmail / Email Address
               </Label>
 
@@ -302,7 +337,7 @@ export default function SignupPage() {
               type="submit"
               disabled={loading}
               size="lg"
-              className="w-full rounded-2xl shadow-emerald-500/20 mt-2"
+              className="w-full rounded-2xl shadow-indigo-500/20 mt-2"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -322,7 +357,7 @@ export default function SignupPage() {
             Already have an account?{" "}
             <Link
               href="/login"
-              className="text-emerald-400 font-semibold hover:underline"
+              className="text-blue-400 font-semibold hover:underline"
             >
               Sign In
             </Link>

@@ -83,7 +83,7 @@ export default async function TrainingMatrixPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="border-slate-800 bg-slate-900">
           <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">
+            <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-blue-400 font-bold">
               <TrendingUp size={20} />
             </div>
             <div>
@@ -129,7 +129,7 @@ export default async function TrainingMatrixPage() {
                 <div key={index} className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
                   <div className="flex justify-between items-center text-xs">
                     <span className="font-semibold text-white">{data.programName}</span>
-                    <span className="font-mono text-emerald-400 font-bold">
+                    <span className="font-mono text-blue-400 font-bold">
                       Avg Score: {data.averageScore.toFixed(1)}%
                     </span>
                   </div>
@@ -150,7 +150,7 @@ export default async function TrainingMatrixPage() {
                 <div key={idx} className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
                   <div className="flex justify-between items-center text-xs">
                     <span className="font-semibold text-white">{sample.name}</span>
-                    <span className="font-mono text-emerald-400 font-bold">
+                    <span className="font-mono text-blue-400 font-bold">
                       Avg Score: {sample.avg}%
                     </span>
                   </div>

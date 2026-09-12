@@ -9,6 +9,7 @@ declare module "next-auth" {
     year?: string | null;
     assessmentType?: string | null;
     collegeName?: string | null;
+    batch?: string | null;
   }
 
   interface Session {
@@ -20,6 +21,7 @@ declare module "next-auth" {
       year?: string | null;
       assessmentType?: string | null;
       collegeName?: string | null;
+      batch?: string | null;
     };
   }
 }
@@ -33,5 +35,6 @@ declare module "next-auth/jwt" {
     year?: string | null;
     assessmentType?: string | null;
     collegeName?: string | null;
+    batch?: string | null;
   }
 }

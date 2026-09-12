@@ -56,12 +56,12 @@ export default async function AdminLayout({
           {/* Brand */}
           <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <Link href="/admin" className="flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
-                CS
+              <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
+                CU
               </div>
               <div className="text-left">
                 <div className="font-bold text-sm text-slate-900 dark:text-white tracking-tight">
-                  CU-<span className="text-emerald-600 dark:text-emerald-400 font-semibold">SUCCEED</span>
+                  CU <span className="text-indigo-600 dark:text-blue-400 font-semibold">Succeed</span>
                 </div>
                 <div className="text-[10px] text-slate-500 font-mono">OFFICIAL PORTAL</div>
               </div>
@@ -93,7 +93,7 @@ export default async function AdminLayout({
 
         {/* Footer with Administrator Profile */}
         <div className="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-xs font-bold text-emerald-600 dark:text-emerald-400 flex-shrink-0">
+          <div className="w-8 h-8 rounded-full bg-indigo-500/10 dark:bg-blue-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-blue-400 flex-shrink-0">
             {session.user.name?.charAt(0) || "A"}
           </div>
           <div className="text-xs text-left min-w-0 flex-1">
@@ -118,7 +118,7 @@ export default async function AdminLayout({
 
           <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
             <span className="hidden sm:inline">
-              Server Status: <strong className="text-emerald-600 dark:text-emerald-400">Online</strong>
+              Server Status: <strong className="text-indigo-600 dark:text-blue-400">Online</strong>
             </span>
             <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 hidden sm:block" />
             <ThemeToggle />

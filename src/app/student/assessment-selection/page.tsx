@@ -37,9 +37,9 @@ export default function AssessmentSelectionPage() {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[140px] pointer-events-none" />
 
       <Card className="relative w-full max-w-3xl border-white/10 bg-slate-900/90 backdrop-blur-xl shadow-2xl">
         <CardContent className="p-8 sm:p-10 space-y-8">
@@ -47,14 +47,14 @@ export default function AssessmentSelectionPage() {
           {/* Header */}
           <div className="text-center space-y-4">
             <Link href="/" className="inline-flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1px]">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-400 p-[1px]">
                 <div className="h-full w-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <Sparkles className="w-4 h-4 text-blue-400" />
                 </div>
               </div>
 
               <span className="font-extrabold text-xl text-white">
-                Succeed<span className="text-emerald-400">Academy</span>
+                CU <span className="text-blue-400">Succeed</span>
               </span>
             </Link>
 
@@ -80,14 +80,14 @@ export default function AssessmentSelectionPage() {
             <button
               type="button"
               onClick={startPsychometric}
-              className="group text-left rounded-2xl border border-emerald-500/40 bg-emerald-500/5 p-6 transition-all hover:border-emerald-400 hover:bg-emerald-500/10 hover:ring-1 hover:ring-emerald-500"
+              className="group text-left rounded-2xl border border-indigo-500/40 bg-indigo-500/5 p-6 transition-all hover:border-blue-400 hover:bg-indigo-500/10 hover:ring-1 hover:ring-indigo-500"
             >
               <div className="flex items-start justify-between">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400">
+                <div className="w-12 h-12 rounded-xl bg-indigo-500/15 flex items-center justify-center text-blue-400">
                   <BrainCircuit className="w-6 h-6" />
                 </div>
 
-                <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                <Badge className="bg-indigo-500/20 text-blue-400 border border-indigo-500/30">
                   Available
                 </Badge>
               </div>
@@ -108,13 +108,13 @@ export default function AssessmentSelectionPage() {
                 </span>
 
                 <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
                   Ready
                 </span>
               </div>
 
               <div className="mt-6">
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-400">
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400">
                   Start Psychometric
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </span>
