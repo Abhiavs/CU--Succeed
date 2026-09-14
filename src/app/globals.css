@@ -2,30 +2,102 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ==================================================== */
+/* BRAND PALETTE — CU-SUCCEED greens / teals            */
+/*                                                      */
+/* The app styles itself with literal Tailwind colour   */
+/* names (bg-slate-900, text-indigo-400,                */
+/* border-blue-500/20 …) across ~54 files, so the       */
+/* palette is remapped UNDER those names here. Every    */
+/* existing class then renders in the brand palette     */
+/* with no component edits, and opacity modifiers       */
+/* (/10, /20, /90) are computed from the base value.    */
+/*                                                      */
+/* amber + red are deliberately NOT remapped: they are  */
+/* semantic warning/danger, not brand, and greening     */
+/* them would destroy their meaning.                    */
+/* ==================================================== */
+
+@theme {
+  /* --- neutrals: the teal ramp ------------------------ */
+  /* low numbers = light (text on dark), high = dark surfaces */
+  --color-slate-50: #f4fbfb;
+  --color-slate-100: #e2f5ee;
+  --color-slate-200: #caece2;
+  --color-slate-300: #a8cbc0;
+  --color-slate-400: #89b6a6;
+  --color-slate-500: #6d8a8a;
+  --color-slate-600: #197368;
+  --color-slate-700: #1c5960;
+  --color-slate-800: #1b4b51;
+  --color-slate-900: #143a41;
+  --color-slate-950: #0b2227;
+
+  /* gray is used as a near-duplicate of slate in a few spots */
+  --color-gray-300: #a8cbc0;
+  --color-gray-400: #89b6a6;
+  --color-gray-600: #197368;
+  --color-gray-700: #1c5960;
+  --color-gray-800: #1b4b51;
+
+  /* --- accents: indigo / blue / sky / violet / emerald all
+         fold into the brand green + teal family ---------- */
+  --color-indigo-50: #eaf7f1;
+  --color-indigo-300: #89b6a6;
+  --color-indigo-400: #66a770;
+  --color-indigo-500: #409d78;
+  --color-indigo-600: #197368;
+  --color-indigo-700: #14574f;
+
+  --color-blue-300: #89b6a6;
+  --color-blue-400: #409d78;
+  --color-blue-500: #197368;
+  --color-blue-600: #155f56;
+  --color-blue-700: #0f4a45;
+
+  --color-sky-400: #66a770;
+  --color-sky-500: #409d78;
+  --color-sky-600: #197368;
+  --color-sky-700: #14574f;
+  --color-sky-900: #0b2227;
+
+  --color-violet-300: #89b6a6;
+  --color-violet-500: #409d78;
+  --color-violet-600: #197368;
+
+  --color-emerald-400: #66a770;
+  --color-emerald-500: #409d78;
+}
+
+/* ==================================================== */
+/* MODE TOKENS                                          */
+/*                                                      */
+/* LIGHT IS THE DEFAULT: the light values sit on :root  */
+/* so they apply before any JavaScript runs, and dark   */
+/* only engages once ThemeToggle (or the bootstrap      */
+/* script in layout.tsx) stamps .dark on <html>.        */
+/* ==================================================== */
+
 @layer base {
   :root {
-    --bg-app: #090d16;
-    --bg-card: #0f172a;
-    --bg-nav: #090d16;
-    --border-main: rgba(255, 255, 255, 0.1);
-    --text-heading: #ffffff;
-    --text-body: #cbd5e1;
-    --text-muted: #94a3b8;
-    color-scheme: dark;
-  }
-
-  html.light {
-    --bg-app: #f8fafc;
+    --bg-app: #f4fbfb;
     --bg-card: #ffffff;
     --bg-nav: #ffffff;
-    --border-main: #e2e8f0;
-    --text-heading: #0f172a;
-    --text-body: #334155;
-    --text-muted: #64748b;
+    --border-main: #caece2;
+    --text-heading: #1b4b51;
+    --text-body: #1c5960;
+    --text-muted: #3f6d68;
     color-scheme: light;
   }
 
   html.dark {
+    --bg-app: #0b2227;
+    --bg-card: #143a41;
+    --bg-nav: #0b2227;
+    --border-main: rgba(202, 236, 226, 0.14);
+    --text-heading: #f4fbfb;
+    --text-body: #b9d8cf;
+    --text-muted: #89b6a6;
     color-scheme: dark;
   }
 }
@@ -40,199 +112,289 @@ body {
 }
 
 /* ==================================================== */
+/* SOLID FILLS KEEP WHITE INK — BOTH MODES              */
+/*                                                      */
+/* Badge variants carry a *-600 text colour, so a badge  */
+/* given a solid fill of the same ramp renders its value */
+/* in the fill's own colour: `bg-indigo-600` +           */
+/* `text-indigo-600` = invisible, in light AND dark.     */
+/* Unlayered, so it outranks Tailwind's layered utility  */
+/* and dark: variants without needing !important.        */
+/* slate is excluded — those classes are card surfaces.  */
+/* ==================================================== */
+
+:is(
+    .bg-indigo-500, .bg-indigo-600, .bg-indigo-700,
+    .bg-blue-500, .bg-blue-600, .bg-blue-700,
+    .bg-sky-500, .bg-sky-600, .bg-sky-700,
+    .bg-emerald-500, .bg-emerald-600,
+    .bg-violet-500, .bg-violet-600,
+    .bg-red-500, .bg-red-600, .bg-red-700
+  ) {
+  color: #ffffff;
+}
+
+/* ==================================================== */
 /* SELECT & OPTION THEME FIX FOR NATIVE OS POPUPS       */
+/* Base = light (the default); dark re-styles below.    */
 /* ==================================================== */
 select {
-  color-scheme: dark;
-  background-color: #0f172a;
-  color: #f8fafc;
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #1b4b51;
 }
 
 select option {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
+  background-color: #ffffff !important;
+  color: #1b4b51 !important;
 }
 
-html.light select {
-  color-scheme: light !important;
-  background-color: #ffffff !important;
-  color: #0f172a !important;
+html.dark select {
+  color-scheme: dark !important;
+  background-color: #143a41 !important;
+  color: #f4fbfb !important;
 }
 
-html.light select option {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
+html.dark select option {
+  background-color: #143a41 !important;
+  color: #f4fbfb !important;
 }
 
 /* ==================================================== */
-/* BULLETPROOF LIGHT MODE ENFORCEMENT                   */
+/* LIGHT MODE ENFORCEMENT                               */
+/*                                                      */
+/* Roughly 34 pages are written dark-first (bg-slate-   */
+/* 900, text-white) with no dark: variants, so their    */
+/* light appearance is produced here by re-styling the  */
+/* class NAMES. Scoped to :root:not(.dark) rather than  */
+/* html.light so light works before JavaScript runs    */
+/* (html.light used to mean a dark flash on every load).*/
+/*                                                      */
+/* If it looks off in light mode, add the missing class */
+/* to this list rather than editing the page.           */
 /* ==================================================== */
-html.light body {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
+
+:root:not(.dark) body {
+  background-color: #f4fbfb !important;
+  color: #1b4b51 !important;
 }
 
-html.light header,
-html.light aside,
-html.light nav {
+:root:not(.dark) header,
+:root:not(.dark) aside,
+:root:not(.dark) nav {
   background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
+  border-color: #caece2 !important;
 }
 
-html.light .bg-slate-950,
-html.light .bg-\[\#090d16\] {
-  background-color: #f8fafc !important;
+/* --- page + card surfaces ---------------------------- */
+/* The [class*=] arms below exist to catch opacity variants
+   (bg-slate-900/90), but a raw substring match also fires on
+   `hover:bg-slate-900` and `dark:bg-slate-900` — which handed
+   ghost buttons a permanent mint fill and pre-lightened any
+   element carrying only a dark: variant. The :not() guards
+   exclude those prefixed tokens; the exact-token arm covers the
+   rare element that carries both. */
+:root:not(.dark) .bg-slate-950,
+:root:not(.dark) .bg-\[\#090d16\] {
+  background-color: #f4fbfb !important;
 }
 
-html.light .bg-slate-900,
-html.light .bg-slate-900\/90,
-html.light .bg-slate-900\/80,
-html.light .bg-slate-900\/70,
-html.light .bg-slate-900\/60,
-html.light .bg-slate-950\/80,
-html.light .bg-slate-950\/60,
-html.light .bg-slate-950\/40 {
+:root:not(.dark) [class*="bg-slate-900"]:not([class*="hover:bg-slate-900"]):not([class*="dark:bg-slate-900"]),
+:root:not(.dark) .bg-slate-900,
+:root:not(.dark) .bg-slate-950\/95,
+:root:not(.dark) .bg-slate-950\/80,
+:root:not(.dark) .bg-slate-950\/60,
+:root:not(.dark) .bg-slate-950\/40 {
   background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
+  border-color: #caece2 !important;
 }
 
-html.light .border-slate-800,
-html.light .border-slate-800\/80,
-html.light .border-slate-800\/60,
-html.light .border-slate-700,
-html.light .border-white\/10,
-html.light .border-white\/5 {
-  border-color: #e2e8f0 !important;
+/* Inset / muted panels read as a soft mint tint, not a dark wash. */
+:root:not(.dark) .bg-slate-950\/50,
+:root:not(.dark) .bg-slate-950\/30 {
+  background-color: #eef9f5 !important;
 }
 
-/* Light mode text contrast overrides (excluding solid button children) */
-html.light h1,
-html.light h2,
-html.light h3,
-html.light h4,
-html.light h5,
-html.light h6 {
-  color: #0f172a !important;
+/* bg-slate-800 is a dark surface only for the solid secondary
+   button; everywhere else (icon chips, avatar, slider track) it
+   is a raised tile that must go light. */
+:root:not(.dark) .bg-slate-800:not(button),
+:root:not(.dark) .bg-slate-800\/30,
+:root:not(.dark) .bg-slate-800\/40,
+:root:not(.dark) .bg-slate-800\/60 {
+  background-color: #e2f5ee !important;
+  border-color: #caece2 !important;
 }
 
-html.light .text-white:not(button.bg-indigo-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
-html.light .text-slate-100:not(button.bg-indigo-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
-html.light .text-slate-200:not(button.bg-indigo-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *),
-html.light .text-slate-300:not(button.bg-indigo-600 *):not(button.bg-blue-600 *):not(button.bg-slate-800 *):not(button.bg-slate-900 *):not(button.bg-red-600 *):not(.btn-primary *):not(.btn-secondary *) {
-  color: #0f172a !important;
+:root:not(.dark) [class*="bg-slate-100"]:not([class*="hover:bg-slate-100"]):not([class*="dark:bg-slate-100"]),
+:root:not(.dark) .bg-slate-100 {
+  background-color: #eaf7f1 !important;
+  color: #1c5960 !important;
+  border-color: #caece2 !important;
 }
 
-html.light .text-slate-400,
-html.light .text-slate-500,
-html.light .text-muted-foreground {
-  color: #475569 !important;
+/* --- borders ----------------------------------------- */
+:root:not(.dark) .border-slate-800,
+:root:not(.dark) .border-slate-800\/80,
+:root:not(.dark) .border-slate-800\/60,
+:root:not(.dark) .border-slate-700,
+:root:not(.dark) .border-white\/10,
+:root:not(.dark) .border-white\/5,
+:root:not(.dark) .border-white\/15 {
+  border-color: #caece2 !important;
 }
 
-/* SOLID BUTTONS: Text MUST be clean white */
-html.light button.bg-indigo-600,
-html.light button.bg-indigo-500,
-html.light button[class*="bg-indigo"],
-html.light button.bg-blue-600,
-html.light button.bg-blue-500,
-html.light button[class*="bg-blue"],
-html.light button.bg-slate-800,
-html.light button.bg-slate-900,
-html.light button.bg-red-600,
-html.light .btn-primary,
-html.light .btn-secondary {
+/* --- text -------------------------------------------- */
+:root:not(.dark) h1,
+:root:not(.dark) h2,
+:root:not(.dark) h3,
+:root:not(.dark) h4,
+:root:not(.dark) h5,
+:root:not(.dark) h6 {
+  color: #1b4b51 !important;
+}
+
+/* Body copy that is white/near-white on dark. Buttons are excluded
+   wholesale and handled by the two blocks below: the old guards
+   (:not(button.bg-indigo-600 *)) only excluded button DESCENDANTS,
+   so the button's own text-white was still rewritten and landed as
+   dark ink on a solid green fill. */
+:root:not(.dark) .text-white:not(button):not(button *):not(.btn-primary, .btn-primary *):not(.btn-secondary, .btn-secondary *),
+:root:not(.dark) .text-slate-100:not(button):not(button *):not(.btn-primary, .btn-primary *):not(.btn-secondary, .btn-secondary *),
+:root:not(.dark) .text-slate-200:not(button):not(button *):not(.btn-primary, .btn-primary *):not(.btn-secondary, .btn-secondary *),
+:root:not(.dark) .text-slate-300:not(button):not(button *):not(.btn-primary, .btn-primary *):not(.btn-secondary, .btn-secondary *) {
+  color: #1b4b51 !important;
+}
+
+/* Muted copy — #3f6d68 is 5.57:1 on the light page, so it can carry
+   body text. (#6d8a8a is only 3.54:1 and is reserved for large text.) */
+:root:not(.dark) .text-slate-400,
+:root:not(.dark) .text-slate-500,
+:root:not(.dark) .text-muted-foreground {
+  color: #3f6d68 !important;
+}
+
+/* Buttons were left out of the conversion above, so a ghost button
+   written for the dark theme (text-slate-300 / text-white) would
+   otherwise keep pale ink on a white surface. This sits BEFORE the
+   solid-button block, so an equal-specificity tie there still
+   resolves to white. */
+:root:not(.dark) button:is(.text-white, .text-slate-100, .text-slate-200, .text-slate-300) {
+  color: #1b4b51 !important;
+}
+
+/* --- SOLID BUTTONS: text stays clean white ------------ */
+/* Exact classes, NOT [class*="bg-indigo"] — the substring form also
+   matched tinted buttons (a `bg-indigo-500/10` chip) and painted
+   white text onto a pale wash. sky/emerald/violet are included
+   because several solid buttons set a fill and no text colour, so
+   they would otherwise inherit the dark body ink. */
+:root:not(.dark) button:is(
+    .bg-indigo-500, .bg-indigo-600, .bg-indigo-700,
+    .bg-blue-400, .bg-blue-500, .bg-blue-600, .bg-blue-700,
+    .bg-sky-400, .bg-sky-500, .bg-sky-600, .bg-sky-700,
+    .bg-emerald-500, .bg-emerald-600,
+    .bg-violet-500, .bg-violet-600,
+    .bg-slate-700, .bg-slate-800, .bg-slate-900,
+    .bg-red-500, .bg-red-600, .bg-red-700
+  ),
+:root:not(.dark) .btn-primary,
+:root:not(.dark) .btn-secondary {
   color: #ffffff !important;
 }
 
-html.light button.bg-indigo-600 *,
-html.light button.bg-indigo-500 *,
-html.light button[class*="bg-indigo"] *,
-html.light button.bg-blue-600 *,
-html.light button.bg-blue-500 *,
-html.light button[class*="bg-blue"] *,
-html.light button.bg-slate-800 *,
-html.light button.bg-slate-900 *,
-html.light button.bg-red-600 *,
-html.light .btn-primary *,
-html.light .btn-secondary * {
+:root:not(.dark) button:is(
+    .bg-indigo-500, .bg-indigo-600, .bg-indigo-700,
+    .bg-blue-400, .bg-blue-500, .bg-blue-600, .bg-blue-700,
+    .bg-sky-400, .bg-sky-500, .bg-sky-600, .bg-sky-700,
+    .bg-emerald-500, .bg-emerald-600,
+    .bg-violet-500, .bg-violet-600,
+    .bg-slate-700, .bg-slate-800, .bg-slate-900,
+    .bg-red-500, .bg-red-600, .bg-red-700
+  ) *,
+:root:not(.dark) .btn-primary *,
+:root:not(.dark) .btn-secondary * {
   color: #ffffff !important;
 }
 
-/* OUTLINE & GHOST BUTTONS */
-html.light button[class*="bg-transparent"],
-html.light button[class*="border-slate"],
-html.light button.bg-white,
-html.light .btn-outline,
-html.light .btn-ghost {
-  color: #0f172a !important;
-  border-color: #cbd5e1 !important;
+/* --- OUTLINE & GHOST BUTTONS -------------------------- */
+/* The border-slate arm must not catch SOLID buttons that merely
+   carry a slate border (the `glass` variant is bg-slate-800 +
+   border-slate-700); forcing them to a white fill would leave
+   white-on-white text. */
+/* A hover:/focus: prefixed token (`hover:border-slate-700`) is not a
+   border, so it must not pull a solid button into this rule. */
+:root:not(.dark) button.bg-transparent,
+:root:not(.dark) button[class*="border-slate"]:not([class*="hover:border-slate"]):not([class*="focus:border-slate"]):not([class*="bg-slate-7"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]),
+:root:not(.dark) button.bg-white,
+:root:not(.dark) .btn-outline,
+:root:not(.dark) .btn-ghost {
+  color: #1b4b51 !important;
+  border-color: #a8cbc0 !important;
   background-color: #ffffff !important;
 }
 
-html.light button[class*="bg-transparent"] *,
-html.light button[class*="border-slate"] *,
-html.light button.bg-white * {
-  color: #0f172a !important;
+:root:not(.dark) button.bg-transparent *,
+:root:not(.dark) button[class*="border-slate"]:not([class*="hover:border-slate"]):not([class*="focus:border-slate"]) *,
+:root:not(.dark) button.bg-white * {
+  color: #1b4b51 !important;
 }
 
-/* INPUTS & SELECTS */
-html.light input,
-html.light textarea,
-html.light select {
+/* --- INPUTS & SELECTS --------------------------------- */
+:root:not(.dark) input,
+:root:not(.dark) textarea,
+:root:not(.dark) select {
   background-color: #ffffff !important;
-  color: #0f172a !important;
-  border: 1px solid #cbd5e1 !important;
+  color: #1b4b51 !important;
+  border: 1px solid #a8cbc0 !important;
 }
 
-html.light input::placeholder,
-html.light textarea::placeholder {
-  color: #94a3b8 !important;
+:root:not(.dark) input::placeholder,
+:root:not(.dark) textarea::placeholder {
+  color: #6d8a8a !important;
 }
 
-/* BADGES */
-html.light [class*="bg-indigo-500/10"],
-html.light [class*="bg-indigo-500/20"] {
-  background-color: #eef2ff !important;
-  color: #3730a3 !important;
-  border-color: #c7d2fe !important;
+/* --- BADGES & TINTS ----------------------------------- */
+/* As above: the substring arms carry the opacity variants, and the
+   :not() guards keep `hover:` / `dark:` prefixed tokens out. */
+:root:not(.dark) [class*="bg-indigo-500/10"]:not([class*="hover:bg-indigo-500/10"]):not([class*="dark:bg-indigo-500/10"]),
+:root:not(.dark) [class*="bg-indigo-500/20"]:not([class*="hover:bg-indigo-500/20"]):not([class*="dark:bg-indigo-500/20"]),
+:root:not(.dark) [class*="bg-indigo-500/5"]:not([class*="hover:bg-indigo-500/5"]):not([class*="dark:bg-indigo-500/5"]) {
+  background-color: #eaf7f1 !important;
+  color: #14574f !important;
+  border-color: #caece2 !important;
 }
 
-html.light [class*="bg-blue-500/10"],
-html.light [class*="bg-blue-500/20"] {
-  background-color: #eff6ff !important;
-  color: #1e40af !important;
-  border-color: #bfdbfe !important;
+:root:not(.dark) [class*="bg-blue-500/10"]:not([class*="hover:bg-blue-500/10"]):not([class*="dark:bg-blue-500/10"]),
+:root:not(.dark) [class*="bg-blue-500/20"]:not([class*="hover:bg-blue-500/20"]):not([class*="dark:bg-blue-500/20"]) {
+  background-color: #eef9f5 !important;
+  color: #155f56 !important;
+  border-color: #caece2 !important;
 }
 
-html.light [class*="bg-sky-500/10"],
-html.light [class*="bg-sky-500/20"] {
-  background-color: #f0f9ff !important;
-  color: #075985 !important;
-  border-color: #bae6fd !important;
+:root:not(.dark) [class*="bg-sky-500/10"]:not([class*="hover:bg-sky-500/10"]):not([class*="dark:bg-sky-500/10"]),
+:root:not(.dark) [class*="bg-sky-500/20"]:not([class*="hover:bg-sky-500/20"]):not([class*="dark:bg-sky-500/20"]) {
+  background-color: #eef9f5 !important;
+  color: #14574f !important;
+  border-color: #caece2 !important;
 }
 
-html.light [class*="bg-amber-500/10"],
-html.light [class*="bg-amber-500/20"] {
+/* amber + red stay warm — they mean warning / danger. */
+:root:not(.dark) [class*="bg-amber-500/10"]:not([class*="hover:bg-amber-500/10"]):not([class*="dark:bg-amber-500/10"]),
+:root:not(.dark) [class*="bg-amber-500/20"]:not([class*="hover:bg-amber-500/20"]):not([class*="dark:bg-amber-500/20"]) {
   background-color: #fffbeb !important;
   color: #92400e !important;
   border-color: #fde68a !important;
 }
 
-html.light [class*="bg-red-500/10"],
-html.light [class*="bg-red-500/20"] {
+:root:not(.dark) [class*="bg-red-500/10"]:not([class*="hover:bg-red-500/10"]):not([class*="dark:bg-red-500/10"]),
+:root:not(.dark) [class*="bg-red-500/20"]:not([class*="hover:bg-red-500/20"]):not([class*="dark:bg-red-500/20"]) {
   background-color: #fef2f2 !important;
   color: #991b1b !important;
   border-color: #fecaca !important;
 }
 
-html.light [class*="bg-slate-100"],
-html.light [class*="bg-slate-800/40"],
-html.light [class*="bg-slate-800/60"] {
-  background-color: #f1f5f9 !important;
-  color: #334155 !important;
-  border-color: #cbd5e1 !important;
-}
-
-/* Custom Scrollbar */
+/* --- Custom Scrollbar --------------------------------- */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -243,10 +405,10 @@ html.light [class*="bg-slate-800/60"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #a8cbc0;
   border-radius: 9999px;
 }
 
 html.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #1c5960;
 }

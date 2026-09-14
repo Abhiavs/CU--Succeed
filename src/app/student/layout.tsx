@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ShieldCheck, User } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
@@ -14,21 +15,11 @@ export default async function StudentLayout({ children }: { children: React.Reac
   }
 
   return (
-    <div className="min-h-screen bg-[#090d16] flex flex-col text-slate-100">
+    <div className="min-h-screen bg-slate-950 flex flex-col text-slate-100">
       {/* Unified Single Student Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
-          <Link href="/student" className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
-              CU
-            </div>
-            <div className="font-bold text-base text-slate-900 dark:text-white tracking-tight">
-              CU <span className="text-indigo-600 dark:text-blue-400 font-semibold">Succeed</span>
-              <span className="text-xs font-normal text-slate-500 dark:text-slate-400 ml-2 hidden sm:inline">
-                Student Portal
-              </span>
-            </div>
-          </Link>
+          <Logo href="/student" size="md" subtitle="Student Portal" />
 
           {/* Nav items */}
           <nav className="flex items-center gap-5 text-xs font-medium text-slate-600 dark:text-slate-300">

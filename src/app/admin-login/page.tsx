@@ -10,10 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { ShieldCheck, ArrowRight, Lock, Mail } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState("admin@succeed.com");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function AdminLoginPage() {
     });
 
     if (res?.error) {
-      setError("Invalid admin credentials. Please use admin@succeed.com / admin123");
+      setError("Invalid admin credentials. Please try again.");
       setLoading(false);
     } else {
       router.push("/admin");
@@ -38,20 +39,13 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090d16] flex flex-col justify-center items-center px-4 sm:px-6 text-slate-100">
+    <div className="min-h-screen bg-slate-950 flex flex-col justify-center items-center px-4 sm:px-6 text-slate-100">
       <div className="w-full max-w-md space-y-6">
         {/* Brand Header */}
-        <div className="text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
-              CU
-            </div>
-            <span className="font-bold text-lg text-white tracking-tight">
-              CU <span className="text-blue-400 font-semibold">Succeed</span>
-            </span>
-          </Link>
-          <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
-            <ShieldCheck className="w-4 h-4 text-blue-400" />
+        <div className="text-center space-y-2 flex flex-col items-center">
+          <Logo href="/" size="lg" />
+          <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400 pt-1">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Official Administrator Portal</span>
           </div>
         </div>
@@ -99,17 +93,6 @@ export default function AdminLoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-              </div>
-
-              {/* Default Credential Helper Box */}
-              <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 space-y-1">
-                <div className="font-semibold text-slate-300">Default Administrator Credentials:</div>
-                <div className="font-mono text-slate-400">
-                  Email: <strong className="text-blue-400">admin@succeed.com</strong> (or <strong className="text-blue-400">admin@cusucceed.com</strong>)
-                </div>
-                <div className="font-mono text-slate-400">
-                  Password: <strong className="text-blue-400">admin123</strong>
-                </div>
               </div>
 
               <Button

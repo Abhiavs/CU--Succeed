@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PSYCHOMETRIC_SECTIONS } from "@/lib/assessmentData";
 
 type QuestionOption = {
   id: string;
@@ -32,6 +33,14 @@ export default function EditQuestionPage() {
 
   const [parameter, setParameter] =
     useState("");
+
+  /*
+   * The parameter doubles as the psychometric section. "section"
+   * mode picks one of the three scoring sections; "custom" keeps a
+   * free-text label for aptitude questions.
+   */
+  const [parameterMode, setParameterMode] =
+    useState<"section" | "custom">("custom");
 
   const [options, setOptions] =
     useState<QuestionOption[]>([
@@ -76,8 +85,25 @@ export default function EditQuestionPage() {
             "MULTIPLE_CHOICE"
         );
 
-        setParameter(
-          question.parameter || ""
+        const loadedParameter =
+          question.parameter || "";
+
+        setParameter(loadedParameter);
+
+        /*
+         * If the stored parameter is one of the psychometric
+         * sections, open the dropdown on it; otherwise it is a
+         * free-text aptitude label.
+         */
+        const matchesSection =
+          PSYCHOMETRIC_SECTIONS.some(
+            (section) =>
+              section.parameter ===
+              loadedParameter
+          );
+
+        setParameterMode(
+          matchesSection ? "section" : "custom"
         );
 
         setCorrectAnswer(
@@ -324,7 +350,7 @@ export default function EditQuestionPage() {
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 
-              {/* PARAMETER */}
+              {/* PARAMETER / SECTION */}
 
               <div className="space-y-1.5">
 
@@ -334,16 +360,91 @@ export default function EditQuestionPage() {
 
                 </Label>
 
-                <Input
+                {/*
+                 * A single control: pick one of the three psychometric
+                 * scoring sections, or "Custom" for an aptitude label.
+                 */}
+                <select
                   id="parameter"
-                  value={parameter}
-                  onChange={(e) =>
-                    setParameter(
-                      e.target.value
-                    )
+                  value={
+                    parameterMode === "custom"
+                      ? "custom"
+                      : parameter
                   }
-                  placeholder="e.g. Technical Skills"
-                />
+                  onChange={(e) => {
+                    const next = e.target.value;
+
+                    if (next === "custom") {
+                      setParameterMode("custom");
+
+                      /*
+                       * Clear a section string so it isn't saved as a
+                       * label by accident.
+                       */
+                      const wasSection =
+                        PSYCHOMETRIC_SECTIONS.some(
+                          (section) =>
+                            section.parameter ===
+                            parameter
+                        );
+
+                      if (wasSection) {
+                        setParameter("");
+                      }
+                    } else {
+                      setParameterMode("section");
+                      setParameter(next);
+                    }
+                  }}
+                  className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm dark:border-slate-700 dark:bg-slate-950"
+                >
+
+                  <option value="custom">
+
+                    Custom / Aptitude Label
+
+                  </option>
+
+                  {PSYCHOMETRIC_SECTIONS.map(
+                    (section) => (
+
+                      <option
+                        key={section.id}
+                        value={section.parameter}
+                      >
+
+                        {section.name} (
+                        {section.questionRange})
+
+                      </option>
+
+                    )
+                  )}
+
+                </select>
+
+                {parameterMode === "custom" && (
+
+                  <Input
+                    id="parameterCustom"
+                    value={parameter}
+                    onChange={(e) =>
+                      setParameter(
+                        e.target.value
+                      )
+                    }
+                    placeholder="e.g. Technical Skills"
+                  />
+
+                )}
+
+                <p className="text-[11px] text-slate-500">
+
+                  {parameterMode === "section"
+                    ? "Assigns this question to a psychometric scoring section."
+                    : "Free-text section label (used for aptitude questions)."}
+
+                </p>
 
               </div>
 

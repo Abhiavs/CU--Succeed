@@ -300,9 +300,16 @@ export default async function StudentDashboard() {
                   </div>
                 </div>
 
-                <Link href="/student/post-wheel" className="flex-1">
+                <Link
+                  href={
+                    state.postWheelCompleted
+                      ? "/student/results?view=post"
+                      : "/student/post-wheel"
+                  }
+                  className="flex-1"
+                >
                   <Button size="sm" className="w-full h-9 text-xs bg-sky-600 hover:bg-sky-700">
-                    {state.postWheelCompleted ? 'View POST Wheel' : 'Start POST Wheel'}
+                    {state.postWheelCompleted ? 'View POST Report' : 'Start POST Wheel'}
                   </Button>
                 </Link>
               </CardContent>

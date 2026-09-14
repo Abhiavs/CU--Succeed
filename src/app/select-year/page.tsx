@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   BrainCircuit,
 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export default function SelectYearPage() {
   const router = useRouter();
@@ -48,21 +49,11 @@ export default function SelectYearPage() {
         <CardContent className="p-8 sm:p-10 space-y-8">
 
           {/* Branding */}
-          <div className="text-center space-y-3">
-            <Link href="/" className="inline-flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-400 p-[1px]">
-                <div className="h-full w-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-blue-400" />
-                </div>
-              </div>
-
-              <span className="font-extrabold text-xl text-white">
-                CU <span className="text-blue-400">Succeed</span>
-              </span>
-            </Link>
+          <div className="text-center space-y-3 flex flex-col items-center">
+            <Logo href="/" size="lg" />
 
             <Badge variant="default" className="text-xs">
-              CU SUCCEED
+              CU-SUCCEED
             </Badge>
 
             <h1 className="text-2xl font-bold text-white tracking-tight">

@@ -98,7 +98,7 @@ export default function AptitudeAssessmentPage() {
   const answeredCount = Object.keys(answers).length;
 
   return (
-    <div className="min-h-screen bg-[#090d16] flex flex-col justify-between py-6 px-4 sm:px-6 text-slate-100">
+    <div className="min-h-screen bg-slate-950 flex flex-col justify-between py-6 px-4 sm:px-6 text-slate-100">
       {/* Top Bar with Timer */}
       <header className="max-w-5xl mx-auto w-full flex items-center justify-between pb-4 border-b border-slate-800">
         <Link

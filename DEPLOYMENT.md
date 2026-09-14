@@ -1,4 +1,4 @@
-# Deploying CU Succeed (Railway / Render / Fly)
+# Deploying CU-SUCCEED (Railway / Render / Fly)
 
 This project runs **identically** in local development and in the cloud — the two
 environments differ only in environment variables and databases. There is **no code

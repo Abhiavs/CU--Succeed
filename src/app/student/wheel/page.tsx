@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
+import { useIsDark } from "@/lib/useIsDark";
 
 import {
   Compass,
@@ -17,6 +18,7 @@ import {
   Target,
   BarChart3,
 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 /*
  * ============================================================
@@ -32,6 +34,7 @@ type WheelDimension = {
 };
 
 export default function WheelOfCompetenciesPage() {
+  const isDark = useIsDark();
   const router = useRouter();
 
   /*
@@ -449,7 +452,7 @@ export default function WheelOfCompetenciesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-100">
 
         <div className="text-center space-y-4">
 
@@ -485,7 +488,7 @@ export default function WheelOfCompetenciesPage() {
 
   if (loadError) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center px-4 text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 text-slate-100">
 
         <Card className="w-full max-w-md border-slate-800 bg-slate-900">
 
@@ -535,7 +538,7 @@ export default function WheelOfCompetenciesPage() {
     dimensions.length === 0
   ) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center px-4 text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 text-slate-100">
 
         <Card className="w-full max-w-md border-slate-800 bg-slate-900">
 
@@ -568,7 +571,7 @@ export default function WheelOfCompetenciesPage() {
    */
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
 
       {/* ======================================================
           BACKGROUND
@@ -586,24 +589,20 @@ export default function WheelOfCompetenciesPage() {
           HEADER
       ====================================================== */}
 
-      <header className="relative border-b border-slate-800/80 bg-[#090d16]/80 backdrop-blur-xl">
+      <header className="relative border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
 
           <div className="flex items-center gap-3">
 
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-
-              <Compass className="w-5 h-5 text-blue-400" />
-
-            </div>
+            <Logo size="md" showText={false} />
 
             <div>
 
               <div className="flex items-center gap-2">
 
                 <h1 className="font-bold text-white">
-                  CU Succeed
+                  CU-SUCCEED
                 </h1>
 
                 <Badge className="text-[10px] bg-indigo-500/10 text-blue-400 border border-indigo-500/20">
@@ -754,7 +753,7 @@ export default function WheelOfCompetenciesPage() {
                             cy={center}
                             r={radius}
                             fill="none"
-                            stroke="rgba(148,163,184,0.14)"
+                            stroke={isDark ? "rgba(202, 236, 226, 0.12)" : "rgba(27, 75, 81, 0.14)"}
                             strokeWidth="1"
                           />
                         );
@@ -779,7 +778,7 @@ export default function WheelOfCompetenciesPage() {
                             y1={center}
                             x2={x}
                             y2={y}
-                            stroke="rgba(148,163,184,0.14)"
+                            stroke={isDark ? "rgba(202, 236, 226, 0.12)" : "rgba(27, 75, 81, 0.14)"}
                             strokeWidth="1"
                           />
                         );
@@ -792,9 +791,9 @@ export default function WheelOfCompetenciesPage() {
                       points={
                         benchmarkPoints
                       }
-                      fill="rgba(59,130,246,0.05)"
-                      stroke="rgba(96,165,250,0.8)"
-                      strokeWidth="1"
+                      fill={isDark ? "rgba(137, 182, 166, 0.12)" : "rgba(25, 115, 104, 0.08)"}
+                      stroke={isDark ? "#89b6a6" : "#6d8a8a"}
+                      strokeWidth="1.2"
                       strokeDasharray="4 4"
                     />
 
@@ -804,8 +803,8 @@ export default function WheelOfCompetenciesPage() {
                       points={
                         studentPoints
                       }
-                      fill="rgba(16,185,129,0.20)"
-                      stroke="#34d399"
+                      fill={isDark ? "rgba(64, 157, 120, 0.3)" : "rgba(64, 157, 120, 0.22)"}
+                      stroke="#409d78"
                       strokeWidth="2"
                     />
 
@@ -849,11 +848,11 @@ export default function WheelOfCompetenciesPage() {
                             }
                             fill={
                               selected
-                                ? "#34d399"
-                                : "#f8fafc"
+                                ? "#409d78"
+                                : (isDark ? "#caece2" : "#ffffff")
                             }
-                            stroke="#0f172a"
-                            strokeWidth="2"
+                            stroke={isDark ? "#0b2227" : "#1b4b51"}
+                            strokeWidth="1.5"
                             className="cursor-pointer"
                             onClick={() =>
                               setActiveDimension(
@@ -1267,7 +1266,7 @@ export default function WheelOfCompetenciesPage() {
 
       <footer className="relative border-t border-slate-800/60 py-5 text-center text-[10px] text-slate-600">
 
-        CU Succeed • Competency Assessment System
+        CU-SUCCEED • Competency Assessment System
 
       </footer>
 

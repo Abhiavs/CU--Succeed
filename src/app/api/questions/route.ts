@@ -44,6 +44,13 @@ export async function POST(req: Request) {
         );
       }
 
+      /*
+       * Psychometric questions use a 1–4 scoring scale with 4
+       * options; aptitude keeps the legacy 5-option layout.
+       */
+      const requiredOptionCount =
+        assessmentType === "PSYCHOMETRIC" ? 4 : 5;
+
       const assessment = await prisma.assessment.findFirst({
         where: {
           type: assessmentType,
@@ -75,11 +82,14 @@ export async function POST(req: Request) {
         if (
           q.type === "MULTIPLE_CHOICE" &&
           (!Array.isArray(q.options) ||
-            q.options.length !== 5)
+            q.options.length !== requiredOptionCount)
         ) {
           errors.push({
             index: index + 1,
-            error: "Must have 5 options",
+            error:
+              requiredOptionCount === 4
+                ? "Must have 4 options"
+                : "Must have 5 options",
           });
           continue;
         }
@@ -148,18 +158,26 @@ export async function POST(req: Request) {
     /*
      * ============================================================
      * MULTIPLE CHOICE VALIDATION
+     *
+     * Psychometric questions use a 1–4 scoring scale with 4
+     * options; aptitude keeps the legacy 5-option layout.
      * ============================================================
      */
 
     if (data.type === "MULTIPLE_CHOICE") {
+      const requiredOptionCount =
+        data.assessmentType === "PSYCHOMETRIC" ? 4 : 5;
+
       if (
         !Array.isArray(data.options) ||
-        data.options.length !== 5
+        data.options.length !== requiredOptionCount
       ) {
         return NextResponse.json(
           {
             error:
-              "Multiple choice questions must have exactly 5 options",
+              requiredOptionCount === 4
+                ? "Multiple choice questions must have exactly 4 options"
+                : "Multiple choice questions must have exactly 5 options",
           },
           { status: 400 }
         );

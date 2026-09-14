@@ -6,6 +6,7 @@ import { WHEEL_DIMENSIONS } from "@/lib/assessmentData";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useIsDark } from "@/lib/useIsDark";
 import Link from "next/link";
 import {
   Compass,
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 
 export function HomeInteractiveDemo() {
+  const isDark = useIsDark();
   const [activeTab, setActiveTab] = useState<"wheel" | "question" | "certificate">("wheel");
 
   // Wheel demo state
@@ -133,7 +135,7 @@ export function HomeInteractiveDemo() {
                       cy={center}
                       r={r}
                       fill="none"
-                      stroke="rgba(255, 255, 255, 0.08)"
+                      stroke={isDark ? "rgba(202, 236, 226, 0.12)" : "rgba(27, 75, 81, 0.14)"}
                       strokeWidth="1"
                     />
                   );
@@ -147,22 +149,22 @@ export function HomeInteractiveDemo() {
                       y1={center}
                       x2={x}
                       y2={y}
-                      stroke="rgba(255, 255, 255, 0.08)"
+                      stroke={isDark ? "rgba(202, 236, 226, 0.12)" : "rgba(27, 75, 81, 0.14)"}
                       strokeWidth="1"
                     />
                   );
                 })}
                 <polygon
                   points={benchmarkPolygon}
-                  fill="rgba(59, 130, 246, 0.08)"
-                  stroke="#3B82F6"
-                  strokeWidth="1"
+                  fill={isDark ? "rgba(137, 182, 166, 0.12)" : "rgba(25, 115, 104, 0.08)"}
+                  stroke={isDark ? "#89b6a6" : "#6d8a8a"}
+                  strokeWidth="1.2"
                   strokeDasharray="3 3"
                 />
                 <polygon
                   points={studentPolygon}
-                  fill="rgba(16, 185, 129, 0.25)"
-                  stroke="#10B981"
+                  fill={isDark ? "rgba(64, 157, 120, 0.3)" : "rgba(64, 157, 120, 0.22)"}
+                  stroke="#409d78"
                   strokeWidth="2"
                   className="transition-all duration-200"
                 />
@@ -177,8 +179,8 @@ export function HomeInteractiveDemo() {
                       cx={x}
                       cy={y}
                       r={isSelected ? 5 : 3.5}
-                      fill={isSelected ? "#10B981" : "#ffffff"}
-                      stroke="#090d16"
+                      fill={isSelected ? "#409d78" : (isDark ? "#caece2" : "#ffffff")}
+                      stroke={isDark ? "#0b2227" : "#1b4b51"}
                       strokeWidth="1.5"
                       onClick={() => setSelectedDim(dim.id)}
                       className="cursor-pointer"
@@ -196,8 +198,8 @@ export function HomeInteractiveDemo() {
                       textAnchor="middle"
                       dominantBaseline="central"
                       onClick={() => setSelectedDim(dim.id)}
-                      className={`text-[8px] font-mono cursor-pointer ${
-                        isSelected ? "fill-blue-400 font-bold" : "fill-slate-400"
+                      className={`text-[8px] font-mono cursor-pointer transition-colors ${
+                        isSelected ? "fill-emerald-600 dark:fill-emerald-400 font-bold" : "fill-slate-600 dark:fill-slate-400"
                       }`}
                     >
                       {dim.shortName}
@@ -342,7 +344,7 @@ export function HomeInteractiveDemo() {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div className="text-[10px] font-mono tracking-widest uppercase text-blue-400 font-bold">
-              CU SUCCEED OFFICIAL CREDENTIAL
+              CU-SUCCEED OFFICIAL CREDENTIAL
             </div>
             <h4 className="text-lg font-serif font-bold text-white">
               Certificate of Employability & Competency

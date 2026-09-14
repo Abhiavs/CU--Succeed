@@ -22,7 +22,7 @@ export default async function ReportsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#090d16] flex flex-col py-10 px-4 sm:px-6 text-slate-900 dark:text-slate-100">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col py-10 px-4 sm:px-6 text-slate-900 dark:text-slate-100">
       <div className="w-full max-w-4xl mx-auto space-y-6">
         <div>
           <Link
@@ -66,7 +66,7 @@ export default async function ReportsPage() {
                   <ShieldCheck className="text-indigo-600 dark:text-blue-400 w-5 h-5" /> Verifiable Certificate
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Issued under CU Succeed Employability Accreditation Protocol
+                  Issued under CU-SUCCEED Employability Accreditation Protocol
                 </p>
               </div>
 

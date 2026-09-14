@@ -4,10 +4,15 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { WHEEL_DIMENSIONS } from "@/lib/assessmentData";
+import { useIsDark } from "@/lib/useIsDark";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import {
+  WheelComparisonChart,
+  type WheelComparisonRow,
+} from "@/components/WheelComparisonChart";
 import {
   Award,
   BrainCircuit,
@@ -21,11 +26,37 @@ import {
   TrendingUp,
   Sparkles,
 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export default function StudentResultsPage() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"scorecard" | "radar" | "certificate">("scorecard");
+  const [activeTab, setActiveTab] = useState<"pre" | "post" | "radar" | "certificate">("pre");
+
+  // Real PRE vs POST wheel scores from the WheelScore table.
+  const [comparison, setComparison] = useState<{
+    hasPre: boolean;
+    hasPost: boolean;
+    preAverage: number | null;
+    postAverage: number | null;
+    rows: WheelComparisonRow[];
+  } | null>(null);
+
+  // Psychometric section scores + insights, reconstructed from DB.
+  const [psyResult, setPsyResult] = useState<any>(null);
+
+  /*
+   * Honour ?view=post so the dashboard's completed-POST button can
+   * land directly on the post report. Read from window.location
+   * rather than useSearchParams to avoid a Suspense boundary.
+   */
+  useEffect(() => {
+    const view = new URLSearchParams(window.location.search).get("view");
+
+    if (view === "post" || view === "radar" || view === "certificate") {
+      setActiveTab(view);
+    }
+  }, []);
 
   useEffect(() => {
     fetch("/api/student/state")
@@ -35,15 +66,32 @@ export default function StudentResultsPage() {
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
+
+    fetch("/api/student/wheel-comparison")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (json) setComparison(json);
+      })
+      .catch(() => {});
+
+    fetch("/api/student/psychometric-result")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (json) setPsyResult(json);
+      })
+      .catch(() => {});
   }, []);
 
   const handlePrint = () => {
     window.print();
   };
 
+  // SVG fills/strokes can't use var(), so the radar reads the mode here.
+  const isDark = useIsDark();
+
   if (isLoading || !data) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-300">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-300">
         <div className="flex flex-col items-center gap-3">
           <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
           <p className="text-xs font-mono">Synthesizing Candidate Results...</p>
@@ -79,8 +127,20 @@ export default function StudentResultsPage() {
     return `${x},${y}`;
   }).join(" ");
 
+  // Real PRE/POST wheel averages from the comparison endpoint, falling
+  // back to the state/composite figure when the API has nothing yet.
+  const preAvg =
+    comparison?.preAverage ?? state?.wheelAverage ?? composite?.wheelAverage ?? null;
+
+  const postAvg = comparison?.postAverage ?? null;
+
+  const wheelChange =
+    typeof preAvg === "number" && typeof postAvg === "number"
+      ? postAvg - preAvg
+      : null;
+
   return (
-    <div className="min-h-screen bg-[#090d16] flex flex-col py-8 px-4 sm:px-6 text-slate-100 print:bg-white print:text-black">
+    <div className="min-h-screen bg-slate-950 flex flex-col py-8 px-4 sm:px-6 text-slate-100 print:bg-white print:text-black">
       {/* Top Header */}
       <header className="max-w-6xl mx-auto w-full flex items-center justify-between pb-6 border-b border-slate-800 print:hidden">
         <Link
@@ -91,31 +151,25 @@ export default function StudentResultsPage() {
         </Link>
 
         {/* View Switcher Tabs */}
-        <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
-          <button
-            onClick={() => setActiveTab("scorecard")}
-            className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-              activeTab === "scorecard" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Scorecard Summary
-          </button>
-          <button
-            onClick={() => setActiveTab("radar")}
-            className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-              activeTab === "radar" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Competency Radar Figure
-          </button>
-          <button
-            onClick={() => setActiveTab("certificate")}
-            className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-              activeTab === "certificate" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Verified Certificate
-          </button>
+        <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 flex-wrap">
+          {(
+            [
+              { id: "pre", label: "PRE Assessment" },
+              { id: "post", label: "POST Assessment" },
+              { id: "radar", label: "Competency Radar" },
+              { id: "certificate", label: "Certificate" },
+            ] as const
+          ).map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setActiveTab(t.id)}
+              className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                activeTab === t.id ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
 
         <div className="flex items-center gap-2">
@@ -166,11 +220,11 @@ export default function StudentResultsPage() {
           </div>
         </div>
 
-        {/* View 1: Scorecard Summary */}
-        {activeTab === "scorecard" && (
+        {/* View 1: PRE Assessment */}
+        {activeTab === "pre" && (
           <div className="space-y-6 text-left">
-            {/* 3 Pillar Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Pre-Training summary */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card className="border-slate-800 bg-slate-900/90 print:border">
                 <CardContent className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
@@ -178,18 +232,214 @@ export default function StudentResultsPage() {
                       <BrainCircuit className="w-4 h-4" />
                     </div>
                     <span className="text-xl font-bold text-white">
-                      {state.psychometricScore || composite.psychometricScore}%
+                      {psyResult?.completed
+                        ? `${psyResult.totalRawScore} / ${psyResult.maxPossible}`
+                        : `${state.psychometricScore || composite.psychometricScore}%`}
                     </span>
                   </div>
                   <div>
-                    <h4 className="font-bold text-white text-sm">Psychometric Matrix</h4>
+                    <h4 className="font-bold text-white text-sm">Psychometric Confidence Assessment</h4>
+                    {psyResult?.completed && (
+                      <p className="text-xs text-blue-400 font-semibold">
+                        {psyResult.overall.label} ({psyResult.overall.range})
+                      </p>
+                    )}
+                    {!psyResult?.completed && (
+                      <p className="text-xs text-slate-400">
+                        Archetype: <strong className="text-blue-400">{composite.psychometricArchetype.title}</strong>
+                      </p>
+                    )}
+                  </div>
+                  <Progress
+                    value={
+                      psyResult?.completed
+                        ? psyResult.scorePercentage
+                        : (state.psychometricScore || composite.psychometricScore)
+                    }
+                    className="h-1"
+                  />
+                  <p className="text-[11px] text-slate-400 leading-normal">
+                    {psyResult?.completed
+                      ? `Scored ${psyResult.totalRawScore} out of ${psyResult.maxPossible}. ${psyResult.answeredCount} questions answered.`
+                      : composite.psychometricArchetype.description}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-slate-800 bg-slate-900/90 print:border">
+                <CardContent className="p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold">
+                      <Compass className="w-4 h-4" />
+                    </div>
+                    <span className="text-xl font-bold text-white">
+                      {typeof preAvg === "number" ? preAvg.toFixed(1) : "—"} / 10
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Competency Wheel — Pre-Training</h4>
                     <p className="text-xs text-slate-400">
-                      Archetype: <strong className="text-blue-400">{composite.psychometricArchetype.title}</strong>
+                      Self-assessed parameters before training
                     </p>
                   </div>
-                  <Progress value={state.psychometricScore || composite.psychometricScore} className="h-1" />
+                  <Progress value={(typeof preAvg === "number" ? preAvg : 0) * 10} className="h-1" />
                   <p className="text-[11px] text-slate-400 leading-normal">
-                    {composite.psychometricArchetype.description}
+                    {comparison?.hasPost
+                      ? "Compare each dimension against your post-training self-ratings below."
+                      : "Complete the POST competency wheel to unlock the pre vs post comparison."}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Psychometric Section Scores */}
+            {psyResult?.completed && psyResult.sections.length > 0 && (
+              <div className="space-y-4">
+                <Card className="border-slate-800 bg-slate-900 print:border">
+                  <CardContent className="p-5 sm:p-6 space-y-4">
+                    <div>
+                      <h3 className="font-bold text-sm text-white">Confidence Scorecard — Psychometric</h3>
+                      <p className="text-xs text-slate-400">
+                        Section-by-section breakdown. Each section scores 0–40 from 10 questions on a 4-point scale.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {psyResult.sections.map((section: any, idx: number) => {
+                        const tierColour =
+                          section.rawScore >= 31
+                            ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                            : section.rawScore >= 21
+                            ? "text-blue-400 bg-blue-500/10 border-blue-500/20"
+                            : section.rawScore >= 11
+                            ? "text-yellow-400 bg-yellow-500/10 border-yellow-500/20"
+                            : "text-red-400 bg-red-500/10 border-red-500/20";
+                        return (
+                          <div key={section.sectionId} className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] font-mono text-slate-500 uppercase">
+                                Section {idx + 1} • {section.questionRange}
+                              </span>
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${tierColour}`}>
+                                {section.tier.label}
+                              </span>
+                            </div>
+                            <h4 className="font-bold text-sm text-white">{section.name}</h4>
+                            <div className="flex items-baseline gap-1">
+                              <span className="text-2xl font-extrabold text-white">{section.rawScore}</span>
+                              <span className="text-xs text-slate-400">/ {section.maxScore}</span>
+                            </div>
+                            <Progress value={section.percentage} className="h-1" />
+                            <p className="text-[10px] text-slate-500 font-mono">
+                              {section.answeredCount} of {Math.round(section.maxPossible / 4)} answered • {section.tier.range}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Section Insights */}
+                {psyResult.sections.map((section: any, idx: number) => (
+                  <Card key={section.sectionId} className="border-slate-800 bg-slate-900 print:border">
+                    <CardContent className="p-5 sm:p-6 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="default" className="text-[10px]">
+                          Section {idx + 1}
+                        </Badge>
+                        <h4 className="font-bold text-sm text-white">{section.name}</h4>
+                        <span className="text-xs font-mono text-slate-400 ml-auto">
+                          {section.rawScore} / {section.maxScore} — {section.tier.label}
+                        </span>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold text-blue-400 uppercase tracking-wide">Your Confidence Insights</p>
+                        {section.tier.paragraphs.map((para: string, pIdx: number) => (
+                          <p key={pIdx} className="text-[11px] text-slate-400 leading-relaxed">
+                            {para}
+                          </p>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {/* Pre vs Post wheel comparison */}
+            <Card className="border-slate-800 bg-slate-900 print:border">
+              <CardContent className="p-5 sm:p-6 space-y-4">
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    Competency Wheel — Pre vs Post
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Self-assessed parameters, scored 0–10 before and after training.
+                  </p>
+                </div>
+                <WheelComparisonChart
+                  rows={comparison?.rows ?? []}
+                  hasPost={comparison?.hasPost ?? false}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* View 2: POST Assessment */}
+        {activeTab === "post" && (
+          <div className="space-y-6 text-left">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="border-slate-800 bg-slate-900/90 print:border">
+                <CardContent className="p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold">
+                      <Compass className="w-4 h-4" />
+                    </div>
+                    <span className="text-xl font-bold text-white">
+                      {typeof postAvg === "number" ? postAvg.toFixed(1) : "—"} / 10
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Competency Wheel — Post-Training</h4>
+                    <p className="text-xs text-slate-400">
+                      Self-assessed parameters after training
+                    </p>
+                  </div>
+                  <Progress value={(typeof postAvg === "number" ? postAvg : 0) * 10} className="h-1" />
+                  <p className="text-[11px] text-slate-400 leading-normal">
+                    {typeof postAvg === "number"
+                      ? "Your post-training self-rating average across all dimensions."
+                      : "No post-training wheel submitted yet."}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-slate-800 bg-slate-900/90 print:border">
+                <CardContent className="p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">
+                      <TrendingUp className="w-4 h-4" />
+                    </div>
+                    <span className="text-xl font-bold text-white">
+                      {wheelChange === null
+                        ? "—"
+                        : `${wheelChange >= 0 ? "+" : ""}${wheelChange.toFixed(1)}`}
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Growth vs Pre-Training</h4>
+                    <p className="text-xs text-slate-400">
+                      Change in wheel average
+                    </p>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-normal">
+                    {wheelChange === null
+                      ? "Available once both PRE and POST wheels are submitted."
+                      : wheelChange >= 0
+                        ? "Positive movement across your self-assessed parameters."
+                        : "Scores dipped — review the dimension breakdown below."}
                   </p>
                 </CardContent>
               </Card>
@@ -218,30 +468,25 @@ export default function StudentResultsPage() {
                   </div>
                 </CardContent>
               </Card>
-
-              <Card className="border-slate-800 bg-slate-900/90 print:border">
-                <CardContent className="p-5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold">
-                      <Compass className="w-4 h-4" />
-                    </div>
-                    <span className="text-xl font-bold text-white">
-                      {state.wheelAverage || composite.wheelAverage} / 10
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white text-sm">Competency Wheel</h4>
-                    <p className="text-xs text-slate-400">
-                      8-Dimension Evaluation Average
-                    </p>
-                  </div>
-                  <Progress value={(state.wheelAverage || composite.wheelAverage) * 10} className="h-1" />
-                  <p className="text-[11px] text-slate-400 leading-normal">
-                    Top Dimension: <strong>Problem Solving & Logic</strong>. High benchmark synergy.
-                  </p>
-                </CardContent>
-              </Card>
             </div>
+
+            {/* Pre vs Post wheel comparison */}
+            <Card className="border-slate-800 bg-slate-900 print:border">
+              <CardContent className="p-5 sm:p-6 space-y-4">
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    Competency Wheel — Post vs Pre
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Where you started against where you are now, dimension by dimension.
+                  </p>
+                </div>
+                <WheelComparisonChart
+                  rows={comparison?.rows ?? []}
+                  hasPost={comparison?.hasPost ?? false}
+                />
+              </CardContent>
+            </Card>
 
             {/* Growth Roadmap */}
             <Card className="border-slate-800 bg-slate-900">
@@ -285,7 +530,7 @@ export default function StudentResultsPage() {
                         cy={center}
                         r={r}
                         fill="none"
-                        stroke="rgba(255, 255, 255, 0.08)"
+                        stroke={isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(27, 75, 81, 0.10)"}
                         strokeWidth="1"
                       />
                     );
@@ -299,22 +544,22 @@ export default function StudentResultsPage() {
                         y1={center}
                         x2={x}
                         y2={y}
-                        stroke="rgba(255, 255, 255, 0.08)"
+                        stroke={isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(27, 75, 81, 0.10)"}
                         strokeWidth="1"
                       />
                     );
                   })}
                   <polygon
                     points={benchmarkPolygon}
-                    fill="rgba(59, 130, 246, 0.08)"
-                    stroke="#3B82F6"
+                    fill={isDark ? "rgba(137, 182, 166, 0.10)" : "rgba(109, 138, 138, 0.08)"}
+                    stroke={isDark ? "#89b6a6" : "#6d8a8a"}
                     strokeWidth="1.5"
                     strokeDasharray="3 3"
                   />
                   <polygon
                     points={studentPolygon}
-                    fill="rgba(16, 185, 129, 0.25)"
-                    stroke="#10B981"
+                    fill={isDark ? "rgba(64, 157, 120, 0.28)" : "rgba(64, 157, 120, 0.20)"}
+                    stroke="#409d78"
                     strokeWidth="2"
                   />
                   {WHEEL_DIMENSIONS.map((dim, i) => {
@@ -326,7 +571,7 @@ export default function StudentResultsPage() {
                         y={y}
                         textAnchor="middle"
                         dominantBaseline="central"
-                        className="text-[9px] font-mono fill-slate-400"
+                        className="text-[9px] font-mono fill-slate-600 dark:fill-slate-400"
                       >
                         {dim.shortName}
                       </text>
@@ -341,7 +586,7 @@ export default function StudentResultsPage() {
                   <span>Candidate Profile</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-0.5 border-t border-dashed border-blue-400" />
+                  <span className="w-2.5 h-0.5 border-t border-dashed border-slate-400" />
                   <span>Industry Benchmark</span>
                 </div>
               </div>
@@ -376,9 +621,12 @@ export default function StudentResultsPage() {
         {activeTab === "certificate" && (
           <div className="pt-2">
             <div className="p-8 sm:p-12 rounded-xl border border-slate-700 bg-slate-900 text-center max-w-3xl mx-auto space-y-6 print:border-2 print:border-black print:bg-white print:text-black">
+              <div className="flex justify-center mb-2">
+                <Logo size="lg" showText={false} />
+              </div>
               <div className="space-y-1">
-                <div className="text-[10px] font-mono tracking-widest uppercase text-blue-400 font-bold print:text-black">
-                  CU SUCCEED DIGITAL CREDENTIAL
+                <div className="text-[10px] font-mono tracking-widest uppercase text-emerald-600 dark:text-emerald-400 font-bold print:text-black">
+                  CU-SUCCEED DIGITAL CREDENTIAL
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white print:text-black">
                   Certificate of Employability Assessment
@@ -419,7 +667,7 @@ export default function StudentResultsPage() {
                     Director of Assessment
                   </div>
                   <div className="text-[10px] text-slate-400 print:text-gray-600 font-mono">
-                    CU Succeed Board
+                    CU-SUCCEED Board
                   </div>
                 </div>
               </div>

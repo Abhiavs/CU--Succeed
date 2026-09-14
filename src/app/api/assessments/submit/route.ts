@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { inMemoryStore } from "@/lib/store";
+import { scorePsychometric } from "@/lib/psychometricScoring";
 
 const PROGRAM_ID = "prog_succeed_core";
 
@@ -155,77 +156,34 @@ console.log("=================================");
       /*
        * ============================================================
        * PSYCHOMETRIC SCORING
+       *
+       * 4 options per question, scored 1–4.
+       * Sections: Self-Belief & Self-Awareness (Q1–10),
+       * Communication & Social Confidence (Q11–20),
+       * Action, Resilience & Decision-Making (Q21–30).
+       * Total possible: 30–120.
        * ============================================================
        */
-      if (assessmentCategory === "PSYCHOMETRIC") {
-        let totalScore = 0;
+      const psychometricResult = assessmentCategory === "PSYCHOMETRIC"
+        ? scorePsychometric(
+            dbQuestions.map((question) => ({
+              id: question.id,
+              parameter: question.parameter,
+              options:
+                question.options as {
+                  id: string;
+                  text: string;
+                }[],
+              correctAnswer:
+                question.correctAnswer,
+            })),
+            submittedAnswers
+          )
+        : null;
 
-        const maxScore = dbQuestions.length * 5;
-
-        dbQuestions.forEach((question) => {
-          const options =
-            question.options as {
-              id: string;
-              text: string;
-            }[];
-
-          const chosenOptionId =
-            submittedAnswers[question.id];
-
-          const correctAnswer =
-            question.correctAnswer;
-
-          const chosenIndex =
-            options.findIndex(
-              (option) =>
-                option.id === chosenOptionId
-            );
-
-          const correctIndex =
-            options.findIndex(
-              (option) =>
-                option.id === correctAnswer
-            );
-
-          /*
-           * Invalid or missing answer.
-           */
-          if (
-            chosenIndex === -1 ||
-            correctIndex === -1
-          ) {
-            totalScore += 1;
-            return;
-          }
-
-          /*
-           * Distance from preferred answer.
-           */
-          const distance = Math.abs(
-            chosenIndex - correctIndex
-          );
-
-          /*
-           * Correct = 5
-           * 1 step away = 4
-           * 2 steps away = 3
-           * 3 steps away = 2
-           * 4 steps away = 1
-           */
-          const marks = Math.max(
-            1,
-            5 - distance
-          );
-
-          totalScore += marks;
-        });
-
+      if (psychometricResult) {
         scorePercentage =
-          maxScore > 0
-            ? Math.round(
-                (totalScore / maxScore) * 100
-              )
-            : 0;
+          psychometricResult.scorePercentage;
       }
 
       /*
@@ -356,9 +314,26 @@ await prisma.attemptAnswer.createMany({
        * ============================================================
        */
       if (assessmentCategory === "PSYCHOMETRIC") {
+        const sectionScores = psychometricResult?.sections.reduce(
+          (acc, section) => {
+            acc[section.sectionId] = section.rawScore;
+            return acc;
+          },
+          {} as Record<string, number>
+        );
+
         inMemoryStore.updateState(studentId, {
           psychometricCompleted: true,
           psychometricScore: scorePercentage,
+          psychometricRawTotal: psychometricResult?.totalRawScore ?? 0,
+          psychometricSectionScores: {
+            "self-belief":
+              sectionScores?.["self-belief"] ?? 0,
+            communication:
+              sectionScores?.["communication"] ?? 0,
+            "action-resilience":
+              sectionScores?.["action-resilience"] ?? 0,
+          },
           psychometricAttemptId: attempt.id,
         });
       } else {
@@ -380,6 +355,10 @@ await prisma.attemptAnswer.createMany({
         score: scorePercentage,
         attemptId: attempt.id,
         redirectUrl: "/student/wheel",
+        psychometricResult:
+          assessmentCategory === "PSYCHOMETRIC"
+            ? psychometricResult
+            : undefined,
       });
     }
 

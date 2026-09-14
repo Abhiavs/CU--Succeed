@@ -81,7 +81,7 @@ export default async function AssessmentPage({
               <Sparkles className="w-3.5 h-3.5 mr-1" /> Active Module
             </Badge>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-              {assessment?.title || "CU Succeed Assessment Module"}
+              {assessment?.title || "CU-SUCCEED Assessment Module"}
             </h1>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               Answer all questions thoughtfully. Your responses are evaluated upon submission.

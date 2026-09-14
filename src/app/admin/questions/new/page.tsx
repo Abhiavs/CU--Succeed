@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PSYCHOMETRIC_SECTIONS } from "@/lib/assessmentData";
 
 /* =========================================
    OPTION PRESETS
@@ -23,15 +24,13 @@ const optionPresets: Record<
     { id: "B", text: "Often" },
     { id: "C", text: "Sometimes" },
     { id: "D", text: "Rarely" },
-    { id: "E", text: "Never" },
   ],
 
   AGREEMENT: [
     { id: "A", text: "Strongly Agree" },
     { id: "B", text: "Agree" },
-    { id: "C", text: "Neutral" },
-    { id: "D", text: "Disagree" },
-    { id: "E", text: "Strongly Disagree" },
+    { id: "C", text: "Disagree" },
+    { id: "D", text: "Strongly Disagree" },
   ],
 
   QUALITY: [
@@ -39,14 +38,12 @@ const optionPresets: Record<
     { id: "B", text: "Good" },
     { id: "C", text: "Average" },
     { id: "D", text: "Poor" },
-    { id: "E", text: "Very Poor" },
   ],
   Trueness: [
     { id: "A", text: "Absolutely True" },
     { id: "B", text: "True" },
-    { id: "C", text: "Mostly True" },
-    { id: "D", text: "Partially True" },
-    { id: "E", text: "False" },
+    { id: "C", text: "Partially True" },
+    { id: "D", text: "False" },
   ],
 
   CUSTOM: [
@@ -54,7 +51,6 @@ const optionPresets: Record<
     { id: "B", text: "" },
     { id: "C", text: "" },
     { id: "D", text: "" },
-    { id: "E", text: "" },
   ],
 };
 
@@ -86,16 +82,24 @@ export default function NewQuestionPage() {
     useState("CUSTOM");
 
   /*
-   * Five options
+   * Response options. Aptitude keeps 5 (A–E); the psychometric uses
+   * 4 (A–D) on a 1–4 scoring scale.
    */
 
-  const [options, setOptions] = useState([
-    { id: "A", text: "" },
-    { id: "B", text: "" },
-    { id: "C", text: "" },
-    { id: "D", text: "" },
-    { id: "E", text: "" },
-  ]);
+  const OPTION_COUNT: Record<string, number> = {
+    APTITUDE: 5,
+    PSYCHOMETRIC: 4,
+  };
+
+  const buildOptions = (count: number) =>
+    Array.from({ length: count }, (_, i) => ({
+      id: String.fromCharCode(65 + i),
+      text: "",
+    }));
+
+  const [options, setOptions] = useState(() =>
+    buildOptions(OPTION_COUNT.APTITUDE)
+  );
 
   /*
    * Highest scoring option
@@ -103,6 +107,37 @@ export default function NewQuestionPage() {
 
   const [correctAnswer, setCorrectAnswer] =
     useState("A");
+
+  /* =========================================
+     CHANGE ASSESSMENT TYPE
+  ========================================= */
+
+  const handleAssessmentTypeChange = (
+    next: string
+  ) => {
+    setAssessmentType(next);
+
+    const nextCount = OPTION_COUNT[next] || 4;
+
+    setOptions((currentOptions) => {
+      const matching = optionPresets[optionPreset] || null;
+
+      /*
+       * When a preset is active, keep its texts slice to the new
+       * length. Otherwise rebuild a blank list.
+       */
+      const source =
+        matching || buildOptions(nextCount);
+      return source
+        .slice(0, nextCount)
+        .map((option) => ({ ...option }));
+    });
+
+    /*
+     * The Highest-Score marker cannot point past the last option.
+     */
+    setCorrectAnswer("A");
+  };
 
   /* =========================================
      CHANGE OPTION PRESET
@@ -117,11 +152,24 @@ export default function NewQuestionPage() {
       optionPresets[preset] ||
       optionPresets.CUSTOM;
 
-    setOptions(
-      presetOptions.map((option) => ({
+    const nextOptions = presetOptions
+      .slice(0, OPTION_COUNT[assessmentType] || 4)
+      .map((option) => ({
         ...option,
-      }))
-    );
+      }));
+
+    setOptions(nextOptions);
+
+    /*
+     * The Highest-Score marker must stay within the new list.
+     */
+    if (
+      !nextOptions.some(
+        (option) => option.id === correctAnswer
+      )
+    ) {
+      setCorrectAnswer("A");
+    }
   };
 
   /* =========================================
@@ -164,7 +212,7 @@ export default function NewQuestionPage() {
     }
 
     /*
-     * Validate five options
+     * Validate four options
      */
 
     if (type === "MULTIPLE_CHOICE") {
@@ -176,7 +224,7 @@ export default function NewQuestionPage() {
 
       if (hasEmptyOption) {
         alert(
-          "Please fill all five options."
+          "Please fill all four options."
         );
 
         return;
@@ -326,7 +374,7 @@ export default function NewQuestionPage() {
                 id="assessmentType"
                 value={assessmentType}
                 onChange={(e) =>
-                  setAssessmentType(
+                  handleAssessmentTypeChange(
                     e.target.value
                   )
                 }
@@ -361,28 +409,63 @@ export default function NewQuestionPage() {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 
 
-              {/* CATEGORY */}
+              {/* CATEGORY / SECTION */}
 
               <div className="space-y-2">
 
                 <Label htmlFor="category">
 
-                  Category / Parameter
+                  {assessmentType === "PSYCHOMETRIC"
+                    ? "Psychometric Section"
+                    : "Category / Parameter"}
 
                 </Label>
 
-                <Input
-                  id="category"
-                  required
-                  type="text"
-                  value={parameter}
-                  onChange={(e) =>
-                    setParameter(
-                      e.target.value
-                    )
-                  }
-                  placeholder="e.g. Technical Skills"
-                />
+                {assessmentType === "PSYCHOMETRIC" ? (
+                  <select
+                    id="category"
+                    required
+                    value={parameter}
+                    onChange={(e) =>
+                      setParameter(
+                        e.target.value
+                      )
+                    }
+                    className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm dark:border-slate-700 dark:bg-slate-950"
+                  >
+                    <option value="" disabled>
+                      Select a section...
+                    </option>
+
+                    {PSYCHOMETRIC_SECTIONS.map((section) => (
+                      <option
+                        key={section.id}
+                        value={section.parameter}
+                      >
+                        {section.name} ({section.questionRange})
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <Input
+                    id="category"
+                    required
+                    type="text"
+                    value={parameter}
+                    onChange={(e) =>
+                      setParameter(
+                        e.target.value
+                      )
+                    }
+                    placeholder="e.g. Quantitative"
+                  />
+                )}
+
+                <p className="text-xs text-slate-500">
+                  {assessmentType === "PSYCHOMETRIC"
+                    ? "Assign the question to one of the 3 scoring sections."
+                    : "Section / parameter label for this question."}
+                </p>
 
               </div>
 
@@ -446,13 +529,18 @@ export default function NewQuestionPage() {
 
                 <Label>
 
-                  Five Response Options
+                  {assessmentType === "PSYCHOMETRIC"
+                    ? "Four Response Options"
+                    : "Five Response Options"}
 
                 </Label>
 
                 <p className="mt-1 text-xs text-slate-500">
 
                   Choose a preset or create your own options.
+                  {assessmentType === "PSYCHOMETRIC"
+                    ? " Scored 4 (best) to 1 (least) by position."
+                    : ""}
 
                 </p>
 

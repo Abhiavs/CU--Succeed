@@ -109,85 +109,236 @@ export interface PsychometricQuestion {
   options: {
     id: string;
     text: string;
-    score: number; // 1 to 5
-    trait: string;
+    score: number; // 1 to 4
   }[];
 }
 
-export const PSYCHOMETRIC_QUESTIONS: PsychometricQuestion[] = [
+/*
+ * ============================================================
+ * PSYCHOMETRIC SECTIONS
+ *
+ * 30 questions total, divided into 3 sections of 10 questions.
+ * Each question scores 1–4, so each section max is 40.
+ * Overall total: 30–120.
+ *
+ * Section assignment is driven by the `parameter` field on
+ * each Question in the database. The admin sets this when
+ * creating the question.
+ * ============================================================
+ */
+
+export const PSYCHOMETRIC_SECTIONS = [
   {
-    id: "psy-1",
-    dimension: "Emotional Resilience & Pressure Handling",
-    scenario: "You are two hours away from a critical project deadline, and an unexpected bug breaks a core feature.",
-    question: "What is your immediate response?",
-    options: [
-      { id: "A", text: "Stay calm, isolate the root cause systematically, and notify stakeholders of a realistic mitigation plan.", score: 5, trait: "High Emotional Resilience" },
-      { id: "B", text: "Work quickly to deploy a temporary workaround while keeping teammates informed.", score: 4, trait: "Adaptive Action" },
-      { id: "C", text: "Feel rushed and try several random fixes simultaneously hoping one resolves it.", score: 2, trait: "Reactive Stress" },
-      { id: "D", text: "Feel overwhelmed and step away until someone else notices the issue.", score: 1, trait: "Low Stress Tolerance" },
-    ],
+    id: "self-belief",
+    name: "Self-Belief & Self-Awareness",
+    parameter: "Self-Belief & Self-Awareness",
+    questionRange: "Q1–10",
+    maxScore: 40,
   },
   {
-    id: "psy-2",
-    dimension: "Collaboration & Conflict Resolution",
-    scenario: "During a sprint planning session, a peer strongly opposes your technical proposal in front of the entire team.",
-    question: "How do you handle their objection?",
-    options: [
-      { id: "A", text: "Acknowledge their perspective objectively, ask probing questions to understand their concerns, and compare pros/cons data-first.", score: 5, trait: "Collaborative Diplomat" },
-      { id: "B", text: "Propose a quick 1-on-1 offline discussion to align before bringing a unified recommendation back.", score: 4, trait: "Pragmatic Peacemaker" },
-      { id: "C", text: "Defend your idea aggressively to ensure your authority is not undermined.", score: 2, trait: "Ego-Driven Defensive" },
-      { id: "D", text: "Immediately withdraw your idea and remain silent for the rest of the meeting.", score: 1, trait: "Passive Avoidant" },
-    ],
+    id: "communication",
+    name: "Communication & Social Confidence",
+    parameter: "Communication & Social Confidence",
+    questionRange: "Q11–20",
+    maxScore: 40,
   },
   {
-    id: "psy-3",
-    dimension: "Initiative & Ownership",
-    scenario: "You notice a recurring inefficiency in your team's workflow that nobody has been assigned to fix.",
-    question: "What action do you take?",
-    options: [
-      { id: "A", text: "Draft a concise improvement prototype or proposal, validate it with a colleague, and present it to the lead.", score: 5, trait: "Proactive Trailblazer" },
-      { id: "B", text: "Mention it briefly in the next retrospective meeting so the team can decide if it's worth fixing.", score: 3, trait: "Constructive Participant" },
-      { id: "C", text: "Only fix it for your personal workflow without sharing the solution.", score: 2, trait: "Isolated Worker" },
-      { id: "D", text: "Ignore it since it is not explicitly listed in your responsibilities.", score: 1, trait: "Minimalist Mindset" },
-    ],
+    id: "action-resilience",
+    name: "Action, Resilience & Decision-Making",
+    parameter: "Action, Resilience & Decision-Making",
+    questionRange: "Q21–30",
+    maxScore: 40,
   },
-  {
-    id: "psy-4",
-    dimension: "Growth Mindset & Continuous Learning",
-    scenario: "You receive constructive, rigorous feedback pointing out multiple flaws in your recent deliverable.",
-    question: "How do you internalize this critique?",
-    options: [
-      { id: "A", text: "Welcome the feedback eagerly as a clear roadmap for skill elevation and request actionable improvement checkpoints.", score: 5, trait: "Mastery Mindset" },
-      { id: "B", text: "Accept the points that make sense, revise the deliverable, and move forward.", score: 4, trait: "Pragmatic Learner" },
-      { id: "C", text: "Feel disappointed and assume the reviewer holds personal bias against your work.", score: 2, trait: "Fixed Mindset" },
-      { id: "D", text: "Lose motivation and avoid taking on similar projects in the future.", score: 1, trait: "Vulnerable Avoidance" },
-    ],
-  },
-  {
-    id: "psy-5",
-    dimension: "Decision Making Under Ambiguity",
-    scenario: "You must choose an architectural or strategy approach, but you only have 60% of the desired background data.",
-    question: "How do you proceed?",
-    options: [
-      { id: "A", text: "Synthesize available data, identify key assumptions, choose the most reversible pathway, and establish early validation metrics.", score: 5, trait: "Strategic Decisiveness" },
-      { id: "B", text: "Consult an experienced mentor, gather rapid insights, and commit to the recommended path.", score: 4, trait: "Consultative Decisiveness" },
-      { id: "C", text: "Delay decision-making indefinitely until 100% information is guaranteed.", score: 2, trait: "Analysis Paralysis" },
-      { id: "D", text: "Flip a coin or pick randomly to avoid being responsible for the methodology.", score: 1, trait: "Reckless Disengagement" },
-    ],
-  },
-  {
-    id: "psy-6",
-    dimension: "Ethical Integrity & Values",
-    scenario: "You discover a shortcut that would allow the team to pass client QA checks, but it leaves subtle edge-case risks unresolved.",
-    question: "What is your course of action?",
-    options: [
-      { id: "A", text: "Refuse the shortcut, document the risk clearly, and propose an expedited genuine solution with transparent timelines.", score: 5, trait: "Uncompromising Integrity" },
-      { id: "B", text: "Bring the trade-off to the engineering lead for a formal risk-acceptance decision.", score: 4, trait: "Compliance Focused" },
-      { id: "C", text: "Implement the shortcut and hope the edge cases are never encountered in production.", score: 2, trait: "Compromised Standards" },
-      { id: "D", text: "Deliberately conceal the edge case to look good in this quarter's metrics.", score: 1, trait: "Ethical Risk" },
-    ],
-  },
-];
+] as const;
+
+export type PsychometricSectionId = (typeof PSYCHOMETRIC_SECTIONS)[number]["id"];
+
+/*
+ * ============================================================
+ * OVERALL SCORING INTERPRETATION
+ *
+ * Total possible: 30–120
+ * ============================================================
+ */
+
+export function getOverallConfidenceLevel(totalScore: number) {
+  if (totalScore >= 90) return { label: "High Confidence", range: "90–120" };
+  if (totalScore >= 60) return { label: "Moderate Confidence", range: "60–89" };
+  return { label: "Low Confidence", range: "30–59" };
+}
+
+/*
+ * ============================================================
+ * PER-SECTION SCORING INSIGHTS
+ *
+ * Each section has 4 tiers based on raw score /40.
+ * Each tier has a label and 3 insight paragraphs.
+ * ============================================================
+ */
+
+export interface SectionInsight {
+  tier: string;
+  range: string;
+  paragraphs: [string, string, string];
+}
+
+export const SECTION_INSIGHTS: Record<PsychometricSectionId, SectionInsight[]> = {
+  "self-belief": [
+    {
+      tier: "Needs Strong Development",
+      range: "0–10",
+      paragraphs: [
+        "Self-belief is an area for development. Your responses suggest that you may sometimes doubt your abilities or focus more on your limitations than your strengths.",
+        "You may be highly affected by comparison or mistakes. Building a more balanced view of your abilities can help you feel more secure in yourself.",
+        "Start with small wins. Recognizing your strengths, accepting mistakes as part of learning, and setting achievable goals can gradually strengthen your self-belief.",
+      ],
+    },
+    {
+      tier: "Developing",
+      range: "11–20",
+      paragraphs: [
+        "You are beginning to recognize your abilities. Your responses show some self-belief, although you may still experience moments of self-doubt.",
+        "You may sometimes underestimate yourself. Comparing yourself with others or worrying about mistakes can affect how confidently you see your own potential.",
+        "Focus on progress rather than perfection. Acknowledging your improvements and learning from setbacks can help make your self-belief more consistent.",
+      ],
+    },
+    {
+      tier: "Good",
+      range: "21–30",
+      paragraphs: [
+        "You show a healthy level of self-belief. You generally recognize your strengths and trust yourself to handle challenges.",
+        "You appear reasonably comfortable with self-improvement. You can acknowledge areas that need development without completely losing confidence in yourself.",
+        "Keep building on this foundation. Taking on new challenges and reflecting on your achievements can make your confidence even stronger.",
+      ],
+    },
+    {
+      tier: "Strong",
+      range: "31–40",
+      paragraphs: [
+        "You demonstrate strong self-belief. You appear comfortable recognizing your strengths and trusting your ability to learn and improve.",
+        "You show healthy self-awareness. You can acknowledge mistakes or areas for improvement without allowing them to define your abilities.",
+        "Your mindset supports continuous growth. Continue challenging yourself while keeping your confidence grounded in self-awareness and learning.",
+      ],
+    },
+  ],
+
+  "communication": [
+    {
+      tier: "Needs Strong Development",
+      range: "0–10",
+      paragraphs: [
+        "Communication confidence is an area for development. You may hesitate to express your thoughts or interact in situations where you feel observed or judged.",
+        "Fear of mistakes or judgment may sometimes hold you back. This can make it harder to participate even when you have something valuable to contribute.",
+        "Start speaking in small, comfortable situations. Asking questions, sharing opinions and participating in group activities can gradually make communication feel easier.",
+      ],
+    },
+    {
+      tier: "Developing",
+      range: "11–20",
+      paragraphs: [
+        "You are developing confidence in communication. You can express yourself in familiar situations but may hesitate in unfamiliar or challenging settings.",
+        "You may sometimes hold back your opinions. Concern about how others perceive you could affect your willingness to speak openly.",
+        "Regular participation can help. Small steps such as introducing yourself, asking questions and contributing to discussions can strengthen your communication confidence.",
+      ],
+    },
+    {
+      tier: "Good",
+      range: "21–30",
+      paragraphs: [
+        "You show good communication confidence. You are generally comfortable expressing your thoughts and participating with others.",
+        "You appear reasonably comfortable in social situations. Disagreement or unfamiliar interactions may challenge you occasionally, but they do not usually stop you from communicating.",
+        "Keep practicing active communication. Taking opportunities to speak, present and participate can make your confidence more consistent across different situations.",
+      ],
+    },
+    {
+      tier: "Strong",
+      range: "31–40",
+      paragraphs: [
+        "You demonstrate strong communication confidence. You appear comfortable expressing your thoughts and interacting with different people.",
+        "You handle social situations with confidence. You are generally willing to ask questions, share opinions and communicate even when others may disagree.",
+        "Your communication can become a strength. Continue practicing listening, presenting and constructive discussion to make your confidence even more effective.",
+      ],
+    },
+  ],
+
+  "action-resilience": [
+    {
+      tier: "Needs Strong Development",
+      range: "0–10",
+      paragraphs: [
+        "Taking action is an area for development. You may sometimes avoid opportunities because of fear of failure, uncertainty or self-doubt.",
+        "Setbacks may affect your confidence. A difficult experience or mistake can sometimes make it harder for you to try again.",
+        "Build confidence through small actions. Taking manageable challenges, making simple decisions independently and learning from mistakes can gradually strengthen your resilience.",
+      ],
+    },
+    {
+      tier: "Developing",
+      range: "11–20",
+      paragraphs: [
+        "You are developing confidence in taking action. You may take initiative in familiar situations but hesitate when something feels uncertain or challenging.",
+        "You may sometimes allow fear of failure to influence your decisions. This can prevent you from exploring opportunities that could help you grow.",
+        "Practice stepping slightly outside your comfort zone. Taking small initiatives and treating mistakes as learning experiences can build stronger resilience.",
+      ],
+    },
+    {
+      tier: "Good",
+      range: "21–30",
+      paragraphs: [
+        "You show good confidence in taking action. You are generally willing to make decisions, accept challenges and move forward when situations become difficult.",
+        "You demonstrate reasonable resilience. Setbacks may affect you temporarily, but you are usually able to recover and continue.",
+        "Keep challenging yourself. Taking initiative in unfamiliar situations and volunteering for new responsibilities can further strengthen your confidence.",
+      ],
+    },
+    {
+      tier: "Strong",
+      range: "31–40",
+      paragraphs: [
+        "You demonstrate strong action-oriented confidence. You appear willing to take initiative and make decisions even when situations are unfamiliar.",
+        "You show strong resilience. Mistakes and setbacks are more likely to be treated as experiences to learn from rather than reasons to give up.",
+        "You have a strong growth-oriented approach. Continue taking meaningful challenges, accepting constructive feedback and using difficult situations as opportunities to develop.",
+      ],
+    },
+  ],
+};
+
+/*
+ * Get the insight for a section given its raw score (0–40).
+ */
+export function getSectionInsight(
+  sectionId: PsychometricSectionId,
+  rawScore: number
+): SectionInsight {
+  const insights = SECTION_INSIGHTS[sectionId];
+  if (rawScore >= 31) return insights[3];
+  if (rawScore >= 21) return insights[2];
+  if (rawScore >= 11) return insights[1];
+  return insights[0];
+}
+
+/*
+ * Map a question's parameter to its section id.
+ * Falls back to index-based assignment for backward compat.
+ */
+export function getSectionIdFromParameter(
+  parameter: string | null | undefined
+): PsychometricSectionId | null {
+  if (!parameter) return null;
+  const normalised = parameter.trim().toLowerCase();
+
+  for (const section of PSYCHOMETRIC_SECTIONS) {
+    if (section.parameter.toLowerCase() === normalised) {
+      return section.id;
+    }
+  }
+
+  return null;
+}
+
+/*
+ * Legacy sample questions (kept for reference / tests).
+ * The real questions live in the database.
+ */
+export const PSYCHOMETRIC_QUESTIONS: PsychometricQuestion[] = [];
 
 export interface AptitudeQuestion {
   id: string;

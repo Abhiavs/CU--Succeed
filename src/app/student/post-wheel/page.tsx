@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
+import { useIsDark } from "@/lib/useIsDark";
 
 import {
   Compass,
@@ -18,6 +19,7 @@ import {
   BarChart3,
   Award,
 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 /*
  * ============================================================
@@ -33,6 +35,7 @@ type WheelDimension = {
 };
 
 export default function PostAssessmentWheelPage() {
+  const isDark = useIsDark();
   const router = useRouter();
 
   /*
@@ -100,6 +103,17 @@ export default function PostAssessmentWheelPage() {
         try {
           const wheelResponse = await fetch("/api/wheel?type=POST");
           const wheelData = await wheelResponse.json();
+
+          /*
+           * POST is a one-shot submission. If a score already exists
+           * this page must not re-open the form (reaching it by URL
+           * used to allow a second attempt), so hand off to the
+           * report instead.
+           */
+          if (wheelResponse.ok && wheelData.completed === true) {
+            router.replace("/student/results?view=post");
+            return;
+          }
 
           if (
             wheelResponse.ok &&
@@ -277,7 +291,7 @@ export default function PostAssessmentWheelPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-100">
         <div className="text-center space-y-4">
           <div className="w-14 h-14 mx-auto rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
             <Loader2 className="w-6 h-6 text-sky-400 animate-spin" />
@@ -303,7 +317,7 @@ export default function PostAssessmentWheelPage() {
 
   if (loadError) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center px-4 text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 text-slate-100">
         <Card className="w-full max-w-md border-slate-800 bg-slate-900">
           <CardContent className="p-8 text-center space-y-5">
             <div className="w-14 h-14 mx-auto rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
@@ -332,7 +346,7 @@ export default function PostAssessmentWheelPage() {
 
   if (dimensions.length === 0) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center px-4 text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 text-slate-100">
         <Card className="w-full max-w-md border-slate-800 bg-slate-900">
           <CardContent className="p-8 text-center space-y-4">
             <Compass className="w-10 h-10 mx-auto text-slate-600" />
@@ -358,7 +372,7 @@ export default function PostAssessmentWheelPage() {
    */
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* BACKGROUND GLOW */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-sky-500/5 rounded-full blur-[140px]" />
@@ -366,16 +380,14 @@ export default function PostAssessmentWheelPage() {
       </div>
 
       {/* HEADER */}
-      <header className="relative border-b border-slate-800/80 bg-[#090d16]/80 backdrop-blur-xl">
+      <header className="relative border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
-              <Award className="w-5 h-5 text-sky-400" />
-            </div>
+            <Logo size="md" showText={false} />
 
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-bold text-white">CU Succeed</h1>
+                <h1 className="font-bold text-white">CU-SUCCEED</h1>
                 <Badge className="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20">
                   POST-ASSESSMENT
                 </Badge>
@@ -455,7 +467,7 @@ export default function PostAssessmentWheelPage() {
                           cy={center}
                           r={radius}
                           fill="none"
-                          stroke="rgba(148,163,184,0.14)"
+                          stroke={isDark ? "rgba(202, 236, 226, 0.12)" : "rgba(27, 75, 81, 0.14)"}
                           strokeWidth="1"
                         />
                       );
@@ -471,7 +483,7 @@ export default function PostAssessmentWheelPage() {
                           y1={center}
                           x2={x}
                           y2={y}
-                          stroke="rgba(148,163,184,0.14)"
+                          stroke={isDark ? "rgba(202, 236, 226, 0.12)" : "rgba(27, 75, 81, 0.14)"}
                           strokeWidth="1"
                         />
                       );
@@ -480,17 +492,17 @@ export default function PostAssessmentWheelPage() {
                     {/* BENCHMARK TARGET POLYGON */}
                     <polygon
                       points={benchmarkPoints}
-                      fill="rgba(59,130,246,0.05)"
-                      stroke="rgba(96,165,250,0.8)"
-                      strokeWidth="1"
+                      fill={isDark ? "rgba(137, 182, 166, 0.12)" : "rgba(25, 115, 104, 0.08)"}
+                      stroke={isDark ? "#89b6a6" : "#6d8a8a"}
+                      strokeWidth="1.2"
                       strokeDasharray="4 4"
                     />
 
                     {/* STUDENT RATING POLYGON */}
                     <polygon
                       points={studentPoints}
-                      fill="rgba(6,182,212,0.20)"
-                      stroke="#22d3ee"
+                      fill={isDark ? "rgba(64, 157, 120, 0.3)" : "rgba(64, 157, 120, 0.22)"}
+                      stroke="#409d78"
                       strokeWidth="2"
                     />
 
@@ -506,9 +518,9 @@ export default function PostAssessmentWheelPage() {
                           cx={x}
                           cy={y}
                           r={selected ? 5 : 3.5}
-                          fill={selected ? "#22d3ee" : "#f8fafc"}
-                          stroke="#0f172a"
-                          strokeWidth="2"
+                          fill={selected ? "#409d78" : (isDark ? "#caece2" : "#ffffff")}
+                          stroke={isDark ? "#0b2227" : "#1b4b51"}
+                          strokeWidth="1.5"
                           className="cursor-pointer transition-transform hover:scale-125"
                           onClick={() => setActiveDimension(dimension.id)}
                         />
@@ -713,7 +725,7 @@ export default function PostAssessmentWheelPage() {
 
       {/* FOOTER */}
       <footer className="relative border-t border-slate-800/60 py-5 text-center text-[10px] text-slate-600">
-        CU Succeed • Post-Assessment Competency System
+        CU-SUCCEED • Post-Assessment Competency System
       </footer>
     </div>
   );

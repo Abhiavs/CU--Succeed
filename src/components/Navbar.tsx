@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { Compass, ShieldCheck, ArrowRight, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Logo } from "@/components/Logo";
 
 export default async function Navbar() {
   const session = await getServerSession(authOptions);
@@ -12,14 +13,7 @@ export default async function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/90 backdrop-blur-md">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
-            CU
-          </div>
-          <div className="font-bold text-base text-white tracking-tight">
-            CU <span className="text-blue-400 font-semibold">Succeed</span>
-          </div>
-        </Link>
+        <Logo href="/" size="md" />
 
         
         {/* Action Buttons & Theme Changer */}

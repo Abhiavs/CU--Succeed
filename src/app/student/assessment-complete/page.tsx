@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   Clock3,
 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export default function AssessmentCompletePage() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function AssessmentCompletePage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-[#090d16] flex items-center justify-center px-4 py-10 relative overflow-hidden text-slate-100">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-10 relative overflow-hidden text-slate-100">
       {/* Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[140px] pointer-events-none" />
 
@@ -61,17 +62,7 @@ export default function AssessmentCompletePage() {
 
           {/* Brand */}
           <div className="flex justify-center mb-8">
-            <Link href="/student" className="inline-flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-400 p-[1px]">
-                <div className="h-full w-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-blue-400" />
-                </div>
-              </div>
-
-              <span className="font-extrabold text-xl text-white">
-                CU <span className="text-blue-400">Succeed</span>
-              </span>
-            </Link>
+            <Logo href="/student" size="lg" />
           </div>
 
           {/* Success Icon */}
@@ -156,7 +147,7 @@ export default function AssessmentCompletePage() {
 
           {/* Footer */}
           <p className="mt-6 text-[10px] text-slate-600">
-            CU Succeed • Psychometric Pre-Assessment
+            CU-SUCCEED • Psychometric Pre-Assessment
           </p>
         </CardContent>
       </Card>

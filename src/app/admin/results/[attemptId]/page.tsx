@@ -15,6 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { WHEEL_DIMENSIONS } from "@/lib/assessmentData";
 
 export default async function AttemptDetailsPage({
   params,
@@ -116,24 +117,75 @@ export default async function AttemptDetailsPage({
 
   /*
    * ============================================================
-   * CONVERT WHEEL DIMENSIONS
+   * RESOLVE WHEEL DIMENSION NAMES
    *
-   * Prisma Json type needs to be safely converted.
+   * WheelScore.dimensions is keyed by WheelDimension.id, but the
+   * earliest rows were seeded from the static WHEEL_DIMENSIONS
+   * slugs ("technical", "careerClarity", …), so both maps are
+   * consulted. Rendering the raw key printed database ids as row
+   * labels; a key that resolves to neither and looks like an
+   * orphan cuid is dropped rather than shown as gibberish.
    * ============================================================
    */
 
-  const wheelDimensions =
+  const wheelDimensionRows = isWheelAttempt
+    ? await prisma.wheelDimension.findMany({
+        orderBy: { sortOrder: "asc" },
+      })
+    : [];
+
+  const dimensionNameById = new Map(
+    wheelDimensionRows.map((dimension) => [dimension.id, dimension.name])
+  );
+
+  const slugNameById = new Map(
+    WHEEL_DIMENSIONS.map((dimension) => [dimension.id, dimension.name])
+  );
+
+  const dimensionOrder = new Map(
+    wheelDimensionRows.map((dimension) => [dimension.id, dimension.sortOrder])
+  );
+
+  /* Prisma cids: "c" + ~24 lowercase alphanumerics. */
+  const CUID_LIKE = /^c[a-z0-9]{20,}$/;
+
+  const prettifyKey = (key: string) =>
+    key
+      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+      .replace(/[_-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/\b[a-z]/g, (char) => char.toUpperCase());
+
+  const wheelDimensions: Array<[string, unknown]> = [];
+
+  if (
     wheelScore &&
     wheelScore.dimensions &&
     typeof wheelScore.dimensions === "object" &&
     !Array.isArray(wheelScore.dimensions)
-      ? Object.entries(
-          wheelScore.dimensions as Record<
-            string,
-            unknown
-          >
-        )
-      : [];
+  ) {
+    Object.entries(
+      wheelScore.dimensions as Record<string, unknown>
+    )
+      .map(([key, value], index) => ({
+        label:
+          dimensionNameById.get(key) ??
+          slugNameById.get(key) ??
+          (CUID_LIKE.test(key) ? "" : prettifyKey(key)),
+
+        value,
+
+        /* Configured dimensions sort by the admin's order; unknown
+           keys keep their stored insertion order at the end. */
+        order: dimensionOrder.get(key) ?? Number.MAX_SAFE_INTEGER,
+
+        index,
+      }))
+      .filter((row) => row.label !== "")
+      .sort((a, b) => a.order - b.order || a.index - b.index)
+      .forEach((row) => wheelDimensions.push([row.label, row.value]));
+  }
 
   /*
    * ============================================================
@@ -433,7 +485,10 @@ export default async function AttemptDetailsPage({
               </h2>
 
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                Review the competency ratings submitted by the student.
+                Review the competency ratings submitted by the student
+                {wheelScore
+                  ? ` (most recent ${wheelScore.type === "POST" ? "POST" : "PRE"} submission).`
+                  : "."}
               </p>
 
             </div>

@@ -6,23 +6,21 @@ import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     const saved = localStorage.getItem("sa_theme") as "dark" | "light" | null;
-    if (saved) {
-      setTheme(saved);
-      document.documentElement.classList.remove("light", "dark");
-      document.documentElement.classList.add(saved);
-    } else {
-      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const initial = isDark ? "dark" : "light";
-      setTheme(initial);
-      document.documentElement.classList.remove("light", "dark");
-      document.documentElement.classList.add(initial);
-    }
+
+    // Light is the brand default and matches the values on :root in
+    // globals.css, so a first-time visitor gets light with no flash.
+    // The OS colour-scheme preference is deliberately not consulted.
+    const initial = saved ?? "light";
+
+    setTheme(initial);
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(initial);
   }, []);
 
   const toggleTheme = () => {

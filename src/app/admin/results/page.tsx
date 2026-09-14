@@ -18,6 +18,8 @@ import {
   Badge,
 } from "@/components/ui/badge";
 
+import AdminResultsBarChart from "@/components/AdminResultsBarChart";
+
 /*
  * ============================================================
  * TYPES
@@ -272,6 +274,29 @@ export default async function ResultGenerationPage({
         getAttemptType(attempt) ===
         currentTab
     );
+
+  /*
+   * ==========================================================
+   * CHART ROWS
+   *
+   * One bar per candidate for the active tab + batch. Values are
+   * the real persisted Attempt.score — nothing is derived.
+   * ==========================================================
+   */
+
+  const chartRows = currentAttempts.map(
+    (attempt) => ({
+      id: attempt.id,
+      name:
+        attempt.student?.name ||
+        "Unknown Student",
+      score:
+        attempt.score === null ||
+        attempt.score === undefined
+          ? null
+          : Number(attempt.score),
+    })
+  );
 
   /*
    * ==========================================================
@@ -735,6 +760,22 @@ export default async function ResultGenerationPage({
 
               {batchFilter ? ` (${batchFilter})` : " (All Batches)"}
             </a>
+
+          </div>
+
+          {/* ==================================================
+              BAR CHART + DOWNLOAD
+          ================================================== */}
+
+          <div className="mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+
+            <AdminResultsBarChart
+              rows={chartRows}
+              tab={currentTab}
+              batchLabel={
+                batchFilter || "All Batches"
+              }
+            />
 
           </div>
 

@@ -12,9 +12,17 @@ export interface StudentProfile {
   createdAt: string;
 }
 
+export interface PsychometricSectionScores {
+  "self-belief": number;
+  "communication": number;
+  "action-resilience": number;
+}
+
 export interface StudentAssessmentState {
   psychometricCompleted: boolean;
   psychometricScore: number;
+  psychometricRawTotal: number;
+  psychometricSectionScores: PsychometricSectionScores;
   psychometricAttemptId?: string;
   psychometricRetakeAllowed: boolean;
   aptitudeCompleted: boolean;
@@ -55,6 +63,8 @@ saveProfile(profile: StudentProfile) {
     globalStore._assessmentStates?.set(profile.id, {
       psychometricCompleted: false,
       psychometricScore: 0,
+      psychometricRawTotal: 0,
+      psychometricSectionScores: { "self-belief": 0, communication: 0, "action-resilience": 0 },
       psychometricRetakeAllowed: false,
 
       aptitudeCompleted: false,
@@ -90,6 +100,8 @@ saveProfile(profile: StudentProfile) {
    const initial: StudentAssessmentState = {
   psychometricCompleted: false,
   psychometricScore: 0,
+  psychometricRawTotal: 0,
+  psychometricSectionScores: { "self-belief": 0, communication: 0, "action-resilience": 0 },
   psychometricRetakeAllowed: false,
 
   aptitudeCompleted: false,

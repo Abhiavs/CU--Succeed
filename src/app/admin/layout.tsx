@@ -16,6 +16,7 @@ import {
 import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Badge } from "@/components/ui/badge";
+import { Logo } from "@/components/Logo";
 
 export default async function AdminLayout({
   children,
@@ -49,23 +50,13 @@ export default async function AdminLayout({
 ];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#090d16] text-slate-100">
+    <div className="flex h-screen overflow-hidden bg-slate-950 text-slate-100">
       {/* Sidebar */}
       <aside className="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col justify-between z-20">
         <div>
           {/* Brand */}
           <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-            <Link href="/admin" className="flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
-                CU
-              </div>
-              <div className="text-left">
-                <div className="font-bold text-sm text-slate-900 dark:text-white tracking-tight">
-                  CU <span className="text-indigo-600 dark:text-blue-400 font-semibold">Succeed</span>
-                </div>
-                <div className="text-[10px] text-slate-500 font-mono">OFFICIAL PORTAL</div>
-              </div>
-            </Link>
+            <Logo href="/admin" size="md" subtitle="OFFICIAL PORTAL" />
           </div>
 
           {/* Navigation Links */}

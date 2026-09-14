@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
+import { BrandLockup } from "@/components/Logo";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +20,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100 selection:bg-indigo-500/20 selection:text-blue-300">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-indigo-500/20 selection:text-blue-300">
 
       {/* =====================================================
           NAVBAR
@@ -36,6 +37,10 @@ export default async function Home() {
         <div className="max-w-5xl mx-auto px-6">
 
           <div className="max-w-3xl mx-auto space-y-7 text-center">
+
+            {/* Brand Lockup */}
+
+            <BrandLockup className="pb-2" />
 
             {/* Badge */}
 
@@ -527,7 +532,7 @@ export default async function Home() {
 
           <div className="font-semibold text-slate-300">
 
-            CU Succeed{" "}
+            CU-SUCCEED{" "}
 
             <span className="font-normal text-slate-500">
 
@@ -562,7 +567,7 @@ export default async function Home() {
 
             <span>
 
-              © {new Date().getFullYear()} CU Succeed
+              © {new Date().getFullYear()} CU-SUCCEED
 
             </span>
 

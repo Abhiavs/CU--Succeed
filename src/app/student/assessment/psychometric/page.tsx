@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   ChevronLeft,
 } from "lucide-react";
+import { PSYCHOMETRIC_SECTIONS } from "@/lib/assessmentData";
 
 /*
  * ============================================================
@@ -33,6 +34,25 @@ type PsychometricQuestion = {
     text: string;
   }[];
 };
+
+/*
+ * ============================================================
+ * SECTION RESOLUTION
+ *
+ * Questions are grouped by position: Q1–10 → Section 1,
+ * Q11–20 → Section 2, Q21–30 → Section 3.
+ * ============================================================
+ */
+
+const SECTION_SIZE = 10;
+
+function getSectionForIndex(index: number) {
+  const sectionIndex = Math.min(
+    PSYCHOMETRIC_SECTIONS.length - 1,
+    Math.floor(index / SECTION_SIZE)
+  );
+  return PSYCHOMETRIC_SECTIONS[sectionIndex];
+}
 
 /*
  * ============================================================
@@ -188,7 +208,7 @@ export default function PsychometricAssessmentPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-100">
         <div className="text-center">
           <BrainCircuit className="w-8 h-8 mx-auto mb-4 text-blue-400 animate-pulse" />
 
@@ -208,7 +228,7 @@ export default function PsychometricAssessmentPage() {
 
   if (loadError) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center px-4 text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 text-slate-100">
         <Card className="max-w-md w-full bg-slate-900 border-slate-800">
           <CardContent className="p-6 text-center space-y-4">
             <h2 className="text-lg font-bold">
@@ -240,7 +260,7 @@ export default function PsychometricAssessmentPage() {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center px-4 text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 text-slate-100">
         <Card className="max-w-md w-full bg-slate-900 border-slate-800">
           <CardContent className="p-6 text-center space-y-4">
             <h2 className="text-lg font-bold">
@@ -285,7 +305,7 @@ export default function PsychometricAssessmentPage() {
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-100">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-100">
         Unable to load current question.
       </div>
     );
@@ -293,7 +313,7 @@ export default function PsychometricAssessmentPage() {
 
   /*
    * ============================================================
-   * PROGRESS
+   * PROGRESS + SECTION
    * ============================================================
    */
 
@@ -305,6 +325,42 @@ export default function PsychometricAssessmentPage() {
             100
         )
       : 0;
+
+  const currentSection =
+    getSectionForIndex(currentIndex);
+
+  const currentSectionIndex =
+    PSYCHOMETRIC_SECTIONS.findIndex(
+      (section) =>
+        section.id ===
+        currentSection.id
+    );
+
+  const questionInSection =
+    (currentIndex % SECTION_SIZE) + 1;
+
+  /*
+   * How many questions of the current section are answered.
+   */
+
+  const sectionQuestionStart =
+    currentSectionIndex * SECTION_SIZE;
+
+  const sectionAnsweredCount = Math.max(
+    0,
+    Math.min(
+      currentIndex + 1,
+      sectionQuestionStart + SECTION_SIZE
+    ) - sectionQuestionStart
+  );
+
+  const sectionProgressPct =
+    Math.round(
+      (sectionAnsweredCount / SECTION_SIZE) * 100
+    );
+
+  const isSectionStart =
+    currentIndex % SECTION_SIZE === 0;
 
   /*
    * ============================================================
@@ -497,7 +553,7 @@ export default function PsychometricAssessmentPage() {
    */
 
   return (
-    <div className="min-h-screen bg-[#090d16] flex flex-col justify-between py-6 px-4 sm:px-6 text-slate-100">
+    <div className="min-h-screen bg-slate-950 flex flex-col justify-between py-6 px-4 sm:px-6 text-slate-100">
 
       {/* ======================================================
           TOP BAR
@@ -545,24 +601,50 @@ export default function PsychometricAssessmentPage() {
             PROGRESS BAR
         ================================================== */}
 
-        <div className="space-y-1.5">
+        <div className="space-y-3">
 
-          <div className="flex justify-between items-center text-xs text-slate-400">
+          {/* Overall progress */}
+          <div className="space-y-1.5">
 
-            <span>
-              Progress
-            </span>
+            <div className="flex justify-between items-center text-xs text-slate-400">
 
-            <span className="text-blue-400 font-mono font-bold">
-              {progressPct}%
-            </span>
+              <span>
+                Overall Progress
+              </span>
+
+              <span className="text-blue-400 font-mono font-bold">
+                {progressPct}%
+              </span>
+
+            </div>
+
+            <Progress
+              value={progressPct}
+              className="h-1.5"
+            />
 
           </div>
 
-          <Progress
-            value={progressPct}
-            className="h-1.5"
-          />
+          {/* Section progress */}
+          <div className="flex items-center gap-1">
+            {PSYCHOMETRIC_SECTIONS.map((section, idx) => (
+              <div
+                key={section.id}
+                className={`flex-1 h-1 rounded-full transition-all ${
+                  idx < currentSectionIndex
+                    ? "bg-indigo-500"
+                    : idx === currentSectionIndex
+                    ? "bg-indigo-500/50"
+                    : "bg-slate-800"
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono">
+            <span>{currentSection.name}</span>
+            <span>Section {currentSectionIndex + 1} of {PSYCHOMETRIC_SECTIONS.length}</span>
+          </div>
 
         </div>
 
@@ -579,11 +661,10 @@ export default function PsychometricAssessmentPage() {
             ============================================== */}
 
       <div className="space-y-3">
-  {currentQuestion.parameter && (
-    <div className="text-[11px] font-mono font-semibold text-blue-400 uppercase">
-      DIMENSION: {currentQuestion.parameter}
-    </div>
-  )}
+  {/* Section Header */}
+  <div className="text-[11px] font-mono font-semibold text-blue-400 uppercase">
+    SECTION {currentSectionIndex + 1}: {currentSection.name} — Q{questionInSection}/{SECTION_SIZE}
+  </div>
 
   {/* QUESTION */}
   <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
@@ -726,7 +807,7 @@ export default function PsychometricAssessmentPage() {
 
         Psychometric Behavioral Matrix
         {" • "}
-        CU Succeed
+        CU-SUCCEED
 
       </footer>
 
