@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { buildWheelComparisonRows } from "@/lib/wheelComparison";
 
 /*
  * ============================================================
@@ -25,33 +26,6 @@ import { prisma } from "@/lib/prisma";
  *   }
  * ============================================================
  */
-
-/*
- * Normalised name matching, so near-duplicates pair up:
- *   "Communication Skills" (PRE)  ->  communicationskill
- *   "communication skill"  (POST) ->  communicationskill
- *
- * Must stay identical to scripts/mirrorPostWheelDimensions.mjs.
- */
-function normalise(name: unknown) {
-  return String(name ?? "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "")
-    .replace(/s$/, "");
-}
-
-function asRecord(value: unknown): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return {};
-  }
-  return value as Record<string, unknown>;
-}
-
-function toScore(value: unknown): number | null {
-  if (value === null || value === undefined) return null;
-  const n = Number(value);
-  return Number.isFinite(n) ? n : null;
-}
 
 export async function GET() {
   try {
@@ -98,22 +72,12 @@ export async function GET() {
       }),
     ]);
 
-    const postByNorm = new Map(
-      postDims.map((d) => [normalise(d.name), d])
+    const rows = buildWheelComparisonRows(
+      preScore,
+      postScore,
+      preDims,
+      postDims
     );
-
-    const preValues = asRecord(preScore?.dimensions);
-    const postValues = asRecord(postScore?.dimensions);
-
-    const rows = preDims.map((preDim) => {
-      const postDim = postByNorm.get(normalise(preDim.name));
-
-      return {
-        name: preDim.name,
-        pre: toScore(preValues[preDim.id]),
-        post: postDim ? toScore(postValues[postDim.id]) : null,
-      };
-    });
 
     return NextResponse.json({
       success: true,

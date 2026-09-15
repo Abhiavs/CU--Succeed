@@ -132,6 +132,9 @@ export async function GET(req: Request) {
           ? new Date(attempt.endTime).toLocaleDateString("en-IN")
           : new Date(attempt.updatedAt).toLocaleDateString("en-IN"),
         Status: "Completed",
+        Comparison: attempt.student
+          ? "View Graph"
+          : "—",
       };
     });
 
@@ -152,6 +155,58 @@ export async function GET(req: Request) {
       worksheet,
       "Results"
     );
+
+    /*
+     * ============================================================
+     * PER-STUDENT COMPARISON LINKS
+     *
+     * Turn the "Comparison" text cells into hyperlinks to the
+     * per-student PRE vs POST graph page, so a click in Excel
+     * opens that candidate's chart in the browser.
+     * ============================================================
+     */
+    const origin = new URL(req.url).origin;
+
+    const range = XLSX.utils.decode_range(
+      worksheet["!ref"] as string
+    );
+
+    let comparisonCol = -1;
+
+    for (let c = range.s.c; c <= range.e.c; c++) {
+      const headerAddr = XLSX.utils.encode_cell({
+        r: range.s.r,
+        c,
+      });
+
+      if (
+        (worksheet[headerAddr] as any)?.v === "Comparison"
+      ) {
+        comparisonCol = c;
+        break;
+      }
+    }
+
+    if (comparisonCol >= 0) {
+      filtered.forEach((attempt, i) => {
+        if (!attempt.student) return;
+
+        const addr = XLSX.utils.encode_cell({
+          r: range.s.r + 1 + i,
+          c: comparisonCol,
+        });
+
+        const cell = worksheet[addr] as any;
+
+        if (cell) {
+          cell.l = {
+            Target: `${origin}/admin/results/student/${attempt.student.id}`,
+            Tooltip:
+              "View this candidate's PRE vs POST comparison graph",
+          };
+        }
+      });
+    }
 
     const buffer = XLSX.write(workbook, {
       type: "buffer",

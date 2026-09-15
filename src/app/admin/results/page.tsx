@@ -858,6 +858,12 @@ export default async function ResultGenerationPage({
 
                   </th>
 
+                  <th className="py-3.5 px-4 font-mono uppercase text-slate-500 text-right">
+
+                    Graph
+
+                  </th>
+
                 </tr>
 
               </thead>
@@ -1102,6 +1108,32 @@ export default async function ResultGenerationPage({
 
                           </td>
 
+                          {/* ================================
+                              GRAPH
+                              Per-student PRE vs POST
+                              comparison page — same link
+                              the Excel export carries.
+                          ================================ */}
+
+                          <td className="py-3.5 px-4 text-right">
+
+                            {attempt.student && (
+
+                              <Link
+                                href={`/admin/results/student/${attempt.student.id}`}
+                                className="inline-flex items-center gap-1 text-[10px] font-semibold text-indigo-600 dark:text-blue-400 hover:underline"
+                              >
+
+                                <BarChart3 className="h-3.5 w-3.5" />
+
+                                View
+
+                              </Link>
+
+                            )}
+
+                          </td>
+
                         </tr>
 
                       );
@@ -1120,7 +1152,7 @@ export default async function ResultGenerationPage({
                     <tr>
 
                       <td
-                        colSpan={7}
+                        colSpan={8}
                         className="py-12 text-center text-slate-500"
                       >
 
