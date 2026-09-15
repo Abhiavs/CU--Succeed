@@ -64,6 +64,17 @@ export default function SignupPage() {
     setError("");
     setLoading(true);
 
+    // Roll numbers must be compact codes (e.g. "12", "21CS045") — students
+    // were typing branch names and sentences into this field.
+    const normalizedRoll = rollNumber.trim();
+    if (!/\d/.test(normalizedRoll) || /\s/.test(normalizedRoll) || normalizedRoll.length > 15) {
+      setError(
+        "Please enter a valid roll number (numbers only, no spaces — e.g. 42 or 21CS045)."
+      );
+      setLoading(false);
+      return;
+    }
+
     try {
       // Create the student account in PostgreSQL.
       const signupResponse = await fetch("/api/auth/signup", {
@@ -188,9 +199,12 @@ export default function SignupPage() {
 
               <Input
                 id="rollNumber"
-                placeholder="Enter your roll number"
+                placeholder="e.g. 42"
                 value={rollNumber}
-                onChange={(e) => setRollNumber(e.target.value)}
+                onChange={(e) =>
+                  setRollNumber(e.target.value.replace(/\s+/g, ""))
+                }
+                maxLength={15}
                 required
               />
             </div>

@@ -11,6 +11,12 @@ export async function POST(req: Request) {
     if (!name?.trim() || !normalizedEmail || !password || !rollNumber?.trim() || !branch?.trim() || !collegeName?.trim()) {
       return NextResponse.json({ error: "Name, email, password, roll number, branch, and college are required." }, { status: 400 });
     }
+    // Roll numbers are compact codes (e.g. "42", "21CS045") — reject
+    // sentences/branch names students paste into the field.
+    const normalizedRoll = rollNumber.trim();
+    if (!/\d/.test(normalizedRoll) || /\s/.test(normalizedRoll) || normalizedRoll.length > 15) {
+      return NextResponse.json({ error: "Please enter a valid roll number (numbers only, no spaces — e.g. 42 or 21CS045)." }, { status: 400 });
+    }
     if (!["Batch 1", "Batch 2"].includes(batch)) {
       return NextResponse.json({ error: "Please select a valid batch." }, { status: 400 });
     }
