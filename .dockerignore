@@ -1,0 +1,40 @@
+# ============================================================
+# Keeps the build context small and the image free of artefacts
+# that belong to whichever machine built it.
+#
+# node_modules is the important one: a host copy may hold macOS
+# or Windows binaries (Prisma engines, SWC) that cannot run in
+# the Linux container. The image installs its own.
+# ============================================================
+
+node_modules
+.next
+out
+build
+coverage
+
+.git
+.gitignore
+.gitattributes
+
+# Secrets — the container is handed its env by docker-compose.yml.
+.env
+.env.*
+!.env.example
+
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+.DS_Store
+*.pem
+*.tsbuildinfo
+
+.vscode
+.idea
+.windsurf
+.claude
+.agents
+.vercel
+
+capture_pages.mjs

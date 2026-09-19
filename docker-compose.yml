@@ -1,0 +1,95 @@
+# ============================================================
+# CU Succeed — local development stack
+#
+#     docker compose up
+#
+# Starts PostgreSQL plus the Next.js dev server on
+# http://localhost:3000. The working copy is bind-mounted, so
+# edits on the host hot-reload in the container. Nothing but
+# Docker Desktop needs to be installed on the host — no Node, no
+# npm, no PostgreSQL.
+#
+# Full walkthrough (including Windows notes): DOCKER.md
+# ============================================================
+
+services:
+  db:
+    image: postgres:16-bookworm
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: cu_succeed
+      POSTGRES_PASSWORD: cu_succeed
+      POSTGRES_DB: cu_succeed
+
+    # Published so a GUI client (pgAdmin, TablePlus, DBeaver) on
+    # the host can inspect rows. Local-only credentials.
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+    # The app waits on this instead of crash-looping against a
+    # database that is still starting.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cu_succeed -d cu_succeed"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      target: dev
+
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      # `db` is the service name above — Docker's internal DNS
+      # resolves it on the compose network.
+      DATABASE_URL: postgresql://cu_succeed:cu_succeed@db:5432/cu_succeed?schema=public
+
+      NEXTAUTH_URL: http://localhost:3000
+
+      # Local-development value only. Production uses a separate
+      # secret set in the Vercel dashboard.
+      NEXTAUTH_SECRET: docker-local-development-secret-change-me
+
+      # A bind mount on Windows or macOS does not deliver inotify
+      # events into the container, so the file watcher has to poll
+      # or hot reload silently stops working.
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      # The checkout, live-edited from the host.
+      - .:/app
+
+      # …with two exceptions kept inside the container:
+      #   node_modules — Linux-native binaries (Prisma engines,
+      #     SWC) that a Windows or macOS host would shadow with
+      #     its own incompatible copies.
+      #   .next — build output; round-tripping it to the host is
+      #     slow and serves no purpose.
+      - /app/node_modules
+      - /app/.next
+
+    # Both steps are idempotent, so this is safe on every start:
+    # `db push` reconciles the schema, and the admin seed skips
+    # itself when the account already exists. Sample questions are
+    # a separate, manual one-off — see DOCKER.md.
+    command: >
+      sh -c "npx prisma db push --skip-generate &&
+             node scripts/seedAdmin.mjs &&
+             npm run dev"
+
+volumes:
+  db-data:
