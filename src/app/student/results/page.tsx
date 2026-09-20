@@ -3,8 +3,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { WHEEL_DIMENSIONS } from "@/lib/assessmentData";
-import { useIsDark } from "@/lib/useIsDark";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,24 +12,17 @@ import {
   type WheelComparisonRow,
 } from "@/components/WheelComparisonChart";
 import {
-  Award,
   BrainCircuit,
-  Zap,
   Compass,
-  CheckCircle2,
   Printer,
   ChevronLeft,
-  ShieldCheck,
-  BarChart3,
   TrendingUp,
-  Sparkles,
 } from "lucide-react";
-import { Logo } from "@/components/Logo";
 
 export default function StudentResultsPage() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"pre" | "post" | "radar" | "certificate">("pre");
+  const [activeTab, setActiveTab] = useState<"pre" | "post">("pre");
 
   // Real PRE vs POST wheel scores from the WheelScore table.
   const [comparison, setComparison] = useState<{
@@ -52,9 +43,8 @@ export default function StudentResultsPage() {
    */
   useEffect(() => {
     const view = new URLSearchParams(window.location.search).get("view");
-
-    if (view === "post" || view === "radar" || view === "certificate") {
-      setActiveTab(view);
+    if (view === "post") {
+      setActiveTab("post");
     }
   }, []);
 
@@ -86,9 +76,6 @@ export default function StudentResultsPage() {
     window.print();
   };
 
-  // SVG fills/strokes can't use var(), so the radar reads the mode here.
-  const isDark = useIsDark();
-
   if (isLoading || !data) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-300">
@@ -101,31 +88,6 @@ export default function StudentResultsPage() {
   }
 
   const { student, state, composite } = data;
-  const certificateId = `SUC-EMP-2026-${(student.id || "STU").slice(-4).toUpperCase()}${Math.floor(1000 + Math.random() * 9000)}`;
-
-  // Radar coordinates
-  const center = 150;
-  const maxRadius = 100;
-  const numPoints = WHEEL_DIMENSIONS.length;
-
-  const getCoordinates = (index: number, value: number) => {
-    const angle = (Math.PI * 2 / numPoints) * index - Math.PI / 2;
-    const r = (value / 10) * maxRadius;
-    const x = center + r * Math.cos(angle);
-    const y = center + r * Math.sin(angle);
-    return { x, y };
-  };
-
-  const studentPolygon = WHEEL_DIMENSIONS.map((dim, i) => {
-    const val = state?.wheelScores?.[dim.id] || 7.5;
-    const { x, y } = getCoordinates(i, val);
-    return `${x},${y}`;
-  }).join(" ");
-
-  const benchmarkPolygon = WHEEL_DIMENSIONS.map((dim, i) => {
-    const { x, y } = getCoordinates(i, dim.benchmark);
-    return `${x},${y}`;
-  }).join(" ");
 
   // Real PRE/POST wheel averages from the comparison endpoint, falling
   // back to the state/composite figure when the API has nothing yet.
@@ -156,8 +118,6 @@ export default function StudentResultsPage() {
             [
               { id: "pre", label: "PRE Assessment" },
               { id: "post", label: "POST Assessment" },
-              { id: "radar", label: "Competency Radar" },
-              { id: "certificate", label: "Certificate" },
             ] as const
           ).map((t) => (
             <button
@@ -183,40 +143,24 @@ export default function StudentResultsPage() {
       <main className="max-w-6xl mx-auto w-full my-6 space-y-6 flex-1">
         {/* Executive Header Banner */}
         <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-6 shadow-sm print:border print:bg-white print:text-black">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-            <div className="space-y-1.5 text-left">
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="default" className="text-xs">
-                  {student.assessmentType === "PRE" ? "PRE-ASSESSMENT REPORT" : "POST-ASSESSMENT REPORT"}
-                </Badge>
-                <Badge variant="secondary" className="text-xs">
-                  {student.year} YEAR • {student.branch}
-                </Badge>
-                <span className="text-xs font-mono text-slate-400">ID: {certificateId}</span>
-              </div>
-
-              <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight print:text-black">
-                Multidimensional Assessment Scorecard
-              </h1>
-              <p className="text-xs text-slate-400 print:text-gray-600">
-                Candidate: <strong className="text-white print:text-black">{student.name}</strong> • Roll:{" "}
-                <strong className="text-white print:text-black">{student.rollNumber}</strong> • College:{" "}
-                <strong className="text-white print:text-black">{student.collegeName}</strong>
-              </p>
+          <div className="space-y-1.5 text-left">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="default" className="text-xs">
+                {student.assessmentType === "PRE" ? "PRE-ASSESSMENT REPORT" : "POST-ASSESSMENT REPORT"}
+              </Badge>
+              <Badge variant="secondary" className="text-xs">
+                {student.year} YEAR • {student.branch}
+              </Badge>
             </div>
 
-            {/* Overall Composite Score */}
-            <div className="p-4 rounded-lg bg-slate-950/80 border border-slate-800 text-center w-full lg:w-60 flex-shrink-0 print:border-gray-300">
-              <div className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-wider mb-0.5">
-                Composite Readiness
-              </div>
-              <div className="text-4xl font-extrabold text-white mb-0.5 print:text-black">
-                {composite.overallReadiness}%
-              </div>
-              <div className="text-xs text-slate-400 font-medium print:text-gray-700">
-                {composite.percentile}th Percentile • {composite.tier}
-              </div>
-            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight print:text-black">
+              Multidimensional Assessment Scorecard
+            </h1>
+            <p className="text-xs text-slate-400 print:text-gray-600">
+              Candidate: <strong className="text-white print:text-black">{student.name}</strong> • Roll:{" "}
+              <strong className="text-white print:text-black">{student.rollNumber}</strong> • College:{" "}
+              <strong className="text-white print:text-black">{student.collegeName}</strong>
+            </p>
           </div>
         </div>
 
@@ -390,7 +334,7 @@ export default function StudentResultsPage() {
         {/* View 2: POST Assessment */}
         {activeTab === "post" && (
           <div className="space-y-6 text-left">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card className="border-slate-800 bg-slate-900/90 print:border">
                 <CardContent className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
@@ -443,31 +387,6 @@ export default function StudentResultsPage() {
                   </p>
                 </CardContent>
               </Card>
-
-              <Card className="border-slate-800 bg-slate-900/90 print:border">
-                <CardContent className="p-5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold">
-                      <Zap className="w-4 h-4" />
-                    </div>
-                    <span className="text-xl font-bold text-white">
-                      {state.aptitudeScore || composite.aptitudeScore}%
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white text-sm">Aptitude Precision</h4>
-                    <p className="text-xs text-slate-400">
-                      Quantitative & Logical Reasoning Speed
-                    </p>
-                  </div>
-                  <Progress value={state.aptitudeScore || composite.aptitudeScore} className="h-1" />
-                  <div className="grid grid-cols-3 gap-1 text-center text-[10px] text-slate-400 pt-1">
-                    <div className="p-1 rounded bg-slate-950">Quant: {composite.aptitudeSectionBreakdown.quantitative}%</div>
-                    <div className="p-1 rounded bg-slate-950">Logic: {composite.aptitudeSectionBreakdown.logical}%</div>
-                    <div className="p-1 rounded bg-slate-950">Verbal: {composite.aptitudeSectionBreakdown.verbal}%</div>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
 
             {/* Pre vs Post wheel comparison */}
@@ -487,191 +406,6 @@ export default function StudentResultsPage() {
                 />
               </CardContent>
             </Card>
-
-            {/* Growth Roadmap */}
-            <Card className="border-slate-800 bg-slate-900">
-              <CardContent className="p-6 space-y-4">
-                <h3 className="font-bold text-sm text-white">Actionable Next Steps for Placement Readiness</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {composite.recommendations.map((rec: any, idx: number) => (
-                    <div key={idx} className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-white">{rec.title}</span>
-                        <Badge variant="outline" className="text-[9px] py-0">
-                          {rec.priority}
-                        </Badge>
-                      </div>
-                      <p className="text-[11px] text-slate-400 leading-normal">{rec.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* View 2: High-Fidelity Radar Figure */}
-        {activeTab === "radar" && (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start text-left">
-            <Card className="md:col-span-6 border-slate-800 bg-slate-900 p-6 flex flex-col items-center justify-center">
-              <div className="text-xs font-mono font-semibold text-slate-400 mb-3 w-full flex justify-between">
-                <span>FIGURE 2.1 • RADAR ANALYSIS</span>
-                <span className="text-blue-400">Average: {state.wheelAverage || composite.wheelAverage}/10</span>
-              </div>
-
-              <div className="w-full max-w-[300px] aspect-square relative">
-                <svg viewBox="0 0 300 300" className="w-full h-full">
-                  {[2, 4, 6, 8, 10].map((ringVal) => {
-                    const r = (ringVal / 10) * maxRadius;
-                    return (
-                      <circle
-                        key={ringVal}
-                        cx={center}
-                        cy={center}
-                        r={r}
-                        fill="none"
-                        stroke={isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(27, 75, 81, 0.10)"}
-                        strokeWidth="1"
-                      />
-                    );
-                  })}
-                  {WHEEL_DIMENSIONS.map((_, i) => {
-                    const { x, y } = getCoordinates(i, 10);
-                    return (
-                      <line
-                        key={i}
-                        x1={center}
-                        y1={center}
-                        x2={x}
-                        y2={y}
-                        stroke={isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(27, 75, 81, 0.10)"}
-                        strokeWidth="1"
-                      />
-                    );
-                  })}
-                  <polygon
-                    points={benchmarkPolygon}
-                    fill={isDark ? "rgba(137, 182, 166, 0.10)" : "rgba(109, 138, 138, 0.08)"}
-                    stroke={isDark ? "#89b6a6" : "#6d8a8a"}
-                    strokeWidth="1.5"
-                    strokeDasharray="3 3"
-                  />
-                  <polygon
-                    points={studentPolygon}
-                    fill={isDark ? "rgba(64, 157, 120, 0.28)" : "rgba(64, 157, 120, 0.20)"}
-                    stroke="#409d78"
-                    strokeWidth="2"
-                  />
-                  {WHEEL_DIMENSIONS.map((dim, i) => {
-                    const { x, y } = getCoordinates(i, 11.8);
-                    return (
-                      <text
-                        key={dim.id}
-                        x={x}
-                        y={y}
-                        textAnchor="middle"
-                        dominantBaseline="central"
-                        className="text-[9px] font-mono fill-slate-600 dark:fill-slate-400"
-                      >
-                        {dim.shortName}
-                      </text>
-                    );
-                  })}
-                </svg>
-              </div>
-
-              <div className="flex items-center gap-5 text-xs text-slate-400 pt-3 border-t border-slate-800 w-full justify-center">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
-                  <span>Candidate Profile</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-0.5 border-t border-dashed border-slate-400" />
-                  <span>Industry Benchmark</span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Dimension Breakdown Table */}
-            <div className="md:col-span-6 space-y-3">
-              <Card className="border-slate-800 bg-slate-900 p-5 space-y-3">
-                <h4 className="font-bold text-sm text-white">Dimension Scores vs Benchmarks</h4>
-                <div className="space-y-2">
-                  {WHEEL_DIMENSIONS.map((dim) => {
-                    const score = state?.wheelScores?.[dim.id] || 7.5;
-                    return (
-                      <div key={dim.id} className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex justify-between items-center text-xs">
-                        <div>
-                          <div className="font-semibold text-slate-200">{dim.name}</div>
-                          <div className="text-[10px] text-slate-500 font-mono">Benchmark: {dim.benchmark}/10</div>
-                        </div>
-                        <span className="font-mono font-bold text-blue-400 px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
-                          {score} / 10
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </Card>
-            </div>
-          </div>
-        )}
-
-        {/* View 3: Verified Certificate */}
-        {activeTab === "certificate" && (
-          <div className="pt-2">
-            <div className="p-8 sm:p-12 rounded-xl border border-slate-700 bg-slate-900 text-center max-w-3xl mx-auto space-y-6 print:border-2 print:border-black print:bg-white print:text-black">
-              <div className="flex justify-center mb-2">
-                <Logo size="lg" showText={false} />
-              </div>
-              <div className="space-y-1">
-                <div className="text-[10px] font-mono tracking-widest uppercase text-emerald-600 dark:text-emerald-400 font-bold print:text-black">
-                  CU-SUCCEED DIGITAL CREDENTIAL
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white print:text-black">
-                  Certificate of Employability Assessment
-                </h3>
-                <p className="text-xs text-slate-400 print:text-gray-600">
-                  This is to certify that
-                </p>
-              </div>
-
-              <div>
-                <div className="text-3xl sm:text-4xl font-bold text-white print:text-black">
-                  {student.name}
-                </div>
-                <div className="text-xs font-mono text-slate-400 mt-1 print:text-gray-700">
-                  Roll No: {student.rollNumber} • {student.branch} • {student.collegeName}
-                </div>
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed print:text-gray-800">
-                has completed the{" "}
-                <strong>
-                  {student.assessmentType === "PRE" ? "Pre-Assessment" : "Post-Assessment"}
-                </strong>{" "}
-                program evaluating Psychometric traits, Aptitude precision, and 8-Dimension Competency standards with a composite score of{" "}
-                <strong className="text-blue-400 print:text-black">{composite.overallReadiness}%</strong>.
-              </p>
-
-              <div className="pt-6 border-t border-slate-800 flex items-center justify-between text-left text-xs print:border-gray-400">
-                <div className="text-slate-400 print:text-gray-600">
-                  <div>Issue Date: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</div>
-                  <div className="font-mono text-[10px] text-blue-400 print:text-black mt-0.5">
-                    Verification ID: {certificateId}
-                  </div>
-                </div>
-
-                <div className="text-right text-xs">
-                  <div className="font-serif font-bold text-white print:text-black">
-                    Director of Assessment
-                  </div>
-                  <div className="text-[10px] text-slate-400 print:text-gray-600 font-mono">
-                    CU-SUCCEED Board
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </main>

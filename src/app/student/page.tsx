@@ -9,13 +9,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import {
   BrainCircuit,
-  Zap,
   CheckCircle2,
-  Clock,
   Hash,
   BookOpen,
   Building2,
-  Lock,
   CircleDot,
 } from "lucide-react";
 
@@ -149,7 +146,7 @@ export default async function StudentDashboard() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
           {/* PRE Stage: Psychometric + Wheel combined */}
           <Card className="border-slate-800 bg-slate-900/90 flex flex-col justify-between">
@@ -219,46 +216,6 @@ export default async function StudentDashboard() {
                   </Link>
                 )}
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Aptitude - Disabled */}
-          <Card className="border-slate-800 bg-slate-900/50 opacity-60 flex flex-col justify-between relative">
-            <div className="absolute top-3 right-3">
-              <Lock className="w-4 h-4 text-slate-500" />
-            </div>
-            <CardContent className="p-5 flex flex-col h-full justify-between space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-lg bg-slate-700/10 border border-slate-700/20 flex items-center justify-center text-slate-600 font-bold">
-                    <Zap className="w-5 h-5" />
-                  </div>
-                  <Badge variant="outline" className="text-xs text-slate-500 border-slate-700/30">
-                    Coming Soon
-                  </Badge>
-                </div>
-
-                <div>
-                  <div className="text-[10px] font-mono font-semibold text-slate-600 uppercase mb-0.5">
-                    Track 02
-                  </div>
-                  <h3 className="font-bold text-base text-slate-500">Aptitude Precision</h3>
-                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                    Timed problem solving evaluating quantitative computation, logical deduction, and verbal correction.
-                  </p>
-                </div>
-
-                <div className="space-y-1 text-[11px] text-slate-600">
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-3 h-3 text-slate-600" />
-                    <span>15-Minute Timed Environment</span>
-                  </div>
-                </div>
-              </div>
-
-              <Button size="sm" className="w-full h-9 text-xs" disabled>
-                Not Available
-              </Button>
             </CardContent>
           </Card>
 

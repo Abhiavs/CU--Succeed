@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { ShieldCheck, User } from "lucide-react";
+import { BarChart3, User } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
@@ -27,8 +27,8 @@ export default async function StudentLayout({ children }: { children: React.Reac
               Dashboard
             </Link>
             <Link href="/student/results" className="hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
-              Scorecard & Certificate
+              <BarChart3 className="w-3.5 h-3.5 text-indigo-500" />
+              Scorecard
             </Link>
           </nav>
 
