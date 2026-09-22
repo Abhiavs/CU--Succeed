@@ -52,7 +52,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [branch, setBranch] = useState("");
-  const [batch, setBatch] = useState("");
+  const [batch, setBatch] = useState("Batch 2.1");
   const [collegeName, setCollegeName] = useState("");
 
   const [error, setError] = useState("");
