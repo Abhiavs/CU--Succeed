@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     if (!/\d/.test(normalizedRoll) || /\s/.test(normalizedRoll) || normalizedRoll.length > 15) {
       return NextResponse.json({ error: "Please enter a valid roll number (numbers only, no spaces — e.g. 42 or 21CS045)." }, { status: 400 });
     }
-    if (!["Batch 1", "Batch 2"].includes(batch)) {
+    if (!["Batch 2.1"].includes(batch)) {
       return NextResponse.json({ error: "Please select a valid batch." }, { status: 400 });
     }
     if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
