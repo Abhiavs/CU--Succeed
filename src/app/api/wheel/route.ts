@@ -3,6 +3,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { inMemoryStore } from "@/lib/store";
+import {
+  averageWheelScore,
+  countWheelDimensions,
+  wheelDimensionDivisor,
+} from "@/lib/wheelScoring";
 
 /*
  * ============================================================
@@ -347,13 +352,37 @@ export async function POST(
         0
       );
 
-    const averageScore =
-      totalScore / keys.length;
+    /*
+     * ============================================================
+     * AVERAGE ACROSS THE WHEEL'S DIMENSIONS
+     *
+     * The average divides the rating total by the number of ACTIVE
+     * dimensions on this wheel (5 for PRE and 5 for POST), not by a
+     * fixed 10. The count comes from the database so an admin adding
+     * or deactivating a dimension is reflected; when no dimension
+     * rows are resolvable the scored map's own size is the fallback.
+     * ============================================================
+     */
+
+    const activeDimensionCount =
+      await prisma.wheelDimension.count({
+        where: {
+          assessmentType: type,
+          isActive: true,
+        },
+      });
+
+    const divisor =
+      wheelDimensionDivisor(
+        activeDimensionCount ||
+          countWheelDimensions(dimensions)
+      );
 
     const roundedAverage =
-      Math.round(
-        averageScore * 10
-      ) / 10;
+      averageWheelScore(
+        totalScore,
+        divisor
+      );
 
     /*
      * ============================================================

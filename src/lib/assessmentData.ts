@@ -1,3 +1,5 @@
+import { averageWheelScore } from "./wheelScoring";
+
 export interface WheelDimension {
   id: string;
   name: string;
@@ -500,10 +502,20 @@ export function calculateCompositeProfile(
   aptScore: number,
   wheelScores: Record<string, number>
 ): CompositeResult {
+  /*
+   * The wheel average is the rating total divided by the number of
+   * dimensions actually on the wheel (5 for PRE and POST), then
+   * scaled to the 0–100 composite scale. Shared with the wheel
+   * submission path so the composite cannot drift from the score.
+   */
   const wheelKeys = Object.keys(wheelScores);
+
   const wheelAvg =
     wheelKeys.length > 0
-      ? (wheelKeys.reduce((acc, k) => acc + (wheelScores[k] || 0), 0) / wheelKeys.length) * 10
+      ? averageWheelScore(
+          wheelKeys.reduce((acc, k) => acc + (wheelScores[k] || 0), 0),
+          wheelKeys.length
+        ) * 10
       : 75;
 
   const validPsy = Math.min(100, Math.max(0, psyScore || 78));

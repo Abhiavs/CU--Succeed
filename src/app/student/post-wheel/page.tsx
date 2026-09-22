@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { useIsDark } from "@/lib/useIsDark";
+import { averageWheelScore } from "@/lib/wheelScoring";
 
 import {
   Compass,
@@ -173,9 +174,15 @@ export default function PostAssessmentWheelPage() {
     0
   );
 
+  /*
+   * Average across the wheel's ACTIVE dimension count — 5 for POST —
+   * shared with POST /api/wheel via averageWheelScore so the figure
+   * shown here and the figure persisted agree.
+   */
+
   const averageScore =
     dimensions.length > 0
-      ? (totalScore / dimensions.length).toFixed(1)
+      ? averageWheelScore(totalScore, dimensions.length).toFixed(1)
       : "0.0";
 
   const completedDimensions = dimensions.filter(

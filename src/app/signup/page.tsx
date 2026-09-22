@@ -40,7 +40,7 @@ const COLLEGES = [
   "Pravara Rural Engineering College, Loni",
 ];
 
-const BATCHES = ["Batch 1", "Batch 2"];
+const BATCHES = ["Batch 2.1"];
 
 export default function SignupPage() {
   const router = useRouter();
