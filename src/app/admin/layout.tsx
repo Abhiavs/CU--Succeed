@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   UserCheck,
   Compass,
+  Building2,
 } from "lucide-react";
 import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -30,24 +31,15 @@ export default async function AdminLayout({
   }
 
   const navItems = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-
-  { label: "Assessments", href: "/admin/assessments", icon: ClipboardList },
-
-  {
-    label: "Wheel Dimensions",
-    href: "/admin/wheel-dimensions",
-    icon: Compass,
-  },
-
-  { label: "Question Bank", href: "/admin/questions", icon: HelpCircle },
-
-  { label: "Results", href: "/admin/results", icon: FileSpreadsheet },
-
-  { label: "Certificates", href: "/admin/certificates", icon: BookOpen },
-
-  { label: "Training Matrix", href: "/admin/matrix", icon: BarChart3 },
-];
+    { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { label: "Assessments", href: "/admin/assessments", icon: ClipboardList },
+    { label: "Wheel Dimensions", href: "/admin/wheel-dimensions", icon: Compass },
+    { label: "Question Bank", href: "/admin/questions", icon: HelpCircle },
+    { label: "Results", href: "/admin/results", icon: FileSpreadsheet },
+    { label: "Certificates", href: "/admin/certificates", icon: BookOpen },
+    { label: "Training Matrix", href: "/admin/matrix", icon: BarChart3 },
+    { label: "College & TPO Mgmt", href: "/admin/colleges", icon: Building2 },
+  ];
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-950 text-slate-100">
@@ -82,46 +74,30 @@ export default async function AdminLayout({
           </div>
         </div>
 
-        {/* Footer with Administrator Profile */}
-        <div className="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-indigo-500/10 dark:bg-blue-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-blue-400 flex-shrink-0">
-            {session.user.name?.charAt(0) || "A"}
-          </div>
-          <div className="text-xs text-left min-w-0 flex-1">
-            <div className="font-semibold text-slate-900 dark:text-white truncate">
-              {session.user.name}
+        {/* User Footer */}
+        <div className="p-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xs">
+                {session.user.name?.[0] || "A"}
+              </div>
+              <div className="text-left overflow-hidden">
+                <div className="text-xs font-bold text-slate-900 dark:text-white truncate">{session.user.name}</div>
+                <div className="text-[10px] text-slate-500 truncate">{session.user.email}</div>
+              </div>
             </div>
-            <div className="text-[10px] text-slate-500 font-mono">Administrator</div>
+            <ThemeToggle />
           </div>
+          <SignOutButton />
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Header Nav with ThemeToggle AND Logout */}
-        <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/80 px-8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-400">ADMIN CONTROL CENTER</span>
-            <Badge variant="outline" className="text-[10px]">
-              Active Session
-            </Badge>
-          </div>
-
-          <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
-            <span className="hidden sm:inline">
-              Server Status: <strong className="text-indigo-600 dark:text-blue-400">Online</strong>
-            </span>
-            <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 hidden sm:block" />
-            <ThemeToggle />
-            <SignOutButton />
-          </div>
-        </header>
-
-        {/* Dynamic Page Content */}
-        <main className="flex-1 overflow-y-auto p-8">
-          <div className="max-w-6xl mx-auto">{children}</div>
-        </main>
-      </div>
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-900/50 p-8">
+        <div className="max-w-7xl mx-auto">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

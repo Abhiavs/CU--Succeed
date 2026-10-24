@@ -479,7 +479,7 @@ export default function BulkQuestionsPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="h-10 px-6 text-xs font-semibold"
+            className="h-10 px-6 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
           >
             <Save size={15} className="mr-1.5" />
             {loading
