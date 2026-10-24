@@ -107,9 +107,9 @@ export default function AssessmentCard({ assessment }: { assessment: AssessmentP
               size="sm"
               onClick={toggleActive}
               disabled={loading}
-              className="flex-1 text-xs"
+              className="flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
             >
-              <Play size={13} className="mr-1" /> {loading ? "Activating..." : "Activate"}
+              <Play size={13} className="mr-1" /> {loading ? "Publishing..." : "Publish Post Assessment"}
             </Button>
           )}
 
