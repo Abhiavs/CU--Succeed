@@ -384,6 +384,7 @@ export default function WheelDimensionsPage() {
           onClick={() =>
             setWheelType("PRE")
           }
+          className={wheelType === "PRE" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""}
         >
           Pre Assessment Wheel
         </Button>
@@ -398,6 +399,7 @@ export default function WheelDimensionsPage() {
           onClick={() =>
             setWheelType("POST")
           }
+          className={wheelType === "POST" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""}
         >
           Post Assessment Wheel
         </Button>
@@ -448,6 +450,7 @@ export default function WheelDimensionsPage() {
                 disabled={
                   saving
                 }
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
               >
 
                 {saving ? (
