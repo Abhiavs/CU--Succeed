@@ -70,28 +70,28 @@ export default async function QuestionBankPage() {
       </div>
 
       {/* Table */}
-      <Card className="overflow-hidden border-slate-800 bg-slate-900">
+      <Card className="overflow-hidden border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/60">
-                <th className="px-5 py-3.5 font-mono uppercase tracking-wider text-slate-400">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60">
+                <th className="px-5 py-3.5 font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   ID
                 </th>
 
-                <th className="px-5 py-3.5 font-mono uppercase tracking-wider text-slate-400">
+                <th className="px-5 py-3.5 font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Question Content
                 </th>
 
-                <th className="px-5 py-3.5 font-mono uppercase tracking-wider text-slate-400">
+                <th className="px-5 py-3.5 font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Category / Trait
                 </th>
 
-                <th className="px-5 py-3.5 font-mono uppercase tracking-wider text-slate-400">
+                <th className="px-5 py-3.5 font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Type
                 </th>
 
-                <th className="px-5 py-3.5 text-right font-mono uppercase tracking-wider text-slate-400">
+                <th className="px-5 py-3.5 text-right font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Actions
                 </th>
               </tr>
@@ -101,7 +101,7 @@ export default async function QuestionBankPage() {
               {questions.map((q) => (
                 <tr
                   key={q.id}
-                  className="border-b border-slate-800/60 transition-colors last:border-0 hover:bg-slate-800/30"
+                  className="border-b border-slate-200 dark:border-slate-800/60 transition-colors last:border-0 hover:bg-slate-50 dark:hover:bg-slate-800/30"
                 >
                   {/* ID */}
                   <td className="px-5 py-3.5 font-mono text-slate-500">
@@ -109,7 +109,7 @@ export default async function QuestionBankPage() {
                   </td>
 
                   {/* Question */}
-                  <td className="max-w-md px-5 py-3.5 font-medium text-slate-200">
+                  <td className="max-w-md px-5 py-3.5 font-medium text-slate-900 dark:text-slate-200">
                     <div className="max-w-md truncate">
                       {q.text}
                     </div>
