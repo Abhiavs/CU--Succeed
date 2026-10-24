@@ -1,580 +1,221 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
-
 import { authOptions } from "@/lib/auth";
-import Navbar from "@/components/Navbar";
-import { BrandLockup } from "@/components/Logo";
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-
-import {
-  ArrowRight,
-  BrainCircuit,
-  Zap,
-  Compass,
-} from "lucide-react";
+import { ArrowRight, ShieldCheck, UserCheck, GraduationCap, Building2, Phone, Mail, MapPin } from "lucide-react";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-indigo-500/20 selection:text-blue-300">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-teal-500/20 selection:text-teal-300">
 
-      {/* =====================================================
-          NAVBAR
-      ===================================================== */}
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/90 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-20">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl font-black tracking-wider bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              CUSucceed
+            </span>
+          </div>
 
-      <Navbar />
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+            <a href="#home" className="hover:text-white transition-colors">About</a>
+            <a href="#services" className="hover:text-white transition-colors">Services</a>
+            <a href="#founder" className="hover:text-white transition-colors">The Founder</a>
+            <a href="#armed" className="hover:text-white transition-colors">Why Us?</a>
+            <a href="#clients" className="hover:text-white transition-colors">Clients</a>
+            <a href="#testimonial" className="hover:text-white transition-colors">Testimonials</a>
+            <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+          </div>
 
-      {/* =====================================================
-          HERO SECTION
-      ===================================================== */}
-
-      <section className="relative pt-20 pb-20 border-b border-slate-800/80">
-
-        <div className="max-w-5xl mx-auto px-6">
-
-          <div className="max-w-3xl mx-auto space-y-7 text-center">
-
-            {/* Brand Lockup */}
-
-            <BrandLockup className="pb-2" />
-
-            {/* Badge */}
-
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-700 bg-slate-900 text-xs font-medium text-slate-300">
-
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-
-              <span>
-                Standardized Student Employability Framework
-              </span>
-
-            </div>
-
-            {/* Heading */}
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-
-              Assess Candidate Potential with
-              <span className="text-blue-400">
-                {" "}Multidimensional Rigor
-              </span>
-
-            </h1>
-
-            {/* Description */}
-
-            <p className="text-sm sm:text-base lg:text-lg text-slate-400 font-normal leading-relaxed max-w-3xl mx-auto">
-
-              Evaluate student competency across{" "}
-
-              <strong className="text-slate-200">
-                Psychometric traits
-              </strong>
-
-              ,{" "}
-
-              <strong className="text-slate-200">
-                Aptitude precision
-              </strong>
-
-              , and an interactive{" "}
-
-              <strong className="text-slate-200">
-                Wheel of Competencies
-              </strong>
-
-              {" "}with instant analytics and verifiable digital
-              certification.
-
-            </p>
-
-            {/* Main Action */}
-
-            <div className="flex justify-center pt-3">
-
-              <Link
-                href={
-                  session
-                    ? "/student"
-                    : "/start"
-                }
-              >
-
-                <Button
-                  size="lg"
-                  className="h-12 px-8 rounded-lg text-sm font-semibold"
-                >
-
-                  {session
-                    ? "Enter Student Dashboard"
-                    : "Start Assessment Journey"}
-
-                  <ArrowRight className="w-4 h-4 ml-2" />
-
+          <div className="flex items-center gap-3">
+            {session ? (
+              <Link href={session.user.role === "TPO" ? "/tpo" : session.user.role === "OFFICIAL" ? "/admin" : "/student"}>
+                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs gap-1.5">
+                  Dashboard <ArrowRight className="w-3.5 h-3.5" />
                 </Button>
-
               </Link>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/login">
+                  <Button variant="outline" size="sm" className="border-slate-700 text-slate-200 hover:bg-slate-800 text-xs">
+                    Student Login
+                  </Button>
+                </Link>
+                <Link href="/tpo-login">
+                  <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs gap-1">
+                    <Building2 className="w-3.5 h-3.5" /> TPO Login
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
 
+      {/* Hero Section */}
+      <section id="home" className="py-20 md:py-32 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[150px] -z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal-500/10 rounded-full blur-[150px] -z-10 pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 text-left">
+            <Badge variant="outline" className="text-emerald-400 border-emerald-500/30 text-xs px-3 py-1">
+              TopClass Training Company In India
+            </Badge>
+            <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
+              Empowering Careers & <span className="text-emerald-400">Placement Readiness</span>
+            </h1>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              At <strong className="text-white">CUSucceed</strong>, we are dedicated to fostering growth and development in students and working professionals. With over 12 years of experience, we have trained more than 120,000 individuals nationwide, partnering with top colleges and corporate organizations.
+            </p>
+            <div className="flex flex-wrap gap-4 pt-2">
+              <Link href="/signup">
+                <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold gap-2">
+                  Get Started <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <Link href="/tpo-login">
+                <Button variant="outline" size="lg" className="border-slate-700 text-slate-200 hover:bg-slate-800 text-sm font-semibold gap-2">
+                  <Building2 className="w-4 h-4 text-emerald-400" /> College TPO Portal
+                </Button>
+              </Link>
             </div>
-
-            {/* Metrics */}
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 mt-8 border-t border-slate-800/80">
-
-              <div className="text-center">
-
-                <div className="text-2xl font-bold text-white">
-                  3 Pillars
-                </div>
-
-                <div className="text-[11px] text-slate-400 mt-1">
-                  Psychometric, Aptitude, Wheel
-                </div>
-
-              </div>
-
-              <div className="text-center">
-
-                <div className="text-2xl font-bold text-indigo-400">
-                  Pre & Post
-                </div>
-
-                <div className="text-[11px] text-slate-400 mt-1">
-                  Growth Tracking
-                </div>
-
-              </div>
-
-              <div className="text-center">
-
-                <div className="text-2xl font-bold text-blue-400">
-                  8 Dimensions
-                </div>
-
-                <div className="text-[11px] text-slate-400 mt-1">
-                  Dynamic Radar
-                </div>
-
-              </div>
-
-            </div>
-
           </div>
 
-        </div>
+          <div className="relative flex justify-center">
+            <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl space-y-6">
+              <h3 className="text-lg font-bold text-white">Quick Portal Access</h3>
+              <p className="text-xs text-slate-400">Select your portal to log in or register your account.</p>
+              <div className="space-y-3">
+                <Link href="/login" className="block">
+                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-emerald-500/50 transition-all flex items-center justify-between group">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+                        <GraduationCap className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">Student Portal</div>
+                        <div className="text-[11px] text-slate-400">Take psychometric & competency assessments</div>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors" />
+                  </div>
+                </Link>
 
+                <Link href="/tpo-login" className="block">
+                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-emerald-500/50 transition-all flex items-center justify-between group">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <Building2 className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">TPO / College Head Portal</div>
+                        <div className="text-[11px] text-slate-400">View college student reports & badge graphs</div>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors" />
+                  </div>
+                </Link>
+
+                <Link href="/admin-login" className="block">
+                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-emerald-500/50 transition-all flex items-center justify-between group">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                        <ShieldCheck className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Official Admin Portal</div>
+                        <div className="text-[11px] text-slate-400">Manage assessments, questions & students</div>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors" />
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-
-      {/* =====================================================
-          6 STEP ASSESSMENT JOURNEY
-      ===================================================== */}
-
-      <section
-        id="flow"
-        className="py-20 border-b border-slate-800/80 bg-slate-950/40"
-      >
-
-        <div className="max-w-6xl mx-auto px-6">
-
-          <div className="text-center max-w-2xl mx-auto mb-12">
-
-            <Badge
-              variant="outline"
-              className="mb-2"
-            >
-              Structured Roadmap
-            </Badge>
-
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">
-
-              The 6-Step Assessment Journey
-
-            </h2>
-
-            <p className="text-slate-400 text-xs sm:text-sm">
-
-              Follow our systematic 6-step roadmap engineered for
-              measurable student skill growth.
-
-            </p>
-
+      {/* Services Section */}
+      <section id="services" className="py-20 border-t border-slate-800 bg-slate-900/40">
+        <div className="max-w-7xl mx-auto px-6 space-y-12">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <Badge variant="outline" className="text-emerald-400 border-emerald-500/30 text-xs">Services</Badge>
+            <h2 className="text-3xl font-bold text-white tracking-tight">What we provide at CUSucceed</h2>
+            <p className="text-xs text-slate-400">Comprehensive training solutions tailored for academic institutions and corporate teams.</p>
           </div>
-
-
-          {/* Steps */}
-
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
-
-            {[
-              {
-                step: "01",
-                title: "Home",
-                desc: "Platform overview & assessment launcher.",
-              },
-
-              {
-                step: "02",
-                title: "Select Type",
-                desc: "Choose Pre-Test or Post-Test.",
-              },
-
-              {
-                step: "03",
-                title: "Select Year",
-                desc: "Choose your academic year.",
-              },
-
-              {
-                step: "04",
-                title: "Register",
-                desc: "Complete your student profile.",
-              },
-
-              {
-                step: "05",
-                title: "Assessments",
-                desc: "Psychometric, Aptitude, and Wheel.",
-              },
-
-              {
-                step: "06",
-                title: "Results",
-                desc: "Scorecards, insights, and certificates.",
-              },
-
-            ].map((item) => (
-
-              <div
-                key={item.step}
-                className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between"
-              >
-
-                <div className="text-[10px] font-mono font-bold text-blue-400 mb-2">
-
-                  STEP {item.step}
-
-                </div>
-
-                <div>
-
-                  <h4 className="font-semibold text-white text-sm mb-1">
-
-                    {item.title}
-
-                  </h4>
-
-                  <p className="text-xs text-slate-400 leading-normal">
-
-                    {item.desc}
-
-                  </p>
-
-                </div>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* =====================================================
-          THREE ASSESSMENT PILLARS
-      ===================================================== */}
-
-      <section
-        id="tracks"
-        className="py-20"
-      >
-
-        <div className="max-w-6xl mx-auto px-6">
-
-          <div className="text-center max-w-2xl mx-auto mb-14">
-
-            <Badge
-              variant="outline"
-              className="mb-2"
-            >
-              Evaluation Tracks
-            </Badge>
-
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">
-
-              Three Independent Assessment Pillars
-
-            </h2>
-
-            <p className="text-sm text-slate-400">
-
-              Measure student potential through multiple dimensions
-              of assessment and development.
-
-            </p>
-
-          </div>
-
-
-          {/* Cards */}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-
-            {/* Psychometric */}
-
             <Card className="border-slate-800 bg-slate-900">
-
               <CardContent className="p-6 space-y-4">
-
-                <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-
-                  <BrainCircuit className="w-5 h-5" />
-
-                </div>
-
-                <div>
-
-                  <div className="text-[11px] font-mono text-blue-400 font-semibold uppercase">
-
-                    Pillar 01
-
-                  </div>
-
-                  <h3 className="text-lg font-bold text-white">
-
-                    Psychometric Matrix
-
-                  </h3>
-
-                  <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-
-                    Situational and behavioral questions measuring
-                    emotional resilience, teamwork, ownership, and
-                    professional mindset.
-
-                  </p>
-
-                </div>
-
-                <div className="pt-2 border-t border-slate-800">
-
-                  <Link href="/start">
-
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-between text-xs text-slate-300"
-                    >
-
-                      <span>
-                        Launch Psychometric
-                      </span>
-
-                      <ArrowRight className="w-3.5 h-3.5" />
-
-                    </Button>
-
-                  </Link>
-
-                </div>
-
+                <h3 className="text-lg font-bold text-white">Campus Recruitment Training</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Significantly boosts students employability by equipping them with essential practical skills, comprehensive interview preparation, and invaluable industry insights.
+                </p>
               </CardContent>
-
             </Card>
 
-
-            {/* Aptitude */}
-
             <Card className="border-slate-800 bg-slate-900">
-
               <CardContent className="p-6 space-y-4">
-
-                <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-
-                  <Zap className="w-5 h-5" />
-
-                </div>
-
-                <div>
-
-                  <div className="text-[11px] font-mono text-blue-400 font-semibold uppercase">
-
-                    Pillar 02
-
-                  </div>
-
-                  <h3 className="text-lg font-bold text-white">
-
-                    Aptitude Assessment
-
-                  </h3>
-
-                  <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-
-                    Evaluate analytical reasoning, problem-solving,
-                    logical thinking, and quantitative ability.
-
-                  </p>
-
-                </div>
-
-                <div className="pt-2 border-t border-slate-800">
-
-                  <Link href="/start">
-
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-between text-xs text-slate-300"
-                    >
-
-                      <span>
-                        Launch Aptitude
-                      </span>
-
-                      <ArrowRight className="w-3.5 h-3.5" />
-
-                    </Button>
-
-                  </Link>
-
-                </div>
-
+                <h3 className="text-lg font-bold text-white">Faculty Development Training</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Enriches educators by providing cutting-edge teaching methodologies, seamless technology integration, and continuous avenues for professional growth.
+                </p>
               </CardContent>
-
             </Card>
 
-
-            {/* Wheel */}
-
             <Card className="border-slate-800 bg-slate-900">
-
               <CardContent className="p-6 space-y-4">
-
-                <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-
-                  <Compass className="w-5 h-5" />
-
-                </div>
-
-                <div>
-
-                  <div className="text-[11px] font-mono text-indigo-400 font-semibold uppercase">
-
-                    Pillar 03
-
-                  </div>
-
-                  <h3 className="text-lg font-bold text-white">
-
-                    Wheel of Competencies
-
-                  </h3>
-
-                  <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-
-                    Interactive competency assessment covering
-                    technical skills, communication, confidence,
-                    leadership, and personal development.
-
-                  </p>
-
-                </div>
-
-                <div className="pt-2 border-t border-slate-800">
-
-                  <Link href="/start">
-
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-between text-xs text-slate-300"
-                    >
-
-                      <span>
-                        Launch Competency Wheel
-                      </span>
-
-                      <ArrowRight className="w-3.5 h-3.5" />
-
-                    </Button>
-
-                  </Link>
-
-                </div>
-
+                <h3 className="text-lg font-bold text-white">Corporate Training</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Sharpens employees' skills, fostering adaptability and continuous improvement to enhance organizational productivity and drive success.
+                </p>
               </CardContent>
-
             </Card>
-
           </div>
-
         </div>
-
       </section>
 
-
-      {/* =====================================================
-          FOOTER
-      ===================================================== */}
-
-      <footer className="border-t border-slate-800 bg-slate-950 py-8 px-6 mt-auto">
-
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
-
-          <div className="font-semibold text-slate-300">
-
-            CU-SUCCEED{" "}
-
-            <span className="font-normal text-slate-500">
-
-              | Assessment Platform
-
-            </span>
-
+      {/* Statistics Section */}
+      <section className="py-20 border-t border-slate-800 bg-slate-950">
+        <div className="max-w-7xl mx-auto px-6 text-center space-y-12">
+          <div className="space-y-3">
+            <Badge variant="outline" className="text-emerald-400 border-emerald-500/30 text-xs">Statistics</Badge>
+            <h2 className="text-3xl font-bold text-white tracking-tight">Our Numbers Speak</h2>
           </div>
 
-
-          <div className="flex flex-wrap justify-center items-center gap-6">
-
-            <Link
-              href="/login"
-              className="hover:text-white transition-colors"
-            >
-
-              Student Sign In
-
-            </Link>
-
-
-            <Link
-              href="/admin-login"
-              className="hover:text-white transition-colors"
-            >
-
-              Admin Portal
-
-            </Link>
-
-
-            <span>
-
-              © {new Date().getFullYear()} CU-SUCCEED
-
-            </span>
-
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <div className="text-4xl font-black text-emerald-400">12+</div>
+              <div className="text-sm font-semibold text-white">Years in Industry</div>
+            </div>
+            <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <div className="text-4xl font-black text-emerald-400">120,000+</div>
+              <div className="text-sm font-semibold text-white">Trained Nationwide</div>
+            </div>
+            <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <div className="text-4xl font-black text-emerald-400">30,000+</div>
+              <div className="text-sm font-semibold text-white">Trainees Placed</div>
+            </div>
           </div>
-
         </div>
+      </section>
 
+      {/* Footer */}
+      <footer className="border-t border-slate-800 bg-slate-900/60 py-8 text-center text-xs text-slate-400">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>© {new Date().getFullYear()} CUSucceed. All rights reserved.</div>
+          <div className="flex items-center gap-6">
+            <Link href="/login" className="hover:text-white transition-colors">Student Login</Link>
+            <Link href="/tpo-login" className="hover:text-white transition-colors">TPO Login</Link>
+            <Link href="/admin-login" className="hover:text-white transition-colors">Admin Login</Link>
+          </div>
+        </div>
       </footer>
 
     </div>

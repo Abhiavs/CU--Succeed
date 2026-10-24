@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 declare module "next-auth" {
   interface User {
     id: string;
-    role: "STUDENT" | "OFFICIAL";
+    role: "STUDENT" | "OFFICIAL" | "TPO";
     rollNumber?: string | null;
     branch?: string | null;
     year?: string | null;
@@ -15,7 +15,7 @@ declare module "next-auth" {
   interface Session {
     user: User & {
       id: string;
-      role: "STUDENT" | "OFFICIAL";
+      role: "STUDENT" | "OFFICIAL" | "TPO";
       rollNumber?: string | null;
       branch?: string | null;
       year?: string | null;
@@ -29,7 +29,7 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
-    role: "STUDENT" | "OFFICIAL";
+    role: "STUDENT" | "OFFICIAL" | "TPO";
     rollNumber?: string | null;
     branch?: string | null;
     year?: string | null;
