@@ -614,7 +614,7 @@ export default async function ResultGenerationPage({
                 className={`px-5 py-2.5 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
                   currentTab ===
                   "PSYCHOMETRIC"
-                    ? "bg-indigo-500 text-white border-indigo-500"
+                    ? "bg-emerald-600 text-white border-emerald-600"
                     : "bg-transparent border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
               >
@@ -647,7 +647,7 @@ export default async function ResultGenerationPage({
                 className={`px-5 py-2.5 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
                   currentTab ===
                   "WHEEL"
-                    ? "bg-indigo-500 text-white border-indigo-500"
+                    ? "bg-emerald-600 text-white border-emerald-600"
                     : "bg-transparent border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
               >
@@ -723,7 +723,7 @@ export default async function ResultGenerationPage({
                 href={`/admin/results?tab=${tabQuery}`}
                 className={`px-3 py-1.5 rounded-md border text-xs font-medium transition-colors ${
                   batchFilter === ""
-                    ? "bg-indigo-500 text-white border-indigo-500"
+                    ? "bg-emerald-600 text-white border-emerald-600"
                     : "border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
               >
@@ -738,7 +738,7 @@ export default async function ResultGenerationPage({
                   )}`}
                   className={`px-3 py-1.5 rounded-md border text-xs font-medium transition-colors ${
                     batchFilter === batchOption
-                      ? "bg-indigo-500 text-white border-indigo-500"
+                      ? "bg-emerald-600 text-white border-emerald-600"
                       : "border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                   }`}
                 >
@@ -752,7 +752,7 @@ export default async function ResultGenerationPage({
 
             <a
               href={exportHref}
-              className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+              className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
             >
               <BarChart3 className="w-4 h-4" />
 
