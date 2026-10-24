@@ -609,6 +609,7 @@ export default async function AdminDashboard({
                     ? "default"
                     : "outline"
                 }
+                className={activeTab === "psychometric" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""}
               >
                 <BrainCircuit className="mr-2 h-4 w-4" />
                 Psychometric
@@ -622,6 +623,7 @@ export default async function AdminDashboard({
                     ? "default"
                     : "outline"
                 }
+                className={activeTab === "pre-wheel" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""}
               >
                 <Compass className="mr-2 h-4 w-4" />
                 Pre Wheel
@@ -635,6 +637,7 @@ export default async function AdminDashboard({
                     ? "default"
                     : "outline"
                 }
+                className={activeTab === "post-wheel" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""}
               >
                 <CircleDot className="mr-2 h-4 w-4" />
                 Post Wheel
@@ -648,6 +651,7 @@ export default async function AdminDashboard({
                     ? "default"
                     : "outline"
                 }
+                className={activeTab === "post" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""}
               >
                 <ClipboardList className="mr-2 h-4 w-4" />
                 Post Assessment
