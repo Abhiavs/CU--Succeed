@@ -4,7 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, ShieldCheck, UserCheck, GraduationCap, Building2, Phone, Mail, MapPin } from "lucide-react";
+import { ArrowRight, ShieldCheck, GraduationCap, Building2 } from "lucide-react";
+import { Logo, LogoIcon } from "@/components/Logo";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -12,23 +13,11 @@ export default async function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-teal-500/20 selection:text-teal-300">
 
-      {/* Navbar */}
+      {/* Minimal Navbar per requirements */}
       <nav className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-20">
           <div className="flex items-center gap-3">
-            <span className="text-2xl font-black tracking-wider bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              CUSucceed
-            </span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-            <a href="#home" className="hover:text-white transition-colors">About</a>
-            <a href="#services" className="hover:text-white transition-colors">Services</a>
-            <a href="#founder" className="hover:text-white transition-colors">The Founder</a>
-            <a href="#armed" className="hover:text-white transition-colors">Why Us?</a>
-            <a href="#clients" className="hover:text-white transition-colors">Clients</a>
-            <a href="#testimonial" className="hover:text-white transition-colors">Testimonials</a>
-            <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+            <Logo href="/" size="md" subtitle="" />
           </div>
 
           <div className="flex items-center gap-3">
@@ -39,14 +28,14 @@ export default async function Home() {
                 </Button>
               </Link>
             ) : (
-              <div className="flex items-center gap-2">
-                <Link href="/login">
-                  <Button variant="outline" size="sm" className="border-slate-700 text-slate-200 hover:bg-slate-800 text-xs">
-                    Student Login
+              <div className="flex items-center gap-3">
+                <Link href="/signup">
+                  <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs">
+                    Sign Up
                   </Button>
                 </Link>
                 <Link href="/tpo-login">
-                  <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs gap-1">
+                  <Button variant="outline" size="sm" className="border-slate-700 text-emerald-400 hover:bg-slate-800 text-xs gap-1.5">
                     <Building2 className="w-3.5 h-3.5" /> TPO Login
                   </Button>
                 </Link>
@@ -88,7 +77,10 @@ export default async function Home() {
 
           <div className="relative flex justify-center">
             <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl space-y-6">
-              <h3 className="text-lg font-bold text-white">Quick Portal Access</h3>
+              <div className="flex items-center gap-3">
+                <LogoIcon size={40} />
+                <h3 className="text-lg font-bold text-white">Quick Portal Access</h3>
+              </div>
               <p className="text-xs text-slate-400">Select your portal to log in or register your account.</p>
               <div className="space-y-3">
                 <Link href="/login" className="block">
@@ -209,9 +201,12 @@ export default async function Home() {
       {/* Footer */}
       <footer className="border-t border-slate-800 bg-slate-900/60 py-8 text-center text-xs text-slate-400">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>© {new Date().getFullYear()} CUSucceed. All rights reserved.</div>
+          <div className="flex items-center gap-2">
+            <LogoIcon size={28} />
+            <span>© {new Date().getFullYear()} CUSucceed. All rights reserved.</span>
+          </div>
           <div className="flex items-center gap-6">
-            <Link href="/login" className="hover:text-white transition-colors">Student Login</Link>
+            <Link href="/signup" className="hover:text-white transition-colors">Sign Up</Link>
             <Link href="/tpo-login" className="hover:text-white transition-colors">TPO Login</Link>
             <Link href="/admin-login" className="hover:text-white transition-colors">Admin Login</Link>
           </div>
