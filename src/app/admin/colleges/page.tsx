@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Building2, ShieldCheck } from "lucide-react";
 import ProvisionTpoModal from "./ProvisionTpoModal";
+import DeleteTpoButton from "./DeleteTpoButton";
 
 export default async function AdminCollegesPage() {
   const session = await getServerSession(authOptions);
@@ -65,12 +66,13 @@ export default async function AdminCollegesPage() {
                   <th className="py-3 px-4">College Name</th>
                   <th className="py-3 px-4">Status</th>
                   <th className="py-3 px-4">Registered Date</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
                 {tpoUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-8 text-center text-slate-500">
+                    <td colSpan={6} className="py-8 text-center text-slate-500">
                       No TPO accounts registered in the platform yet.
                     </td>
                   </tr>
@@ -87,6 +89,9 @@ export default async function AdminCollegesPage() {
                       </td>
                       <td className="py-3 px-4 font-mono text-slate-500">
                         {new Date(tpo.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <DeleteTpoButton tpoId={tpo.id} tpoName={tpo.name} />
                       </td>
                     </tr>
                   ))
