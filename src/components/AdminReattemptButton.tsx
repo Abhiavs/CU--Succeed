@@ -57,6 +57,7 @@ export default function ReattemptButton({
         type="button"
         onClick={handleClick}
         disabled={loading}
+        className="bg-emerald-600 hover:bg-emerald-700 text-white"
       >
         {loading ? (
           <span className="flex items-center gap-2">

@@ -80,6 +80,7 @@ export default function PostPublishToggle() {
         variant={published ? "outline" : "default"}
         onClick={togglePublish}
         disabled={toggling}
+        className={published ? "" : "bg-emerald-600 hover:bg-emerald-700 text-white"}
       >
         {toggling ? (
           <span className="flex items-center gap-2">
