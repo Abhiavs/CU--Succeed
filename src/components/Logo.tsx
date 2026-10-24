@@ -46,12 +46,12 @@ export function BrandLockup({
       <div className="flex items-center gap-3">
         <LogoIcon size={iconSize} />
         <span className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-none text-[#006f73]">
-          CU-SUCCEED
+          CU-<span className="text-[#004d50]">SUCCEED</span>
         </span>
       </div>
 
       {showTagline && (
-        <span className="mt-2 pl-[0.25em] text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.25em] text-[#6fbf58]">
+        <span className="mt-2 pl-[0.25em] text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.25em] text-[#004d50]">
           Grow • Change • Succeed
         </span>
       )}
@@ -76,14 +76,14 @@ export function Logo({
       {showText && (
         <div className="flex flex-col select-none">
           <div
-            className={`font-black tracking-tight text-[#006f73] leading-none ${
+            className={`font-black tracking-tight text-[#006f73] dark:text-white leading-none ${
               size === "sm" ? "text-base" : size === "lg" || size === "xl" ? "text-2xl" : "text-xl"
             } ${textClassName}`}
           >
-            CU-<span className="text-[#6fbf58]">SUCCEED</span>
+            CU-<span className="text-[#004d50] dark:text-[#6fbf58]">SUCCEED</span>
           </div>
           {subtitle && (
-            <span className="text-[10px] font-semibold text-gray-500 tracking-wider uppercase leading-tight mt-1">
+            <span className="text-[10px] font-semibold text-gray-500 dark:text-slate-400 tracking-wider uppercase leading-tight mt-1">
               {subtitle}
             </span>
           )}

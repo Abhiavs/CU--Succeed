@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
 import { useRouter} from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
@@ -10,8 +9,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Sparkles,
-  ArrowRight,
   User,
   Mail,
   Lock,
@@ -19,7 +16,7 @@ import {
   BookOpen,
   Building2,
   ChevronDown,
-  Layers,
+  ArrowRight,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
@@ -59,14 +56,11 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("Batch selected:", batch);
     e.preventDefault();
 
     setError("");
     setLoading(true);
 
-    // Roll numbers must be compact codes (e.g. "12", "21CS045") — students
-    // were typing branch names and sentences into this field.
     const normalizedRoll = rollNumber.trim();
     if (!/\d/.test(normalizedRoll) || /\s/.test(normalizedRoll) || normalizedRoll.length > 15) {
       setError(
@@ -77,7 +71,6 @@ export default function SignupPage() {
     }
 
     try {
-      // Create the student account in PostgreSQL.
       const signupResponse = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -108,7 +101,6 @@ export default function SignupPage() {
         return;
       }
 
-      // Automatically log the newly created student in.
       const loginResult = await signIn("credentials", {
         email,
         password,
@@ -123,7 +115,6 @@ export default function SignupPage() {
         return;
       }
 
-      // Continue to academic year selection
       router.push("/select-year");
       router.refresh();
     } catch (error) {
@@ -138,26 +129,26 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-slate-950 p-4">
+    <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-gray-50 dark:bg-[#0b2227] p-4 transition-colors">
       {/* Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
-      <Card className="border-white/10 bg-slate-900/85 backdrop-blur-xl w-full max-w-md shadow-2xl animate-fade-in relative">
+      <Card className="border-gray-200 dark:border-slate-800 bg-white dark:bg-[#143a41] shadow-2xl w-full max-w-md relative transition-colors">
         <CardContent className="p-8 sm:p-10 space-y-6">
 
           {/* Branding */}
           <div className="text-center space-y-2 flex flex-col items-center">
             <Logo href="/" size="lg" className="mb-2" />
 
-            <h2 className="text-xl font-bold text-white tracking-tight">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
               Student Registration
             </h2>
 
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-gray-500 dark:text-slate-400">
               Academic Year:{" "}
-              <span className="text-blue-400 font-semibold">
+              <span className="text-[#006f73] dark:text-blue-400 font-semibold">
                 First Year
               </span>
             </p>
@@ -165,7 +156,7 @@ export default function SignupPage() {
 
           {/* Error */}
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium text-center animate-fade-in">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium text-center">
               {error}
             </div>
           )}
@@ -174,8 +165,8 @@ export default function SignupPage() {
 
             {/* Full Name */}
             <div className="space-y-1.5">
-              <Label htmlFor="name" className="flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-indigo-400" />
+              <Label htmlFor="name" className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium">
+                <User className="w-3.5 h-3.5 text-[#006f73] dark:text-indigo-400" />
                 Full Name
               </Label>
 
@@ -190,30 +181,23 @@ export default function SignupPage() {
 
             {/* Roll Number */}
             <div className="space-y-1.5">
-              <Label
-                htmlFor="rollNumber"
-                className="flex items-center gap-1.5"
-              >
-                <Hash className="w-3.5 h-3.5 text-indigo-400" />
-                Roll Number
+              <Label htmlFor="rollNumber" className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium">
+                <Hash className="w-3.5 h-3.5 text-[#006f73] dark:text-indigo-400" />
+                Roll Number (e.g. 42 or 21CS045)
               </Label>
 
               <Input
                 id="rollNumber"
-                placeholder="e.g. 42"
+                placeholder="Enter roll number"
                 value={rollNumber}
-                onChange={(e) =>
-                  setRollNumber(e.target.value.replace(/\s+/g, ""))
-                }
-                maxLength={15}
+                onChange={(e) => setRollNumber(e.target.value)}
                 required
               />
             </div>
 
-            {/* Batch Dropdown */}
+            {/* Batch Selection */}
             <div className="space-y-1.5">
-              <Label htmlFor="batch" className="flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-sky-400" />
+              <Label htmlFor="batch" className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium">
                 Batch
               </Label>
 
@@ -223,7 +207,7 @@ export default function SignupPage() {
                   value={batch}
                   onChange={(e) => setBatch(e.target.value)}
                   required
-                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="flex h-10 w-full appearance-none rounded-md border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 pr-10 text-sm text-gray-900 dark:text-slate-100 outline-none transition focus:border-[#006f73] dark:focus:border-indigo-500 focus:ring-1 focus:ring-[#006f73]"
                 >
                   <option value="" disabled>
                     Select your batch
@@ -236,14 +220,14 @@ export default function SignupPage() {
                   ))}
                 </select>
 
-                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-400" />
               </div>
             </div>
 
             {/* Branch Dropdown */}
             <div className="space-y-1.5">
-              <Label htmlFor="branch" className="flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+              <Label htmlFor="branch" className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium">
+                <BookOpen className="w-3.5 h-3.5 text-[#006f73] dark:text-sky-400" />
                 Branch
               </Label>
 
@@ -253,7 +237,7 @@ export default function SignupPage() {
                   value={branch}
                   onChange={(e) => setBranch(e.target.value)}
                   required
-                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="flex h-10 w-full appearance-none rounded-md border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 pr-10 text-sm text-gray-900 dark:text-slate-100 outline-none transition focus:border-[#006f73] dark:focus:border-indigo-500 focus:ring-1 focus:ring-[#006f73]"
                 >
                   <option value="" disabled>
                     Select your branch
@@ -266,7 +250,7 @@ export default function SignupPage() {
                   ))}
                 </select>
 
-                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-400" />
               </div>
             </div>
 
@@ -274,9 +258,9 @@ export default function SignupPage() {
             <div className="space-y-1.5">
               <Label
                 htmlFor="collegeName"
-                className="flex items-center gap-1.5"
+                className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium"
               >
-                <Building2 className="w-3.5 h-3.5 text-indigo-400" />
+                <Building2 className="w-3.5 h-3.5 text-[#006f73] dark:text-indigo-400" />
                 College
               </Label>
 
@@ -286,7 +270,7 @@ export default function SignupPage() {
                   value={collegeName}
                   onChange={(e) => setCollegeName(e.target.value)}
                   required
-                  className="flex h-10 w-full appearance-none rounded-md border border-slate-700 bg-slate-950 px-3 py-2 pr-10 text-sm text-slate-100 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="flex h-10 w-full appearance-none rounded-md border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 pr-10 text-sm text-gray-900 dark:text-slate-100 outline-none transition focus:border-[#006f73] dark:focus:border-indigo-500 focus:ring-1 focus:ring-[#006f73]"
                 >
                   <option value="" disabled>
                     Select your college
@@ -299,14 +283,14 @@ export default function SignupPage() {
                   ))}
                 </select>
 
-                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-400" />
               </div>
             </div>
 
             {/* Email */}
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-sky-400" />
+              <Label htmlFor="email" className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium">
+                <Mail className="w-3.5 h-3.5 text-[#006f73] dark:text-sky-400" />
                 Gmail / Email Address
               </Label>
 
@@ -322,8 +306,8 @@ export default function SignupPage() {
 
             {/* Password */}
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-indigo-400" />
+              <Label htmlFor="password" className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium">
+                <Lock className="w-3.5 h-3.5 text-[#006f73] dark:text-indigo-400" />
                 Password
               </Label>
 
@@ -333,42 +317,26 @@ export default function SignupPage() {
                 placeholder="Minimum 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                minLength={8}
                 required
               />
             </div>
 
-            {/* Submit */}
             <Button
               type="submit"
+              className="w-full bg-[#006f73] dark:bg-indigo-600 hover:bg-[#14574f] dark:hover:bg-indigo-700 text-white font-medium py-2.5 transition-all shadow-md"
               disabled={loading}
-              size="lg"
-              className="w-full rounded-2xl shadow-indigo-500/20 mt-2"
             >
-              {loading ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                 Creating Account...
-                </span>
-              ) : (
-                <span className="flex items-center gap-2">
-                  Register & Continue
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              )}
+              {loading ? "Creating Account..." : "Create Account & Start Assessment"}
+              {!loading && <ArrowRight className="w-4 h-4 ml-2" />}
             </Button>
           </form>
 
-          <div className="pt-6 border-t border-white/10 text-center text-xs text-slate-400">
+          <div className="pt-4 border-t border-gray-200 dark:border-slate-800 text-center text-xs text-gray-500 dark:text-slate-400">
             Already have an account?{" "}
-            <Link
-              href="/login"
-              className="text-blue-400 font-semibold hover:underline"
-            >
-              Sign In
+            <Link href="/login" className="text-[#006f73] dark:text-indigo-400 hover:underline font-semibold">
+              Sign in
             </Link>
           </div>
-
         </CardContent>
       </Card>
     </div>

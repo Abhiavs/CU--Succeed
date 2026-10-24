@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, Mail, Lock, ArrowRight, ShieldCheck } from "lucide-react";
+import { Mail, Lock, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export default function LoginPage() {
@@ -44,31 +43,31 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-slate-950 p-4">
+    <div className="flex justify-center items-center min-h-screen relative overflow-hidden bg-gray-50 dark:bg-[#0b2227] p-4 transition-colors">
       {/* Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[140px] -z-10 pointer-events-none" />
 
-      <Card className="border-white/10 bg-slate-900/85 backdrop-blur-xl w-full max-w-md shadow-2xl animate-fade-in relative">
+      <Card className="border-gray-200 dark:border-slate-800 bg-white dark:bg-[#143a41] shadow-2xl w-full max-w-md relative transition-colors">
         <CardContent className="p-8 sm:p-10 space-y-6">
           <div className="text-center space-y-2 flex flex-col items-center">
             <Logo href="/" size="lg" className="mb-2" />
-            <h2 className="text-xl font-bold text-white tracking-tight">Student Portal Sign In</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Student Portal Sign In</h2>
+            <p className="text-xs text-gray-500 dark:text-slate-400">
               Access your assessments, dimension wheel, and certificates.
             </p>
           </div>
 
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium text-center animate-fade-in">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium text-center">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-indigo-400" /> Email Address
+              <Label htmlFor="email" className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium">
+                <Mail className="w-3.5 h-3.5 text-[#006f73] dark:text-indigo-400" /> Email Address
               </Label>
               <Input
                 id="email"
@@ -81,8 +80,8 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-sky-400" /> Password
+              <Label htmlFor="password" className="flex items-center gap-1.5 text-gray-700 dark:text-slate-300 text-xs font-medium">
+                <Lock className="w-3.5 h-3.5 text-[#006f73] dark:text-sky-400" /> Password
               </Label>
               <Input
                 id="password"
@@ -98,11 +97,11 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               size="lg"
-              className="w-full rounded-2xl shadow-indigo-500/20 mt-2"
+              className="w-full bg-[#006f73] dark:bg-indigo-600 hover:bg-[#14574f] dark:hover:bg-indigo-700 text-white font-medium py-2.5 transition-all shadow-md rounded-xl mt-2"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Signing In...
                 </span>
               ) : (
@@ -113,19 +112,22 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="pt-6 border-t border-white/10 flex flex-col gap-2.5 text-center text-xs text-slate-400">
+          <div className="pt-6 border-t border-gray-200 dark:border-slate-800 flex flex-col gap-2.5 text-center text-xs text-gray-500 dark:text-slate-400">
             <p>
               New student?{" "}
-              <Link href="/start" className="text-blue-400 font-semibold hover:underline">
-                Start Assessment 
+              <Link href="/start" className="text-[#006f73] dark:text-indigo-400 font-semibold hover:underline">
+                Register here
               </Link>
             </p>
-            <p>
-              Are you an official?{" "}
-              <Link href="/admin-login" className="text-sky-400 font-semibold hover:underline">
-                Official Admin Portal
+            <div className="flex items-center justify-center gap-4 pt-1">
+              <Link href="/tpo-login" className="hover:text-[#006f73] dark:hover:text-white transition-colors">
+                TPO Login
               </Link>
-            </p>
+              <span>•</span>
+              <Link href="/admin-login" className="hover:text-[#006f73] dark:hover:text-white transition-colors">
+                Admin Login
+              </Link>
+            </div>
           </div>
         </CardContent>
       </Card>

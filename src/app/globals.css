@@ -15,17 +15,43 @@
   --color-slate-900: #143a41;
   --color-slate-950: #0b2227;
 
-  --color-emerald-400: #6fbf58;
-  --color-emerald-500: #6fbf58;
-  --color-emerald-600: #006f73;
+  --color-emerald-400: #66a770;
+  --color-emerald-500: #409d78;
+  --color-emerald-600: #197368;
 }
+
+/* ========================================================== */
+/* PREMIUM ANIMATION SYSTEM                                   */
+/* ========================================================== */
 
 @keyframes floatLogo {
   0%, 100% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-12px);
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes entranceFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+@keyframes entranceScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -33,11 +59,77 @@
   animation: floatLogo 5s ease-in-out infinite;
 }
 
+.animate-entrance-header {
+  animation: entranceFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-entrance-title {
+  animation: entranceFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+  opacity: 0;
+}
+
+.animate-entrance-subtitle {
+  animation: entranceFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+  opacity: 0;
+}
+
+.animate-entrance-desc {
+  animation: entranceFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+  opacity: 0;
+}
+
+.animate-entrance-logo {
+  animation: entranceScale 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+  opacity: 0;
+}
+
+/* Interactive hover transitions */
+.hover-lift {
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+}
+
 body {
-  background-color: #ffffff;
-  color: #374151;
+  background-color: var(--bg-app, #ffffff);
+  color: var(--text-body, #374151);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+}
+
+:root {
+  --bg-app: #ffffff;
+  --bg-nav: rgba(255, 255, 255, 0.95);
+  --bg-card: #ffffff;
+  --text-heading: #193335;
+  --text-body: #374151;
+  --border-color: #e5e7eb;
+}
+
+.dark {
+  --bg-app: #0b2227;
+  --bg-nav: rgba(11, 34, 39, 0.95);
+  --bg-card: #143a41;
+  --text-heading: #f4fbfb;
+  --text-body: #b9d8cf;
+  --border-color: rgba(202, 236, 226, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-logo,
+  .animate-entrance-header,
+  .animate-entrance-title,
+  .animate-entrance-subtitle,
+  .animate-entrance-desc,
+  .animate-entrance-logo,
+  .hover-lift {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
 }
