@@ -60,7 +60,7 @@ export default async function QuestionBankPage() {
           <Link href="/admin/questions/new">
             <Button
               size="sm"
-              className="h-9 px-4 text-xs font-semibold"
+              className="h-9 px-4 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               <Plus size={15} className="mr-1" />
               Add Question
